@@ -107,7 +107,11 @@ In collaboration with:
 	
 
 
-\section{Introduction} \cite{KoMa14}
+\section{Introduction} 
+% notation table
+% bullet points of my contributions
+% Availabilitty of Xiaozhe's code / stiffness matrices 
+
 fPDEs  FEM and GMG, appearnace of Toeplitz matrices, circulant preconditioning for krylov methods
 \begin{itemize}
 	\item circulant preconditioning
@@ -135,13 +139,33 @@ If the mesh is not fine enough to give the desired accuracy the initial approach
 fractional PDEs mean all elements interact, though some weaker some stronger. Weak and strong interaction guiding a natural splitting. Good for low-rank approximation. Summary of matrix structure, spsd?
 
 %% Toeplitz matrices and generating functions 
+Toeplitz matrices have many unique properties that give rise to efficient algorithms (see for example \cite{TODO}). For our purposes we focus on their connection to functions in the Weiener class. This will allow us to take our problem from matrix operator theory to function theory. Suppose we have a singly infinite, symmetric Toeplitz matrix, 
+\begin{equation*}
+	\A = \begin{bmatrix}
+		a_0 & a_1 & a_2 & \\
+		a_1 & a_0 & a_1 &  \ddots \\
+		a_2 & a_1 & a_0 & \ddots  \\
+		 & \ddots & \ddots & \ddots  \\
+	\end{bmatrix}.
+\end{equation*}
+Assume $\sum_{k=-\infty}^{\infty} |a_k| <\infty$. Then the function $a(z) = \sum_{k=-\infty}^{\infty} a_k z^k$ is real, positive, and in the Wiener class for $|z| = 1$. It will be convenient to define the corresponding truncated function for a finite subsection of the infinite matrix: 
+\begin{definition}
+	The $m \times m$ finite subsection of the singly infinite matrix $\A$ is denoted $\A_m$ and defined as
+	\begin{equation*}
+				\A_m = \begin{bmatrix}
+			a_0 & a_1 & \cdots & a_{m-1} \\
+			a_1 & a_0 & \cdots & a_{m-2} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			a_{m-1} & a_{m-2} & \cdots & a_0 
+		\end{bmatrix}.
+	\end{equation*}
+	Similarly this matrix induces a function from the truncated series, $a_m(z) = \sum_{k=-m}^{m} a_k z^k$. 
+\end{definition}
 
 \todo[inline]{boundaries is the problem always (not infinite, block division)}
 \begin{itemize}
-	\item FEM? - Adaptive mesh and GMG
+	\item FEM,  adaptive mesh and GMG
 	\item Hierarchical matrices 
-	\item Toeplitz matrices $\iff$ generating functions 
-	\item Truncated infinite matrix
 	\item Hankel 
 	\item circulant and DFT/FFT (displacement kernel's)
 	\item discrete convolution for exact solution and the boundary problem 
@@ -158,16 +182,50 @@ We can make this last point more precise.
 \begin{definition}[Eigenvalue Clustering] 
 	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $\ptau^{-1} \A_m$ are clustered around $1$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $\ptau^{-1} \A_m$ that do not lie within $ [1-\varepsilon, 1+\varepsilon]$.
 \end{definition}
+The use of circulant preconditioners for Toeplitz systems originates from TODO. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
+
+In our numerical results we use type TODO, discussed in \cite{Bini}. Though the results could be generalized to all eight forms. An important fact that we will use later:
+\todo[inline]{eigenvalues as points on function }
+$\A$ is Toeplitz block, $\Hank$ is ``Hankel Correction"
+\begin{align*}
+	\A = \begin{bmatrix}
+		a_0 & a_1 & a_2 & \cdots &a_{n-2}& a_{n-1} \\
+		a_1 & a_0 & a_1 &  \cdots &a_{n-3}& a_{n-2} \\
+		a_2 & a_1 & a_0 & \cdots &a_{n-4}& a_{n-3} \\
+		\vdots & \vdots & \vdots & \ddots&\vdots & \vdots \\
+		a_{n-2} & a_{n-3} & a_{n-4} & \cdots &a_0 & a_1 \\
+		a_{n-1} & a_{n-2} & a_{n-3} & \cdots & a_1 & a_0 
+	\end{bmatrix}
+	\Hank = \begin{bmatrix}
+		a_2 & a_3 & a_4 & \cdots & a_{n-1} & 0 & 0 \\
+		a_3 & a_4 & a_5 & \cdots  & 0 & 0 & 0 \\
+		a_4 & a_5 & a_6 & \cdots & 0 & 0 & a_{n-1} \\
+		\vdots & \vdots & \vdots & \cdots & \vdots & \vdots & \vdots \\
+		0 & 0 & 0 & \cdots & a_5 & a_4 & a_3 \\
+		0 & 0 & a_{n-1} & \cdots & a_4 & a_3 & a_2
+	\end{bmatrix}
+\end{align*}
+$\ptau = \A-\Hank$
+
+
+We'll also utilize the common assumptions that $ a(z) = \sum_{k=-\infty}^{\infty} |a_k| <\infty$ and $a(z) > 0$ for each Toeplitz block. 
+
+To apply the $\tau$ preconditioner to our adaptive mesh we can think first of a block construction, 
+ (explicit) Identify Toeplitz blocks $\A_j$, Build Hankel correction $\Hank_j$, Construct little $\ptau_j = A_j - \Hank_j$ . Assemble big $\mathcal{T} = \begin{bmatrix}
+		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_m
+	\end{bmatrix}$
+
+To apply it $m \log m$ instead,  (implicit)
+Get sizes of Toeplitz blocks $n_j$, calculate  $\lambda_i = c_i [\DST \t]_i$ for $1 \leq i \leq n_j$, apply $\DST \Lambda^{-1} \DST$.
 
 \begin{itemize}
 	\item story of many
-	\item requirements
-	\item common assumptions
-	\item tau
-	\item applied to adaptive mesh
+	\item SPSD with SPSD A
+	\item how it works w multigrid
 \end{itemize}
 
 \section{Theoretical Results} 
+%% 1x1 blocks consideration 
 Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
 \subsection{Eigenvalue Bounds}
 \begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $n \times n$ matrices. Then for $A := M + E$ we have 
@@ -205,11 +263,7 @@ Assumptions:
 	The matrices $\Sq(A_m)$ and $\Sq(A_m)^{-1}$ are positive definite.
 \end{corollary}
 
-\begin{definition}[Eigenvalue Clustering] 
-	Note $\A_m$ has real eigenvalues. For any $\varepsilon > 0$ we say the eigenvalues of a matrix $\ptau^{-1} A$ are clustered around $1$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $\ptau^{-1}A_m$ that do not lie within $ [1-\varepsilon, 1+\varepsilon]$.
-\end{definition}
-
-
+First we present the proof for a single Toeplitz matrix/block, adapted from \cite{Kailath}. This will be used in the proof of the full matrix spectral clustering. 
 \todo[inline]{Lemma statement }
 \begin{align}
 	\Sq(A) &= A + H + B \\
@@ -231,15 +285,8 @@ Now we use the min-max theorem to bound the eigenvalues of $\Sq(A)^{-1} (H+B)$.
 	&\leq \lambda_k(H+B)  \frac{1}{\min_{|z|=1} a_m(z)} 
 \end{align*}
 
-
-\subsubsection{Notes on gap between above and my case}
-\begin{itemize}
-	\item Can be simplified with $B = \zero$
-	\item Bounding $a(z)$ away from zero, numerically? Complex differentiation?
-\end{itemize}
-
-
-Actual condition: $a(z) > 2 \varepsilon$, is this true??
+Can be simplified with $B = \zero$.
+Actual condition: $a(z) > 2 \varepsilon$. 
 
 \subsection{Full Matrix Proof}
 \subsubsection{setup}
@@ -296,11 +343,9 @@ Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\o
 
 \begin{itemize}
 	\item Weyl's inequality vs min-max characterization -- are they saying the same thing?
-	\item for one-off blocks we can't write eigs as some point on $a(z)$, does this break things? 
 	\item Note on choosing $m$ vs choosing $\varepsilon$
 	\item numerical test confirming off-diag low rank
 	\item Explanation and tests showing off-off-diag are small norm 
-	\item For notation, do we like $\Tau$ as big $\tau$? 
 	\item technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi inverse treatment so are clustered around 1 
 	\item Comment - all problems come from boundaries
 	\item Extend proof to different kinds of circulant preconditioner
@@ -308,6 +353,7 @@ Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\o
 
 \section{Numerical Results}
 \begin{itemize}
+	\item enough info to reproduce 
 	\item Single block clustering
 	\item Adaptive clustering (what happens to smallest eigenvalue?)
 	\item behavior for different $\alpha$
