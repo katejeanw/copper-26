@@ -1,0 +1,324 @@
+\documentclass[review]{siamart251216}
+
+% 1. Preamble and packages
+\usepackage{amsfonts, amsmath, amssymb, amsbsy}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{algorithmic}
+\ifpdf%
+  \DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+\else
+  \DeclareGraphicsExtensions{.eps}
+\fi
+\usepackage{amsopn}
+\DeclareMathOperator{\diag}{diag}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{todonotes}
+
+% 1.5 Macros 
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\bigOh}{\mathcal{O}}
+\renewcommand{\vec}[1]{{{\mathbf{#1}}}}
+\renewcommand{\t}{{\vec  t }}
+\newcommand{\s}{{\vec  s}}
+\renewcommand{\u}{{\vec  u }}
+\renewcommand{\v}{{\vec  v }}
+\newcommand{\f}{{\vec  f }}
+\newcommand{\zero}{{\vec  0 }}
+\newcommand{\A}{{A }}
+\newcommand{\offd}{{B}}
+\newcommand{\Hank}{{ H }}
+\newcommand{\DST}{{ S }}
+\newcommand{\Tau}{T}
+\newcommand{\ptau}{{\bm{\tau}}}
+\newcommand{\Sq}{{S_Q}} 
+
+
+
+% 2. Paper title
+\newcommand{\TheTitle}{%
+  Reviving Circulant Preconditioners for Adaptive Mesh Refinement
+}
+
+% 2.5. Short title for running heads (if needed)
+\newcommand{\TheShortTitle}{%
+  \TheTitle
+}
+
+% 3. Student Name
+\newcommand{\TheName}{%
+ K. Wall
+}
+
+% 4. Student Address
+\newcommand{\TheAddress}{%
+  Tufts Universoty,
+  (\email{kate.wall@tufts.edu}, \url{https://katejeanw.github.io/}).
+}
+
+% 5. Acknowledge funding or other resources
+\newcommand{\TheFunding}{%
+  This work was funded by NSF\@.
+}
+
+% 6. Collaborators, such as advisor or research collaborators
+\newcommand{\TheCollaborators}{%
+  James Adler,
+  Xiaozhe Hu,
+  Misha Kilmer,
+}
+
+% ---------------------------------------------
+% ---------------------------------------------
+\author{\TheName\thanks{\TheAddress}}
+\title{{\TheTitle}\thanks{\TheFunding}}
+\headers{\TheShortTitle}{\TheName}
+\ifpdf%
+\hypersetup{%
+  pdftitle={\TheTitle},
+  pdfauthor={\TheName}
+}
+\fi
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+In collaboration with:
+  {\TheCollaborators}
+\end{center}
+\vspace{1cm}
+% ---------------------------------------------
+% ---------------------------------------------
+
+\begin{abstract}
+	A preconditioner for solving fractional partial differential equations (PDEs) is presented. In our method the fractional PDE is discretized on an adaptive grid, resulting in a Hierarchical matrix representation. The stiffness matrix has Toeplitz blocks along the diagonal and low-rank approximations off the diagonal. Our preconditioner expands on previously developed methods of conditioning Toeplitz systems with circulant matrices. We show how these methods can be applied cheaply on the adaptive mesh and prove that the spectrum of the resulting system is well-clustered. In order to prove these results, we must take special consideration of how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system.  We validate our results for various fractional orders and inspect any assumptions through numerical tests. 
+	
+	Preconditioning on adaptive grid, theoretical and numerical results for eigenvalue clustering 
+\end{abstract}
+
+\begin{keywords}
+  % 7. Keywords that describe the paper
+  Preconditioner, Toeplitz, Circulant
+\end{keywords}
+
+	
+
+
+\section{Introduction} \cite{KoMa14}
+fPDEs  FEM and GMG, appearnace of Toeplitz matrices, circulant preconditioning for krylov methods
+\begin{itemize}
+	\item circulant preconditioning
+	\item AMR and low-rank approx in hierarchical matrices
+	\item fractional PDEs
+\end{itemize}
+
+There has long been interest in solving Toeplitz systems efficiently. An $n \times n$ matrix is called Topelitz if $a_{ij} = a_{i-j}$ (constant diagonals). Since a Toeplitz system has just order $n$ entires is can be solved directly in $\bigOh(n^2)$ time, as opposed to an arbitrary matrix with $n^2$ entries solved in $\bigOh(n^3)$ time. 
+
+Solving large Toeplitz systems, particularly those that are positive definite, has been made even faster by the use of circulant preconditioners. Def circulant. These preconditioners can be thought of as coming from Kernels of displacement operators. Cite Kalaith and Chan-Yeung. These SPD Toepltiz matrices are common in PDE discretization, singal processing, and control theory. 
+
+Toepltiz PDEs arise from uniform grids. 
+
+Further, multilevel \todo[inline]{is multilevel the right word?} Topelitz systems naturally arise from PDEs solved on adaptive meshes. Adaptive mesh refinement is sued to solve system that need different orders of granularity in different parts of the domain. To avoid the expensive grid refinement on the whole domain, only certain subsets of the domain are refined. Each part of the domain is refined only until the desired level of error is met. Int his setting we no longer have a uniform mesh on the whole domain, but every point on the mesh is part of a \emph{locally uniform} mesh. Each locally uniform subdomain corresponds to a Toeplitz block in the stiffness matrix. Blocks have different sizes. Geometric multigrid, hierarchical matrices, off diagonal low rank blocks. In the case of a system of purely Toeplitz blocks the preconditioning and theoretical results about spectral clustering are straightforward, we must also deal with how the off diagonal blocks perturb the spectrum. Weak and strong interactions. 
+
+In this paper we investigate how to precondition such systems using circulant matrices. Our investigation is focused on hierarchical matrices from GMG cite Xiaozhe, but the same methods could be used on any multilevel Toeplitz system. We prove spectral clustering around 1 and show numerical results with superlinear convergence. 
+
+\section{Background}
+%% FEM and matrix structure 
+\todo[inline]{applications for fPDEs}
+One of the most common approaches to numerically solving PDEs is the finite element method (FEM). FEM requires the domain be broken into a grid or mesh. When each piece of the domain, or element, is the same size we say it is an uniform mesh.
+\todo[inline]{Prove uniform mesh gives toeplitz here}
+If the mesh is not fine enough to give the desired accuracy the initial approach may be to increase $n$ and make each element smaller, keeping a uniform mesh. Alternatively, when different levels of granularity are required across the domain to achieve desired accuracy, adaptive meshes can be employed.  This approach only increases the mesh size in certain subdomains. While the entire mesh is no longer uniform, each element is part of a locally uniform mesh. 
+\todo[inline]{toeplitz blocks}
+fractional PDEs mean all elements interact, though some weaker some stronger. Weak and strong interaction guiding a natural splitting. Good for low-rank approximation. Summary of matrix structure, spsd?
+
+%% Toeplitz matrices and generating functions 
+
+\todo[inline]{boundaries is the problem always (not infinite, block division)}
+\begin{itemize}
+	\item FEM? - Adaptive mesh and GMG
+	\item Hierarchical matrices 
+	\item Toeplitz matrices $\iff$ generating functions 
+	\item Truncated infinite matrix
+	\item Hankel 
+	\item circulant and DFT/FFT (displacement kernel's)
+	\item discrete convolution for exact solution and the boundary problem 
+\end{itemize}
+
+\section{Preconditioner}
+A good preconditioner for an iterative method must in general decrease the total number of iterations without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, though similar criteria has been established since Bini and Benedetto \cite{Bini}:
+\begin{enumerate}
+	\item Complexity of constructing  applying $\ptau$ should be $\bigOh (m \log m)$.
+	\item A linear system with $\ptau$ should be solved in $ \bigOh (m \log m)$ operations.
+	\item The spectrum of $\ptau^{-1} \A$ should be clustered around 1
+\end{enumerate}
+We can make this last point more precise. 
+\begin{definition}[Eigenvalue Clustering] 
+	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $\ptau^{-1} \A_m$ are clustered around $1$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $\ptau^{-1} \A_m$ that do not lie within $ [1-\varepsilon, 1+\varepsilon]$.
+\end{definition}
+
+\begin{itemize}
+	\item story of many
+	\item requirements
+	\item common assumptions
+	\item tau
+	\item applied to adaptive mesh
+\end{itemize}
+
+\section{Theoretical Results} 
+Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
+\subsection{Eigenvalue Bounds}
+\begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $n \times n$ matrices. Then for $A := M + E$ we have 
+	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq n.$$
+	That is the eigenvalues of $A$ are at most $||E||_2$ away from the eigenvalues of $M$. 
+\end{lemma}
+\subsubsection{Kailath-Olshevsky Proof rewritten}
+Fix $\varepsilon > 0$. 
+Assumptions:
+\begin{enumerate}
+	\item Generating function is in the Wiener Class, $$a(z) = \sum_{k = -\infty}^{\infty} a_k z^k, \  \sum_{k = -\infty}^{\infty} |a_k|< \infty.$$
+	\item Generating function is bounded away from zero on unit circle, $$a(z) > 2 \varepsilon, \ |z|=1.$$
+\end{enumerate}
+
+\begin{lemma}
+	Let $a_m(z)$ be the truncated generating function with $2m-1$ terms, $\sum_{k = -(m-1)}^{m-1} a_k z^k$.
+	Then for each $\lambda_k(\Sq(A))$ there exists $z_k$ on the unit circle such that $\lambda_k = a_m(z_k)$. 
+\end{lemma}
+
+\begin{lemma}
+	Choose $m$ and $N <m$ big enough so that $\sum_{N+1}^{\infty} |a_k| < \varepsilon$. Then assumption 2 implies that $a_m(z)$ is positive on the unit circle. 
+\end{lemma}
+\begin{proof}
+	First notice $\varepsilon > \sum_{N+1}^{\infty} |a_k| > \sum_{m}^{\infty} |a_k|$. 
+	Now
+	\begin{align*}
+		a(z) &=  a_m(z) + \sum_{-\infty}^{-m} a_k z^k + \sum_{m}^{\infty} a_k z^k \\ 
+		&\implies 	a_m(z) =  a(z) - \sum_{-\infty}^{-m} a_k z^k - \sum_{m}^{\infty} a_k z^k \\ 
+		&\implies a(z) - 2 \varepsilon < a_m(z) \\
+		&\ 0 < a(z) - 2 \varepsilon < a_m(z)
+	\end{align*}
+\end{proof}
+
+\begin{corollary}
+	The matrices $\Sq(A_m)$ and $\Sq(A_m)^{-1}$ are positive definite.
+\end{corollary}
+
+\begin{definition}[Eigenvalue Clustering] 
+	Note $\A_m$ has real eigenvalues. For any $\varepsilon > 0$ we say the eigenvalues of a matrix $\ptau^{-1} A$ are clustered around $1$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $\ptau^{-1}A_m$ that do not lie within $ [1-\varepsilon, 1+\varepsilon]$.
+\end{definition}
+
+
+\todo[inline]{Lemma statement }
+\begin{align}
+	\Sq(A) &= A + H + B \\
+	A &= \Sq(A) - (H+B)
+\end{align}
+Where $A$ is Toeplitz (given), $H$ is Hankel, and $B$ is `border' matrix, at most nonzero in exterior rows and columns. 
+Thus $$\Sq(A)^{-1} A = I - \Sq(A)^{-1} (H+B).$$
+So it suffices to show the spectrum of $\Sq(A)^{-1} (H+B)$ is clustered around zero. \\
+Let $\varepsilon > 0 $ and choose $N$ such that $\sum_{N+1}^{\infty} |a_k| < \varepsilon$. We can then split $H+B$ into the sum of a low-rank matrix $A_{lr}$ and a small norm matrix $A_{sn}$.  Here $A_{lr}$ contains the diagonals with entries $a_0, \dots, a_N$. Let $s := \text{rank}(A_{lr}) << m$. Now $A_{sn} := (H+B) - A_{lr}$ is a hermitian $m \times m$ matrix with at most two copies of $a_{N+1}, \dots, a_m$ in each row/column. Thus $||A_{sn}||_2 = \sqrt{||A_{sn}||_1 ||A_{sn}||_{\infty}} = ||A_{sn}||_1 < 2 \varepsilon$.  Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $H+B$ are clustered within $2 \varepsilon$ of zero. 
+
+Now we use the min-max theorem to bound the eigenvalues of $\Sq(A)^{-1} (H+B)$. 
+\begin{align*}
+	\lambda_k ( \Sq(A)^{-1} (H+B)) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{((H+B)x,x)}{(\Sq(A)x,x)}\right) \\
+	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{((H+B)x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\Sq(A)x,x)} \right) \right] \\
+	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{((H+B)x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\Sq(A)x,x)} \right)  \\
+	&= \lambda_k(H+B)   \max_{x \in \R^n} \left( \frac{(x,x)}{(\Sq(A)x,x)} \right)  \\
+	&\leq \lambda_k(H+B)  \frac{1}{\lambda_{\min}(\Sq(A))} \\
+	&= \lambda_k(H+B)  \frac{1}{a_m(z_{\min})} \\ 
+	&\leq \lambda_k(H+B)  \frac{1}{\min_{|z|=1} a_m(z)} 
+\end{align*}
+
+
+\subsubsection{Notes on gap between above and my case}
+\begin{itemize}
+	\item Can be simplified with $B = \zero$
+	\item Bounding $a(z)$ away from zero, numerically? Complex differentiation?
+\end{itemize}
+
+
+Actual condition: $a(z) > 2 \varepsilon$, is this true??
+
+\subsection{Full Matrix Proof}
+\subsubsection{setup}
+A single block preconditioner is $\tau$ the block diagonal preconditioner is $\Tau$.
+
+On a single block we write $\tau = \A - \Hank$, but for the full adaptive matrix $\A$ includes off diagonal blocks. Denote the diagonal (Toeplitz blocks) as $\A_D$ and everything else $\A_E$ so that $$\A = \A_D + \A_E + \offd$$. And thus the splitting as in \cite{Kailath} is expressed $\A_D = \Tau + H$ and $\A = \A_E + \offd + \Tau + \Hank$. So
+\begin{equation}\label{decomp}
+	\Tau^{-1} \A = \Tau^{-1}(\Tau + \Hank + \A_E + \offd) = I +\Tau^{-1}\Hank + \Tau^{-1}\A_E  +\Tau^{-1}\offd
+\end{equation}
+\subsubsection{Proof}
+It suffices to show that $\Tau^{-1}\Hank$, $\Tau^{-1}\offd$ and $\Tau^{-1}\A_E$ have spectra clustered around zero. 
+First notice that $\Tau^{-1} \Hank$ is block diagonal and the spectrum of each block can be characterized using the former proof on each block. 
+
+\todo[inline]{since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
+
+Assume the off-diagonal-by-one blocks are low-rank. Let $C$ be such a block with dimensions $n_C \times n_C$ and rank $r_C << n_C$. Using the SVD we can split $C$ as $$ C = \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right). $$ 
+With a slight abuse of notation, we can embed this decomposition in the appropriate ``off-diagonal'' position of an $m \times m$ matrix. Doing this for all such off-diagonal blocks we write
+\begin{align*}
+	B &= \sum_{C \in \text{off-diag}} \left[ \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right) \right]  \\
+	&= \left( \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*  \right) 
+\end{align*}
+where $r_{\offd} = \max_{C \in \text{off-diag}} r_C$.
+
+We additionally split $\Hank$ by separating the anti-diagonals with coefficients $a_0, \dots, a_N$ and the anti-diagonals comprising of $a_{N+1}, \dots a_m$. So we have two splittings, 
+\begin{align*} 
+	\offd &= \left( \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*  \right) \\
+	\Hank &= \Hank|_{a_{0},\dots,a_N} + \Hank|_{a_{N+1},\dots,a_m}.
+\end{align*}
+The first term in each sum can be thought of as our `low-rank' equivalent from before and similarly the second term is our `small-norm' summand. \todo[inline]{Bound on number of off diagonal blocks} 
+
+Finally we can make the splitting $\A = \A_{SN} + \A_{LR}$ where
+\begin{align*}
+	\A_{SN} &= \Hank|_{a_{N+1},\dots,a_m} + \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* +A_E \\
+	\A_{LR} &= \Hank|_{a_{0},\dots,a_N} + \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i*.
+\end{align*}
+$\A_{LR}$ represent outliers, IE $s := \text{rank}(\A_{LR}) \leq N + r_{\offd}$ bounds the number of outliers. \todo[inline]{Is the N part of this bound true? 2N?} So the work is showing $|| \Tau^{-1}\A_{SN}||_2 \leq \varepsilon$. Define $\tilde{\offd} = \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* $ and $\tilde{\Hank} = \Hank|_{a_{N+1},\dots,a_m}$, so that $\A_{SN} = \tilde{\Hank} + \tilde{\offd} + \A_E$. 
+\begin{align*}
+	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \tilde{\Hank}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_E ||_2
+\end{align*}
+We can bound $||\Tau^{-1} \tilde{\Hank}||_2$ as in \cite{Kailath}. We can bound $||\Tau^{-1} \A_E||_2$ with Weyl's inequality:
+\begin{equation*}
+	||\Tau^{-1} \A_E||_2 \leq ||\Tau^{-1}||_2 ||\A_E||_2 =\sigma_{\max}(\Tau^{-1}) \sigma_{\max}(\A_E) = \frac{ \sigma_{\max}(\A_E)}{\lambda_{\min}(\Tau)}.
+\end{equation*}
+Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$.
+\begin{align*}
+	\lambda_k ( \Tau^{-1} \tilde{\offd}) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{(\tilde{\offd}x,x)}{(\Tau x,x)}\right) \\
+	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{(\tilde{\offd} x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\Tau x,x)} \right) \right] \\
+	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{(\tilde{\offd} x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\Tau x,x)} \right)  \\
+	&= \lambda_k(\tilde{\offd})   \max_{x \in \R^n} \left( \frac{(x,x)}{(\Tau x,x)} \right)  \\
+	&\leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} \\
+	&= \lambda_k(\tilde{\offd})  \min_{n \in n_k} \min_{1 \leq i \leq n} \frac{\sin(\frac{\pi i}{n+1})}{\sum_{j=1}^n t_j \sin(\frac{\pi i j }{n+1})}
+\end{align*}
+Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*$ what can we say about $\lambda_k$?  
+
+\begin{itemize}
+	\item Weyl's inequality vs min-max characterization -- are they saying the same thing?
+	\item for one-off blocks we can't write eigs as some point on $a(z)$, does this break things? 
+	\item Note on choosing $m$ vs choosing $\varepsilon$
+	\item numerical test confirming off-diag low rank
+	\item Explanation and tests showing off-off-diag are small norm 
+	\item For notation, do we like $\Tau$ as big $\tau$? 
+	\item technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi inverse treatment so are clustered around 1 
+	\item Comment - all problems come from boundaries
+	\item Extend proof to different kinds of circulant preconditioner
+\end{itemize}
+
+\section{Numerical Results}
+\begin{itemize}
+	\item Single block clustering
+	\item Adaptive clustering (what happens to smallest eigenvalue?)
+	\item behavior for different $\alpha$
+	\item Verify assumptions from proof
+	\item convergence of solving with PCG (superlinear convergence)
+\end{itemize}
+
+\section{Conclusion}
+Future work: how to build adaptive mesh to increase block size, other circulant preconditioners, tensor preconditioners, higher dimension domain 
+
+\bibliographystyle{siamplain}
+\bibliography{references}
+
+\end{document}
