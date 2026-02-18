@@ -94,10 +94,11 @@ In collaboration with:
 % ---------------------------------------------
 
 \begin{abstract}
-	A preconditioner for solving fractional partial differential equations (PDEs) is presented. In our method the fractional PDE is discretized on an adaptive grid, resulting in a Hierarchical matrix representation. The stiffness matrix has Toeplitz blocks along the diagonal and low-rank approximations off the diagonal. Our preconditioner expands on previously developed methods of conditioning Toeplitz systems with circulant matrices. We show how these methods can be applied cheaply on the adaptive mesh and prove that the spectrum of the resulting system is well-clustered. In order to prove these results, we must take special consideration of how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system.  We validate our results for various fractional orders and inspect any assumptions through numerical tests. 
-	
-	Preconditioning on adaptive grid, theoretical and numerical results for eigenvalue clustering 
+We present a preconditioner for solving fractional partial differential equations (PDEs) on an adaptive mesh. Adaptive refinement of the problem domain results in a stiffness matrix with Toeplitz blocks along the main diagonal, while the fractional PDE yields a dense stiffness matrix, where off-diagonal blocks are stored as low-rank approximations. Our preconditioner utilizes ideas from the circulant preconditioner of Chan and Strang [SIAM Journal on Scientific Computing, 1989], which takes advantage of the Toeplitz blocks on the diagonal and also accounts for the low-rank nature of the off-diagonal blocks. We demonstrate convergence improvements for our systems and emphasize its efficient application. This work presents theoretical results about the spectral clustering of the preconditioned system. In order to prove these results, special consideration is taken on how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system. Numerical tests for various fractional orders are used to inspect any assumptions and validate our results.
 \end{abstract}
+
+
+
 
 \begin{keywords}
   % 7. Keywords that describe the paper
@@ -342,8 +343,6 @@ Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$.
 Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*$ what can we say about $\lambda_k$?  
 
 \begin{itemize}
-	\item Weyl's inequality vs min-max characterization -- are they saying the same thing?
-	\item Note on choosing $m$ vs choosing $\varepsilon$
 	\item numerical test confirming off-diag low rank
 	\item Explanation and tests showing off-off-diag are small norm 
 	\item technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi inverse treatment so are clustered around 1 
