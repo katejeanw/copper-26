@@ -15,6 +15,11 @@
 \usepackage{booktabs}
 \usepackage{bm}
 \usepackage{todonotes}
+\usepackage{caption}
+\usepackage{float}
+
+\DeclareCaptionType{equ}[Equation][List of Equations]
+%\captionsetup[equ]{labelformat=empty}
 
 % 1.5 Macros 
 \newcommand{\R}{{\mathbb{R}}}
@@ -53,7 +58,7 @@
 
 % 4. Student Address
 \newcommand{\TheAddress}{%
-  Tufts Universoty,
+  Tufts University,
   (\email{kate.wall@tufts.edu}, \url{https://katejeanw.github.io/}).
 }
 
@@ -66,7 +71,7 @@
 \newcommand{\TheCollaborators}{%
   James Adler,
   Xiaozhe Hu,
-  Misha Kilmer,
+  Misha Kilmer
 }
 
 % ---------------------------------------------
@@ -94,7 +99,7 @@ In collaboration with:
 % ---------------------------------------------
 
 \begin{abstract}
-We present a preconditioner for solving fractional partial differential equations (PDEs) on an adaptive mesh. Adaptive refinement of the problem domain results in a stiffness matrix with Toeplitz blocks along the main diagonal, while the fractional PDE yields a dense stiffness matrix, where off-diagonal blocks are stored as low-rank approximations. Our preconditioner utilizes ideas from the circulant preconditioner of Chan and Strang [SIAM Journal on Scientific Computing, 1989], which takes advantage of the Toeplitz blocks on the diagonal and also accounts for the low-rank nature of the off-diagonal blocks. We demonstrate convergence improvements for our systems and emphasize its efficient application. This work presents theoretical results about the spectral clustering of the preconditioned system. In order to prove these results, special consideration is taken on how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system. Numerical tests for various fractional orders are used to inspect any assumptions and validate our results.
+We present a preconditioner for solving fractional partial differential equations (PDEs) on an adaptive mesh. Adaptive refinement of the problem domain results in a stiffness matrix with Toeplitz blocks along the main diagonal, while the fractional PDE yields a dense stiffness matrix, where off-diagonal blocks are stored as low-rank approximations. Our preconditioner utilizes ideas from the circulant preconditioner of Chan and Strang [SIAM Journal on Scientific Computing, 1989], which takes advantage of the Toeplitz blocks on the diagonal and also accounts for the low-rank nature of the off-diagonal blocks. We demonstrate its effectiveness at accelerating convergence for our systems and emphasize its efficient application. This work presents theoretical results about the spectral clustering of the preconditioned system. In order to prove these results, special consideration is taken on how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system. Numerical tests for various fractional orders are used to inspect any assumptions and validate our results.
 \end{abstract}
 
 
@@ -102,33 +107,59 @@ We present a preconditioner for solving fractional partial differential equation
 
 \begin{keywords}
   % 7. Keywords that describe the paper
-  Preconditioner, Toeplitz, Circulant
+  Preconditioner, Adaptive Refinement, Toeplitz, Circulant, DST, DCT
 \end{keywords}
 
 	
 
 
 \section{Introduction} 
-% notation table
-% bullet points of my contributions
 % Availabilitty of Xiaozhe's code / stiffness matrices 
 
-fPDEs  FEM and GMG, appearnace of Toeplitz matrices, circulant preconditioning for krylov methods
+There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$, in other words, $A$ has constant diagonals. Arbitrary matrices have $\bigOh(n^2)$ unique entries and are solved directly by traditional techniques in $\bigOh(n^3)$ time, Since such a Toeplitz matrix has just $\bigOh (n)$ unique entries, we may expect to be able to solve it in $\bigOh (n^2)$ time. This is indeed the case via techniques such as Levinson's algorithm \cite{Levinson}. Even this improvement, however, is infeasible for sufficiently large systems. Instead we turn to iterative Krylov methods. For these methods we can still take advantage of Toeplitz structure by using circulant preconditioners. 
+
+A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around'' property where the last entry each row is the first entry of the subsequent row. 
+
+\begin{equ}[H]
+	\begin{equation}
+	A = \begin{pmatrix}
+		a_0 & a_{-1} & \cdots & a_{-(n-1)} \\
+		a_{1} & a_0 & \cdots & a_{-(n-2)} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n-1} & a_{n-2} & \cdots & a_0 
+	\end{pmatrix} 
+	\hspace{.15 in}
+	C = \begin{pmatrix}
+		c_0 & c_1 & \cdots & c_{n-1} \\
+		c_{n-1} & c_0 & \cdots & c_{n-2} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		c_{1} & c_{2} & \cdots & c_0 
+		\end{pmatrix}
+\end{equation}
+\caption{$A$ is a Toeplitz matrix and $C$ is circulant.}
+\end{equ}
+
+Toeplitz matrices commonly arise in PDE discretization, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $Ax = b$, the idea introduced by Strang and Chan is to use certain circulant preconditioners $C$ so that $C^{-1}Ax = C^{-1}b$ is solved in fewer iterations \cite{Chan_Strang}.
+
+We leverage this idea to build a preconditioner for stiffness matrices generated from the adaptive finite element for fractional PDEs. In this setting the problem is discretized on a nonuniform mesh, and the resulting stiffness matrix is dense. In the usual finite element setting an uniform mesh results in a Toeplitz stiffness matrix. In the adaptive setting, after an initial solve on a uniform grid, the error on each element is estimated and the elements with largest error are refined via bisection. It is often the case that neighboring elements are refined the same number of times. So although the mesh is not globally uniform, there are areas of local uniformity. To build an effective preconditioner, we will take advantage of these locally uniform areas and their corresponding Toeplitz blocks in the stiffness matrix. 
+% application for fractional pdes
+% similar systems result from mixed precision 
+\todo[inline]{citations for facts about FEM and Toeplitz matrices}
+
+Although dense, the stiffness matrix can be effectively stored as a hierarchical matrix ($\mathcal{H}$-matrix). Due to weaker interaction between elements that are further apart in the domain, off-diagonal blocks are well-suited for low rank approximation. (See \cite{Xiaozhe} for more stiffness matrix details.) The low rank representation makes for fast computations, but complicates both the implementation of the preconditioner and the spectral clustering of the preconditioned system. 
+
+% These preconditioners can be thought of as coming from Kernels of displacement operators. Cite Kalaith and Chan-Yeung.
+
+In this paper we investigate how to precondition such systems using circulant matrices. Our investigation is focused on $\mathcal{H}$-matrices as in \cite{Xiaozhe}, but the same methods could be used on any matrix with Toeplitz blocks on the diagonal. We prove the preconditioned system has eigenvalues clustered around 1 and demonstrate numerical results with superlinear convergence. 
+
+We emphasize that our unique contributions are:
 \begin{itemize}
-	\item circulant preconditioning
-	\item AMR and low-rank approx in hierarchical matrices
-	\item fractional PDEs
+	\item building circulant preconditioners for adaptive meshes 
+	\item proving the preconditioned system has eigenvalues clustered around 1
+	\item something else? numerical results? dealing with low-rank blocks?
 \end{itemize}
 
-There has long been interest in solving Toeplitz systems efficiently. An $n \times n$ matrix is called Topelitz if $a_{ij} = a_{i-j}$ (constant diagonals). Since a Toeplitz system has just order $n$ entires is can be solved directly in $\bigOh(n^2)$ time, as opposed to an arbitrary matrix with $n^2$ entries solved in $\bigOh(n^3)$ time. 
-
-Solving large Toeplitz systems, particularly those that are positive definite, has been made even faster by the use of circulant preconditioners. Def circulant. These preconditioners can be thought of as coming from Kernels of displacement operators. Cite Kalaith and Chan-Yeung. These SPD Toepltiz matrices are common in PDE discretization, singal processing, and control theory. 
-
-Toepltiz PDEs arise from uniform grids. 
-
-Further, multilevel \todo[inline]{is multilevel the right word?} Topelitz systems naturally arise from PDEs solved on adaptive meshes. Adaptive mesh refinement is sued to solve system that need different orders of granularity in different parts of the domain. To avoid the expensive grid refinement on the whole domain, only certain subsets of the domain are refined. Each part of the domain is refined only until the desired level of error is met. Int his setting we no longer have a uniform mesh on the whole domain, but every point on the mesh is part of a \emph{locally uniform} mesh. Each locally uniform subdomain corresponds to a Toeplitz block in the stiffness matrix. Blocks have different sizes. Geometric multigrid, hierarchical matrices, off diagonal low rank blocks. In the case of a system of purely Toeplitz blocks the preconditioning and theoretical results about spectral clustering are straightforward, we must also deal with how the off diagonal blocks perturb the spectrum. Weak and strong interactions. 
-
-In this paper we investigate how to precondition such systems using circulant matrices. Our investigation is focused on hierarchical matrices from GMG cite Xiaozhe, but the same methods could be used on any multilevel Toeplitz system. We prove spectral clustering around 1 and show numerical results with superlinear convergence. 
+% overview of subsequent sections?
 
 \section{Background}
 %% FEM and matrix structure 
@@ -183,7 +214,7 @@ We can make this last point more precise.
 \begin{definition}[Eigenvalue Clustering] 
 	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $\ptau^{-1} \A_m$ are clustered around $1$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $\ptau^{-1} \A_m$ that do not lie within $ [1-\varepsilon, 1+\varepsilon]$.
 \end{definition}
-The use of circulant preconditioners for Toeplitz systems originates from TODO. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
+The use of circulant preconditioners for Toeplitz systems originates from \cite{Chan_Strang}. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
 
 In our numerical results we use type TODO, discussed in \cite{Bini}. Though the results could be generalized to all eight forms. An important fact that we will use later:
 \todo[inline]{eigenvalues as points on function }
@@ -226,7 +257,8 @@ Get sizes of Toeplitz blocks $n_j$, calculate  $\lambda_i = c_i [\DST \t]_i$ for
 \end{itemize}
 
 \section{Theoretical Results} 
-%% 1x1 blocks consideration 
+% notation table ?
+% 1x1 blocks consideration 
 Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
 \subsection{Eigenvalue Bounds}
 \begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $n \times n$ matrices. Then for $A := M + E$ we have 
@@ -361,7 +393,7 @@ Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\o
 \end{itemize}
 
 \section{Conclusion}
-Future work: how to build adaptive mesh to increase block size, other circulant preconditioners, tensor preconditioners, higher dimension domain 
+Future work: how to build adaptive mesh to increase block size, other circulant preconditioners, tensor preconditioners, higher dimension domain, mixed precision 
 
 \bibliographystyle{siamplain}
 \bibliography{references}

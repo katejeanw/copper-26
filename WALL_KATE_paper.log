@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  17 FEB 2026 21:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  19 FEB 2026 00:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -782,33 +782,77 @@ LaTeX Info: Redefining \addtolength on input line 81.
 )
 \c@@todonotes@numberoftodonotes=\count334
 )
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen286
+\captionmargin@=\dimen287
+\captionwidth=\dimen288
+\caption@tempdima=\dimen289
+\caption@indent=\dimen290
+\caption@parindent=\dimen291
+\caption@hangindent=\dimen292
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+Package caption Info: \@makecaption = \long macro:#1#2->\footnotesize \setlengt
+h {\parindent }{1.5pc} \ifx \@captype \@figtxt \vskip \abovecaptionskip \setbox
+ \@tempboxa \hbox {{\normalfont \scshape #1}. {\normalfont \itshape #2}}\ifdim 
+\wd \@tempboxa >\hsize {\normalfont \scshape #1}. {\normalfont \itshape #2}\par
+ \else \global \@minipagefalse \hb@xt@ \hsize {\hfil \box \@tempboxa \hfil }\fi
+ \else \hbox to\hsize {\hfil {\normalfont \scshape #1}\hfil }\setbox \@tempboxa
+ \hbox {{\normalfont \itshape #2}}\ifdim \wd \@tempboxa >\hsize {\normalfont \i
+tshape #2}\par \else \global \@minipagefalse \hb@xt@ \hsize {\hfil \box \@tempb
+oxa \hfil }\fi \vskip \belowcaptionskip \fi  on input line 1139.
+)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+\c@caption@flags=\count335
+\c@continuedfloat=\count336
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: hypcap package is loaded.
+)
+Package caption Info: Option `declare type' requires the `newfloat' package on 
+input line 21.
+ (/usr/local/texlive/2021/texmf-dist/tex/latex/newfloat/newfloat.sty
+Package: newfloat 2019/09/02 v1.1l Defining new floating environments (AR)
+)
+Package newfloat Info: New float `equ' with options `' on input line 21.
+\c@equ=\count337
+Package newfloat Info: float type `equ'=8 on input line 21.
+
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count335
+\l__color_backend_stack_int=\count338
 \l__pdf_internal_box=\box63
 )
 (./WALL_KATE_paper.aux)
 \openout1 = `WALL_KATE_paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 84.
-LaTeX Font Info:    ... okay on input line 84.
-Package hyperref Info: Link coloring ON on input line 84.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+Package hyperref Info: Link coloring ON on input line 89.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -820,11 +864,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count336
+\c@section@level=\count339
 )
-LaTeX Info: Redefining \ref on input line 84.
-LaTeX Info: Redefining \pageref on input line 84.
-LaTeX Info: Redefining \nameref on input line 84.
+LaTeX Info: Redefining \ref on input line 89.
+LaTeX Info: Redefining \pageref on input line 89.
+LaTeX Info: Redefining \nameref on input line 89.
  (./WALL_KATE_paper.out) (./WALL_KATE_paper.out)
 \@outlinefile=\write4
 \openout4 = `WALL_KATE_paper.out'.
@@ -832,111 +876,132 @@ LaTeX Info: Redefining \nameref on input line 84.
 
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count337
-\scratchdimen=\dimen286
+\scratchcounter=\count340
+\scratchdimen=\dimen293
 \scratchbox=\box64
-\nofMPsegments=\count338
-\nofMParguments=\count339
+\nofMPsegments=\count341
+\nofMParguments=\count342
 \everyMPshowfont=\toks57
-\MPscratchCnt=\count340
-\MPscratchDim=\dimen287
-\MPnumerator=\count341
-\makeMPintoPDFobject=\count342
+\MPscratchCnt=\count343
+\MPscratchDim=\dimen294
+\MPnumerator=\count344
+\makeMPintoPDFobject=\count345
 \everyMPtoPDFconversion=\toks58
 )
 
 Package todonotes Warning: The length marginparwidth is less than 2cm and will 
 most likely cause issues with the appearance of inserted todonotes. The issue c
 an be solved by adding a line like \setlength {\marginparwidth }{2cm} prior to 
-loading the todonotes package. on input line 84.
+loading the todonotes package. on input line 89.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 87.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+Package newfloat Info: `float' package detected.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 92.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 87.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 92.
 
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 129.
- [1
+Package hyperref Info: bookmark level for unknown equ defaults to 0 on input li
+ne 139.
+
+
+LaTeX Warning: Citation `Chan_Strang' on page 1 undefined on input line 142.
+
+[1
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
+ine 146.
 
-LaTeX Warning: Citation `TODO' on page 2 undefined on input line 143.
 
+LaTeX Warning: Citation `Xiaozhe' on page 2 undefined on input line 148.
+
+
+LaTeX Warning: Citation `Xiaozhe' on page 2 undefined on input line 152.
+
+
+LaTeX Warning: Citation `TODO' on page 2 undefined on input line 171.
+
+[2]
 Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
-nput line 154.
+nput line 182.
 
-Overfull \hbox (11.62389pt too wide) in paragraph at lines 162--164
+Overfull \hbox (11.62389pt too wide) in paragraph at lines 190--192
 \OT1/cmr/m/it/10 Similarly this ma-trix in-duces a func-tion from the trun-cate
 d se-ries, $\OML/cmm/m/it/10 a[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 z\OT1/cmr/m/n
 /10 ) = [][] \OML/cmm/m/it/10 a[]z[]$\OT1/cmr/m/it/10 . |
  []
 
-[2]
 
-LaTeX Warning: Citation `Kailath' on page 3 undefined on input line 176.
-
-
-LaTeX Warning: Citation `Bini' on page 3 undefined on input line 176.
+LaTeX Warning: Citation `Kailath' on page 3 undefined on input line 204.
 
 
-LaTeX Warning: Citation `Bini' on page 3 undefined on input line 188.
+LaTeX Warning: Citation `Bini' on page 3 undefined on input line 204.
 
 
-Overfull \hbox (34.94649pt too wide) detected at line 208
+LaTeX Warning: Citation `Chan_Strang' on page 3 undefined on input line 214.
+
+
+LaTeX Warning: Citation `Bini' on page 3 undefined on input line 216.
+
+
+Overfull \hbox (34.94649pt too wide) detected at line 236
 []|
  []
 
 [3]
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 232.
+line 261.
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 253.
+line 282.
+ [4]
 Package hyperref Info: bookmark level for unknown corollary defaults to 0 on in
-put line 264.
+put line 293.
 
-
-LaTeX Warning: Citation `Kailath' on page 4 undefined on input line 267.
-
-[4]
 
 LaTeX Warning: Citation `Kailath' on page 5 undefined on input line 296.
 
 [5]
-Overfull \hbox (5.81287pt too wide) in paragraph at lines 314--315
+
+LaTeX Warning: Citation `Kailath' on page 6 undefined on input line 325.
+
+
+Overfull \hbox (5.81287pt too wide) in paragraph at lines 343--344
 []\OT1/cmr/m/n/10 We ad-di-tion-ally split $\OML/cmm/m/it/10 H$ \OT1/cmr/m/n/10
  by sep-a-rat-ing the anti-diagonals with co-ef-fi-cients $\OML/cmm/m/it/10 a[]
 ; [] ; a[]$|
  []
 
+[6]
 
-LaTeX Warning: Citation `Kailath' on page 6 undefined on input line 330.
+LaTeX Warning: Citation `Kailath' on page 7 undefined on input line 359.
 
-[6] (./WALL_KATE_paper.bbl)
+[7] (./WALL_KATE_paper.bbl)
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
- [7] (./WALL_KATE_paper.aux)
+ [8] (./WALL_KATE_paper.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 95886439FD62FBA8C434FFE7A59556E5;1376.
+(rerunfilecheck)             Checksum: 287DB0E307DC87D609FDD81FEB438A56;1377.
  ) 
 Here is how much of TeX's memory you used:
- 24464 strings out of 478994
- 439156 string characters out of 5858183
- 722548 words of memory out of 5000000
- 39916 multiletter control sequences out of 15000+600000
+ 25833 strings out of 478994
+ 465474 string characters out of 5858183
+ 747633 words of memory out of 5000000
+ 41273 multiletter control sequences out of 15000+600000
  413482 words of font info for 64 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
- 102i,16n,102p,1111b,860s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 102i,16n,117p,1115b,860s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><
@@ -954,10 +1019,10 @@ e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/202
 1/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (7 pages, 229223 bytes).
+Output written on WALL_KATE_paper.pdf (8 pages, 231958 bytes).
 PDF statistics:
- 218 PDF objects out of 1000 (max. 8388607)
- 174 compressed objects within 2 object streams
- 45 named destinations out of 1000 (max. 500000)
+ 224 PDF objects out of 1000 (max. 8388607)
+ 179 compressed objects within 2 object streams
+ 48 named destinations out of 1000 (max. 500000)
  197 words of extra memory for PDF output out of 10000 (max. 10000000)
 
