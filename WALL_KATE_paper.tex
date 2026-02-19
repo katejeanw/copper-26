@@ -116,17 +116,17 @@ We present a preconditioner for solving fractional partial differential equation
 \section{Introduction} 
 % Availabilitty of Xiaozhe's code / stiffness matrices 
 
-There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$, in other words, $A$ has constant diagonals. Arbitrary matrices have $\bigOh(n^2)$ unique entries and are solved directly by traditional techniques in $\bigOh(n^3)$ time, Since such a Toeplitz matrix has just $\bigOh (n)$ unique entries, we may expect to be able to solve it in $\bigOh (n^2)$ time. This is indeed the case via techniques such as Levinson's algorithm \cite{Levinson}. Even this improvement, however, is infeasible for sufficiently large systems. Instead we turn to iterative Krylov methods. For these methods we can still take advantage of Toeplitz structure by using circulant preconditioners. 
+There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$, in other words, $A$ has constant diagonals. Arbitrary $n \times n$ matrices have up to $n^2$ unique entries and are solved directly by traditional techniques in $\bigOh(n^3)$ time. Since a Toeplitz matrix has just at most $2n-1$ unique entries, we may expect to be able to solve it in $\bigOh (n^2)$ time. This is indeed the case via techniques such as Levinson's algorithm \cite{Levinson}. Even this improvement, however, is infeasible for large systems. Instead we turn to iterative Krylov and multigrid methods. For these methods we can still take advantage of Toeplitz structure by using circulant preconditioners. 
 
 A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around'' property where the last entry each row is the first entry of the subsequent row. 
 
 \begin{equ}[H]
 	\begin{equation}
-	A = \begin{pmatrix}
-		a_0 & a_{-1} & \cdots & a_{-(n-1)} \\
-		a_{1} & a_0 & \cdots & a_{-(n-2)} \\
+	T = \begin{pmatrix}
+		t_0  &  t_{-1} & \cdots & t_{-(n-1)} \\
+		t_{1} & t_0 & \cdots & t_{-(n-2)} \\
 		\vdots & \vdots & \ddots & \vdots \\
-		a_{n-1} & a_{n-2} & \cdots & a_0 
+		t_{n-1} & t_{n-2} & \cdots & t_0 
 	\end{pmatrix} 
 	\hspace{.15 in}
 	C = \begin{pmatrix}
@@ -136,15 +136,15 @@ A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around
 		c_{1} & c_{2} & \cdots & c_0 
 		\end{pmatrix}
 \end{equation}
-\caption{$A$ is a Toeplitz matrix and $C$ is circulant.}
+\caption{$T$ is a Toeplitz matrix and $C$ is circulant.}
 \end{equ}
 
-Toeplitz matrices commonly arise in PDE discretization, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $Ax = b$, the idea introduced by Strang and Chan is to use certain circulant preconditioners $C$ so that $C^{-1}Ax = C^{-1}b$ is solved in fewer iterations \cite{Chan_Strang}.
+Toeplitz matrices commonly arise in PDE discretization, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $Tx = b$, the idea introduced by Strang and Chan is to use certain circulant preconditioners $C$ so that $C^{-1}Tx = C^{-1}b$ is solved in fewer iterations \cite{Chan_Strang}.
 
-We leverage this idea to build a preconditioner for stiffness matrices generated from the adaptive finite element for fractional PDEs. In this setting the problem is discretized on a nonuniform mesh, and the resulting stiffness matrix is dense. In the usual finite element setting an uniform mesh results in a Toeplitz stiffness matrix. In the adaptive setting, after an initial solve on a uniform grid, the error on each element is estimated and the elements with largest error are refined via bisection. It is often the case that neighboring elements are refined the same number of times. So although the mesh is not globally uniform, there are areas of local uniformity. To build an effective preconditioner, we will take advantage of these locally uniform areas and their corresponding Toeplitz blocks in the stiffness matrix. 
+We leverage this idea to build a preconditioner for stiffness matrices generated from the adaptive finite element method (AFEM) for fractional PDEs. In this setting the problem is discretized on a nonuniform mesh, and the resulting stiffness matrix is dense. In the usual finite element method (FEM) setting an uniform mesh results in a Toeplitz stiffness matrix. In the adaptive setting, after an initial solve on a uniform grid, the error on each element is estimated and the elements with largest error are refined via bisection. It is often the case that neighboring elements are refined the same number of times. So although the mesh is not globally uniform, there are areas of local uniformity. To build an effective preconditioner, we will take advantage of these locally uniform areas and their corresponding Toeplitz blocks in the stiffness matrix. 
 % application for fractional pdes
 % similar systems result from mixed precision 
-\todo[inline]{citations for facts about FEM and Toeplitz matrices}
+\todo[inline]{TODO: citations for facts about FEM and Toeplitz matrices}
 
 Although dense, the stiffness matrix can be effectively stored as a hierarchical matrix ($\mathcal{H}$-matrix). Due to weaker interaction between elements that are further apart in the domain, off-diagonal blocks are well-suited for low rank approximation. (See \cite{Xiaozhe} for more stiffness matrix details.) The low rank representation makes for fast computations, but complicates both the implementation of the preconditioner and the spectral clustering of the preconditioned system. 
 
@@ -163,47 +163,72 @@ We emphasize that our unique contributions are:
 
 \section{Background}
 %% FEM and matrix structure 
-\todo[inline]{applications for fPDEs}
-One of the most common approaches to numerically solving PDEs is the finite element method (FEM). FEM requires the domain be broken into a grid or mesh. When each piece of the domain, or element, is the same size we say it is an uniform mesh.
-\todo[inline]{Prove uniform mesh gives toeplitz here}
-If the mesh is not fine enough to give the desired accuracy the initial approach may be to increase $n$ and make each element smaller, keeping a uniform mesh. Alternatively, when different levels of granularity are required across the domain to achieve desired accuracy, adaptive meshes can be employed.  This approach only increases the mesh size in certain subdomains. While the entire mesh is no longer uniform, each element is part of a locally uniform mesh. 
-\todo[inline]{toeplitz blocks}
-fractional PDEs mean all elements interact, though some weaker some stronger. Weak and strong interaction guiding a natural splitting. Good for low-rank approximation. Summary of matrix structure, spsd?
+To understand the need for our preconditioner, we must give a bit more detail about AFEM. We restrict our attention to problems on a one-dimensional domain, $[a,b]$ with the discretization $a = x_0, x_1, \dots, x_n = b$. Often FEM is  done on a uniform mesh, that is each element $[x_i, x_{i+1}]$ is size $x_{i+1}- x_i$ for all $0 \leq i \leq n-1$.
+
+% brief proof uniform mesh gives toeplitz?
+If the mesh is not fine enough to give the desired accuracy, one approach is to increase the number of elements, $n$. While this approach preserves uniformity, it usually requires recomputing the stiffness matrix entirely. Alternatively, if the level of refinement gives sufficiently small error for some parts of the domain, we can leave those unchanged and only refine in areas of larger error. This approach allows us to take advantage of computations that have already been performed, but the mesh is no longer uniform. 
+
+In practice we find that adjacent elements are often refined to the same level, so a group of elements forms a locally uniform mesh. Since uniform meshes give rise to SPD Toeplitz systems, we can see that if we formed the stiffness matrix for just a locally uniform subdomain we would have an SPD Toeplitz matrix. So wherever there are adjacent elements of the same size we can find a corresponding Toeplitz block on the main diagonal of our stiffness matrix, $\A$. The size of this block depends on how many adjacent elements are the same size. We have also observed that the boundary of the domain almost always requires the greatest level of refinement. In general we have larger Toeplitz blocks from locally uniform subdomains in the middle of the matrix, and smaller blocks---or indeed $1 \times 1$ blocks---near the boundary. 
 
 %% Toeplitz matrices and generating functions 
-Toeplitz matrices have many unique properties that give rise to efficient algorithms (see for example \cite{TODO}). For our purposes we focus on their connection to functions in the Weiener class. This will allow us to take our problem from matrix operator theory to function theory. Suppose we have a singly infinite, symmetric Toeplitz matrix, 
+To build an effective preconditioner and investigate its properites, we have to take full advantage of these SPD Toeplitz blocks. Toeplitz matrices have many unique properties that give rise to efficient algorithms (see for example \cite{toeplitz}). For our purposes we focus on their connection to functions in the Wiener class. This will allow us to take our problem from matrix operator theory to function theory. Suppose we have a singly infinite, symmetric Toeplitz matrix
 \begin{equation*}
-	\A = \begin{bmatrix}
-		a_0 & a_1 & a_2 & \\
-		a_1 & a_0 & a_1 &  \ddots \\
-		a_2 & a_1 & a_0 & \ddots  \\
+	T = \begin{pmatrix}
+		t_0 & t_1 & t_2 & \\
+		t_1 & t_0 & t_1 &  \ddots \\
+		t_2 & t_1 & t_0 & \ddots  \\
 		 & \ddots & \ddots & \ddots  \\
-	\end{bmatrix}.
+	\end{pmatrix}.
 \end{equation*}
-Assume $\sum_{k=-\infty}^{\infty} |a_k| <\infty$. Then the function $a(z) = \sum_{k=-\infty}^{\infty} a_k z^k$ is real, positive, and in the Wiener class for $|z| = 1$. It will be convenient to define the corresponding truncated function for a finite subsection of the infinite matrix: 
+Assume $\sum_{k=-\infty}^{\infty} |t_k| <\infty$. Then the function $t(z) = \sum_{k=-\infty}^{\infty} t_k z^k$ is real, positive, and in the Wiener class for $|z| = 1$. It will be convenient to define the corresponding truncated function for a finite subsection of the infinite matrix: 
 \begin{definition}
-	The $m \times m$ finite subsection of the singly infinite matrix $\A$ is denoted $\A_m$ and defined as
+	The $m \times m$ finite subsection of the singly infinite matrix $T$ is denoted $T_m$ and defined as
 	\begin{equation*}
-				\A_m = \begin{bmatrix}
-			a_0 & a_1 & \cdots & a_{m-1} \\
-			a_1 & a_0 & \cdots & a_{m-2} \\
+				T_m = \begin{pmatrix}
+			t_0 & t_1 & \cdots & t_{m-1} \\
+			t_1 & t_0 & \cdots & t_{m-2} \\
 			\vdots & \vdots & \ddots & \vdots \\
-			a_{m-1} & a_{m-2} & \cdots & a_0 
-		\end{bmatrix}.
+			t_{m-1} & t_{m-2} & \cdots & t_0 
+		\end{pmatrix}.
 	\end{equation*}
-	Similarly this matrix induces a function from the truncated series, $a_m(z) = \sum_{k=-m}^{m} a_k z^k$. 
+	Similarly this matrix induces a function from the truncated series, $t_m(z) = \sum_{k=-(m-1)}^{m-1} t_k z^k$. 
 \end{definition}
 
-\todo[inline]{boundaries is the problem always (not infinite, block division)}
+Previous work on Toeplitz systems offers a few options for circulant preconditioners. Although their construction differs, the spectrum of the preconditioned systems are asymptotically the same \cite{Chan_89}. We use the construction given by Bini and Benedetto \cite{Bini}. Given a symmetric Toeplitz matrix $T$ we build a Hankel correction, $H$ where 
+\begin{equation*}
+	T = \begin{pmatrix}
+		t_0 & t_1 & t_2 & \cdots &t_{n-2}& t_{n-1} \\
+		t_1 & t_0 & t_1 &  \cdots &t_{n-3}& t_{n-2} \\
+		t_2 & t_1 & t_0 & \cdots &t_{n-4}& t_{n-3} \\
+		\vdots & \vdots & \vdots & \ddots&\vdots & \vdots \\
+		t_{n-2} & t_{n-3} & t_{n-4} & \cdots &t_0 & t_1 \\
+		t_{n-1} & t_{n-2} & t_{n-3} & \cdots & t_1 & t_0 
+	\end{pmatrix}
+	\Hank = \begin{pmatrix}
+		t_2 & t_3 & t_4 & \cdots & t_{n-1} & 0 & 0 \\
+		t_3 & t_4 & t_5 & \cdots  & 0 & 0 & 0 \\
+		t_4 & t_5 & t_6 & \cdots & 0 & 0 & t_{n-1} \\
+		\vdots & \vdots & \vdots & \cdots & \vdots & \vdots & \vdots \\
+		0 & 0 & 0 & \cdots & t_5 & t_4 & t_3 \\
+		0 & 0 & t_{n-1} & \cdots & t_4 & t_3 & t_2
+	\end{pmatrix}.
+\end{equation*}
+Then Bini and Benedetto's preconditioner is defined as $\ptau = T - H$. We summarize the important properties of $\ptau$ (see \cite{Bini} for details):
 \begin{itemize}
-	\item FEM,  adaptive mesh and GMG
-	\item Hierarchical matrices 
-	\item Hankel 
-	\item circulant and DFT/FFT (displacement kernel's)
-	\item discrete convolution for exact solution and the boundary problem 
+	\item $\ptau$ is a circulant matrix
+	\item $\ptau$ can be applied in $n \log n$ time 
+	\item $\ptau$ is diagonalized by the discrete sine transform-I matrix 
+	\item Each eigenvalue of $\ptau$ can be written as the truncated function $t_m$ evaluated somewhere on the unit circle, IE $\lambda_k(\ptau) = t_m(z_k)$ where $|z_k| = 1$.
 \end{itemize}
+These preconditioner can also be thought of as coming from the kernel of a displacement operator. This framework is useful for generating yet other circulant preconditioners, see \cite{Kailath}. 
+% boundaries are the problem always (not infinite, block division)}
+% Hankel matrices
+% circulant and DFT/FFT (displacement kernel's)
+% discrete convolution for exact solution and the boundary problem 
 
-\section{Preconditioner}
+\section{Our Preconditioner}
+In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building our preconditioner, and how to build and apply our preconditioner efficiently.
+
 A good preconditioner for an iterative method must in general decrease the total number of iterations without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, though similar criteria has been established since Bini and Benedetto \cite{Bini}:
 \begin{enumerate}
 	\item Complexity of constructing  applying $\ptau$ should be $\bigOh (m \log m)$.
