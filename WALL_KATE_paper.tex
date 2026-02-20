@@ -276,7 +276,7 @@ Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using equation \ref{e
 		S_{m_1} &&& \\ & S_{m_2} && \\ && \ddots & \\ &&& S_{m_k}
 		\end{pmatrix}.
 \end{equation*}
-Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{is this true?}
+Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{verify this is true...}
 
 \section{Theoretical Results} 
 % notation table ?
