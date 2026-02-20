@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  19 FEB 2026 22:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  20 FEB 2026 13:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -956,45 +956,47 @@ Overfull \hbox (29.03433pt too wide) detected at line 215
 
 LaTeX Warning: Citation `Bini' on page 3 undefined on input line 219.
 
-
-LaTeX Warning: Citation `Kailath' on page 3 undefined on input line 226.
-
 [3]
 
-LaTeX Warning: Citation `Kailath' on page 4 undefined on input line 235.
+LaTeX Warning: Citation `Kailath' on page 4 undefined on input line 228.
 
 
-LaTeX Warning: Citation `Bini' on page 4 undefined on input line 235.
+LaTeX Warning: Citation `Kailath' on page 4 undefined on input line 237.
 
-Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 273.
+
+LaTeX Warning: Citation `Bini' on page 4 undefined on input line 237.
+
+
+Overfull \hbox (6.7159pt too wide) detected at line 278
+\OMS/cmsy/m/n/10 T[] \OT1/cmr/m/n/10 = [] [] [] \OML/cmm/m/it/10 :|
+ []
+
 [4]
+Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
+line 287.
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 294.
+line 308.
 Package hyperref Info: bookmark level for unknown corollary defaults to 0 on in
-put line 305.
+put line 319.
 
 
-LaTeX Warning: Citation `Kailath' on page 5 undefined on input line 308.
+LaTeX Warning: Citation `Kailath' on page 5 undefined on input line 322.
 
 [5]
 
-LaTeX Warning: Citation `Kailath' on page 6 undefined on input line 337.
+LaTeX Warning: Citation `Kailath' on page 6 undefined on input line 351.
 
 [6]
-Overfull \hbox (5.81287pt too wide) in paragraph at lines 355--356
+Overfull \hbox (5.81287pt too wide) in paragraph at lines 369--370
 []\OT1/cmr/m/n/10 We ad-di-tion-ally split $\OML/cmm/m/it/10 H$ \OT1/cmr/m/n/10
  by sep-a-rat-ing the anti-diagonals with co-ef-fi-cients $\OML/cmm/m/it/10 a[]
 ; [] ; a[]$|
  []
 
+[7]
 
-LaTeX Warning: Citation `Kailath' on page 7 undefined on input line 371.
+LaTeX Warning: Citation `Kailath' on page 8 undefined on input line 385.
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [7]
 (./WALL_KATE_paper.bbl)
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
@@ -1004,13 +1006,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: D6D95E62EB4BDE431DBB4277968E3EE0;1399.
+(rerunfilecheck)             Checksum: A37B366B0A69E2831A2565CFB109BC8F;1399.
  ) 
 Here is how much of TeX's memory you used:
- 25815 strings out of 478994
- 465157 string characters out of 5858183
- 747350 words of memory out of 5000000
- 41261 multiletter control sequences out of 15000+600000
+ 25821 strings out of 478994
+ 465237 string characters out of 5858183
+ 747471 words of memory out of 5000000
+ 41265 multiletter control sequences out of 15000+600000
  413482 words of font info for 64 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
  102i,13n,117p,1115b,857s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1031,10 +1033,10 @@ e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/202
 1/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (8 pages, 234874 bytes).
+Output written on WALL_KATE_paper.pdf (8 pages, 237303 bytes).
 PDF statistics:
- 217 PDF objects out of 1000 (max. 8388607)
- 172 compressed objects within 2 object streams
- 42 named destinations out of 1000 (max. 500000)
+ 221 PDF objects out of 1000 (max. 8388607)
+ 176 compressed objects within 2 object streams
+ 44 named destinations out of 1000 (max. 500000)
  197 words of extra memory for PDF output out of 10000 (max. 10000000)
 

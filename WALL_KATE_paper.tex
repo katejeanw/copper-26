@@ -220,7 +220,9 @@ We summarize the important properties of $\ptau$ (see \cite{Bini} for details):
 \begin{itemize}
 	\item $\ptau$ is a circulant matrix.
 	\item $\ptau$ can be applied in $n \log n$ time .
-	\item $\ptau$ is diagonalized by the type-I discrete sine transform matrix, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
+	\item $\ptau$ is diagonalized by the type-I discrete sine transform (DST) matrix, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
+	\item The $k$-th eigenvalue of $\ptau$ is proportional to the $k$-th entry of $St_1$ where $t_1$ is the first column of $T$. Specifically, define  $c_k := \sqrt{\frac{n+1}{2}} \frac{1}{\sin(\frac{\pi k }{n+1})}$, then 
+	\begin{equation} \label{eigs} \lambda_k(\ptau) = c_k [St_1]_k \end{equation}.
 	\item Each eigenvalue of $\ptau$ can be written as the truncated function $t_m$ evaluated somewhere on the unit circle, IE $\lambda_k(\ptau) = t_m(z_k)$ where $|z_k| = 1$.
 \end{itemize}
 These preconditioner can also be thought of as coming from the kernel of a displacement operator. This framework is useful for generating yet other circulant preconditioners, see \cite{Kailath}. 
@@ -255,14 +257,26 @@ Assume our stiffness matrix has $k$ Toeplitz blocks $T_1, T_2, \dots, T_k$ of re
 % Common assumptions for proof on one block 
 
 We can now construct a preconditioner, $\Tau$ for the adaptive system. To explicitly construct $\Tau$ we can calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $T_i$. Then we define $\ptau_i = T_i - \Hank_i$,  resulting in $k$ matrices $\ptau_1, \ptau_2, \dots, \ptau_k$. Finally we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
-$$\Tau = \begin{bmatrix}
+$$\Tau = \begin{pmatrix}
 		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_m
-	\end{bmatrix}.$$
+	\end{pmatrix}.$$
 
-This explicit construction is not the most efficient, instead we can apply $\Tau$ implicitly in $m \log m $ time where $m = \sum_{j=1}^k m_j$. 
+This explicit construction is not the most efficient, instead we can apply $\Tau^{-1}$ implicitly in $m \log m $ time where $m = \sum_{j=1}^k m_j$. 
 
-To apply it $m \log m$ instead,  (implicit)
-Get sizes of Toeplitz blocks $n_j$, calculate  $\lambda_i = c_i [\DST \t]_i$ for $1 \leq i \leq n_j$, apply $\DST \Lambda^{-1} \DST$.
+Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using equation \ref{eigs} to calculate the eigenvalues of $\ptau_i$, we can write $\ptau_i =  S_{m_i} \Lambda_i S_{m_i}$. 
+\begin{equation*}
+	\Tau^{-1} = 
+	\begin{pmatrix}
+		S_{m_1} &&& \\ & S_{m_2} && \\ && \ddots & \\ &&& S_{m_k}
+	\end{pmatrix}
+	\begin{pmatrix}
+		\Lambda_1^{-1} &&& \\ & \Lambda_2^{-1} && \\ && \ddots & \\ &&& \Lambda_m^{-1}
+	\end{pmatrix}
+	\begin{pmatrix}
+		S_{m_1} &&& \\ & S_{m_2} && \\ && \ddots & \\ &&& S_{m_k}
+		\end{pmatrix}.
+\end{equation*}
+Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{is this true?}
 
 \section{Theoretical Results} 
 % notation table ?
