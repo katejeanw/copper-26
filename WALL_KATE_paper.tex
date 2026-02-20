@@ -35,7 +35,7 @@
 \newcommand{\offd}{{B}}
 \newcommand{\Hank}{{ H }}
 \newcommand{\DST}{{ S }}
-\newcommand{\Tau}{T}
+\newcommand{\Tau}{\mathcal{T}}
 \newcommand{\ptau}{{\bm{\tau}}}
 \newcommand{\Sq}{{S_Q}} 
 
@@ -213,11 +213,14 @@ Previous work on Toeplitz systems offers a few options for circulant preconditio
 		0 & 0 & t_{n-1} & \cdots & t_4 & t_3 & t_2
 	\end{pmatrix}.
 \end{equation*}
-Then Bini and Benedetto's preconditioner is defined as $\ptau = T - H$. We summarize the important properties of $\ptau$ (see \cite{Bini} for details):
+
+Then Bini and Benedetto's preconditioner is defined as $\ptau := T - H$. $\Hank$ is a Hankel matrix, that is it is constant on the antidiagonals. Both $T$ and $\Hank$ are symmetric, so they can be completely represented by the at most $n$ unique values: the diagonals of $T, {t_0, t_1, \dots, t_{n-1}}$, and the antidiagonals of $\Hank, {t_2, t_3, \dots, t_{n-1},0,0}$. 
+	
+We summarize the important properties of $\ptau$ (see \cite{Bini} for details):
 \begin{itemize}
-	\item $\ptau$ is a circulant matrix
-	\item $\ptau$ can be applied in $n \log n$ time 
-	\item $\ptau$ is diagonalized by the discrete sine transform-I matrix 
+	\item $\ptau$ is a circulant matrix.
+	\item $\ptau$ can be applied in $n \log n$ time .
+	\item $\ptau$ is diagonalized by the type-I discrete sine transform matrix, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
 	\item Each eigenvalue of $\ptau$ can be written as the truncated function $t_m$ evaluated somewhere on the unit circle, IE $\lambda_k(\ptau) = t_m(z_k)$ where $|z_k| = 1$.
 \end{itemize}
 These preconditioner can also be thought of as coming from the kernel of a displacement operator. This framework is useful for generating yet other circulant preconditioners, see \cite{Kailath}. 
@@ -229,62 +232,43 @@ These preconditioner can also be thought of as coming from the kernel of a displ
 \section{Our Preconditioner}
 In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building our preconditioner, and how to build and apply our preconditioner efficiently.
 
-A good preconditioner for an iterative method must in general decrease the total number of iterations without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, though similar criteria has been established since Bini and Benedetto \cite{Bini}:
+A good preconditioner for an iterative method must in general decrease the total number of iterations, without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, though similar criteria has been established in literature (for example \cite{Bini}). 
 \begin{enumerate}
 	\item Complexity of constructing  applying $\ptau$ should be $\bigOh (m \log m)$.
 	\item A linear system with $\ptau$ should be solved in $ \bigOh (m \log m)$ operations.
 	\item The spectrum of $\ptau^{-1} \A$ should be clustered around 1
 \end{enumerate}
-We can make this last point more precise. 
+
+How tightly the eigenvalues cluster around 1 will determine the speed of convergence. In proving results about the clustering we will refer to the infinite matrix framework established previously. First we summarize results established previously about the spectral clustering of $\ptau$ applied to a single Toeplitz block $T$. This result will then be used as a lemma in proving the spectral clustering for our stiffness matrix from the adaptive mesh. We will show that for $m$ large enough 
+
+We make this last point more precise:
 \begin{definition}[Eigenvalue Clustering] 
-	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $\ptau^{-1} \A_m$ are clustered around $1$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $\ptau^{-1} \A_m$ that do not lie within $ [1-\varepsilon, 1+\varepsilon]$.
+	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $C^{-1} T_m$ are clustered around a real number $\rho$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $C^{-1} T_m$ that do not lie within $ [\rho-\varepsilon, \rho+\varepsilon]$.
 \end{definition}
-The use of circulant preconditioners for Toeplitz systems originates from \cite{Chan_Strang}. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
 
-In our numerical results we use type TODO, discussed in \cite{Bini}. Though the results could be generalized to all eight forms. An important fact that we will use later:
-\todo[inline]{eigenvalues as points on function }
-$\A$ is Toeplitz block, $\Hank$ is ``Hankel Correction"
-\begin{align*}
-	\A = \begin{bmatrix}
-		a_0 & a_1 & a_2 & \cdots &a_{n-2}& a_{n-1} \\
-		a_1 & a_0 & a_1 &  \cdots &a_{n-3}& a_{n-2} \\
-		a_2 & a_1 & a_0 & \cdots &a_{n-4}& a_{n-3} \\
-		\vdots & \vdots & \vdots & \ddots&\vdots & \vdots \\
-		a_{n-2} & a_{n-3} & a_{n-4} & \cdots &a_0 & a_1 \\
-		a_{n-1} & a_{n-2} & a_{n-3} & \cdots & a_1 & a_0 
-	\end{bmatrix}
-	\Hank = \begin{bmatrix}
-		a_2 & a_3 & a_4 & \cdots & a_{n-1} & 0 & 0 \\
-		a_3 & a_4 & a_5 & \cdots  & 0 & 0 & 0 \\
-		a_4 & a_5 & a_6 & \cdots & 0 & 0 & a_{n-1} \\
-		\vdots & \vdots & \vdots & \cdots & \vdots & \vdots & \vdots \\
-		0 & 0 & 0 & \cdots & a_5 & a_4 & a_3 \\
-		0 & 0 & a_{n-1} & \cdots & a_4 & a_3 & a_2
-	\end{bmatrix}
-\end{align*}
-$\ptau = \A-\Hank$
+%The use of circulant preconditioners for Toeplitz systems originates from \cite{Chan_Strang}. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
+%
+%In our numerical results we use type TODO, discussed in \cite{Bini}. Though the results could be generalized to all eight forms. An important fact that we will use later:
+%\todo[inline]{eigenvalues as points on function }
 
+Assume our stiffness matrix has $k$ Toeplitz blocks $T_1, T_2, \dots, T_k$ of respective sizes $m_1, m_2, \dots, m_k$. Assume additionally these are ordered as they appear along the main diagonal. Each block can be thought of as a singly infinite matrix with a corresponding generating function, $t_1(z), t_2(z), \dots t_k(z)$. Assume that for all $1 \leq i \leq k, t_i(z)  \sum_{j=-\infty}^{\infty} |t_j| <\infty$ and $t_i(z) > 0$ for $z$ on the unit circle. 
+% Common assumptions for proof on one block 
 
-We'll also utilize the common assumptions that $ a(z) = \sum_{k=-\infty}^{\infty} |a_k| <\infty$ and $a(z) > 0$ for each Toeplitz block. 
-
-To apply the $\tau$ preconditioner to our adaptive mesh we can think first of a block construction, 
- (explicit) Identify Toeplitz blocks $\A_j$, Build Hankel correction $\Hank_j$, Construct little $\ptau_j = A_j - \Hank_j$ . Assemble big $\mathcal{T} = \begin{bmatrix}
+We can now construct a preconditioner, $\Tau$ for the adaptive system. To explicitly construct $\Tau$ we can calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $T_i$. Then we define $\ptau_i = T_i - \Hank_i$,  resulting in $k$ matrices $\ptau_1, \ptau_2, \dots, \ptau_k$. Finally we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
+$$\Tau = \begin{bmatrix}
 		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_m
-	\end{bmatrix}$
+	\end{bmatrix}.$$
+
+This explicit construction is not the most efficient, instead we can apply $\Tau$ implicitly in $m \log m $ time where $m = \sum_{j=1}^k m_j$. 
 
 To apply it $m \log m$ instead,  (implicit)
 Get sizes of Toeplitz blocks $n_j$, calculate  $\lambda_i = c_i [\DST \t]_i$ for $1 \leq i \leq n_j$, apply $\DST \Lambda^{-1} \DST$.
-
-\begin{itemize}
-	\item story of many
-	\item SPSD with SPSD A
-	\item how it works w multigrid
-\end{itemize}
 
 \section{Theoretical Results} 
 % notation table ?
 % 1x1 blocks consideration 
 Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
+First, we recall some classic eigenvalue results that will be of use to us later. 
 \subsection{Eigenvalue Bounds}
 \begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $n \times n$ matrices. Then for $A := M + E$ we have 
 	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq n.$$
