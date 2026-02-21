@@ -32,7 +32,7 @@
 \newcommand{\f}{{\vec  f }}
 \newcommand{\zero}{{\vec  0 }}
 \newcommand{\A}{{A }}
-\newcommand{\offd}{{B}}
+\newcommand{\offd}{{A_E}}
 \newcommand{\Hank}{{ H }}
 \newcommand{\Toe}{{ L }}
 \newcommand{\toe}{{ \ell }}
@@ -118,6 +118,7 @@ We present a preconditioner for solving fractional partial differential equation
 \section{Introduction} 
 % Availabilitty of Xiaozhe's code / stiffness matrices 
 
+\todo[inline]{problem statement, describe A block by block, visually? decay, dependence on alpha}
 There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$, in other words, $A$ has constant diagonals. Arbitrary $n \times n$ matrices have up to $n^2$ unique entries and are solved directly by traditional techniques in $\bigOh(n^3)$ time. Since a Toeplitz matrix has just at most $2n-1$ unique entries, we may expect to be able to solve it in $\bigOh (n^2)$ time. This is indeed the case via techniques such as Levinson's algorithm \cite{Levinson}. Even this improvement, however, is infeasible for large systems. Instead we turn to iterative Krylov and multigrid methods. For these methods we can still take advantage of Toeplitz structure by using circulant preconditioners. 
 
 A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around'' property where the last entry each row is the first entry of the subsequent row. 
@@ -234,7 +235,7 @@ These preconditioner can also be thought of as coming from the kernel of a displ
 % circulant and DFT/FFT (displacement kernel's)
 % discrete convolution for exact solution and the boundary problem 
 
-\section{Our Preconditioner}
+\section{Our Preconditioner} \label{precond}
 In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building our preconditioner, and how to build and apply our preconditioner efficiently.
 
 A good preconditioner for an iterative method must in general decrease the total number of iterations, without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, though similar criteria has been established in literature (for example \cite{Bini}). 
@@ -303,12 +304,14 @@ We present our version of the spectral clustering proof for the case of $\ptau$ 
 %		\lambda_k &= \mathop{\max_{V \subset \R^{n \times n}}}_{\dim (V) = k} \ \mathop{\min_{x \in V}}_{x \ne \zero} \frac{(Ax,x)}{(x,x)} .
 %	\end{align*} 
 %\end{theorem}
+
 For convenience we restate Weyl's inequality, which will be useful to us later. 
 \begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $m \times m$ matrices. Then for $A := M + E$ we have 
 	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq m.$$
 	That is the eigenvalues of $A$ are at most $||E||_2$ away from the eigenvalues of $M$. 
 \end{lemma}
 
+\subsection{Spectral Clustering of a Toeplitz Block}
 \begin{lemma}[Eigenvalue Clustering on a Toeplitz Block]
 	Let $\Toe$ be a singly infinite, symmetric, Toeplitz matrix with diagonals $\toe_0, \toe_1, \dots$. Then $\Toe_m$ is its $m \times m$ truncation with diagonals $\toe_0, \toe_1, \dots, \toe_{m-1}$. Assume the generating function $\toe(z)$ is in the Wiener class and positive on the unit circle. Let $\ptau$ be the corresponding preconditioner, then for $m$ large enough the spectrum of $\ptau^{-1} \Toe$ is clustered around 1. 
 \end{lemma}
@@ -338,21 +341,24 @@ Now using the min-max theorem,
 Thus the clustering of the spectrum of $\Hank$ around 0 implies the same for $\ptau^{-1} \Hank$. 
 \end{proof}
 
-\subsection{Full Matrix Proof}
-\subsubsection{setup}
-A single block preconditioner is $\tau$ the block diagonal preconditioner is $\Tau$.
+\subsection{Spectral Clustering of the Full System}
+\begin{theorem}[Full Matrix Clustering]
+	Let $\A$ be the stiffness matrix as described in section/equation TODO and $\Tau$ as described in section \ref{precond}. Then the spectrum of $\Tau^{-1} \A$ is clustered around 1. 
+\end{theorem}
 
-On a single block we write $\tau = \A - \Hank$, but for the full adaptive matrix $\A$ includes off diagonal blocks. Denote the diagonal (Toeplitz blocks) as $\A_D$ and everything else $\A_E$ so that $$\A = \A_D + \A_E + \offd$$. And thus the splitting as in \cite{Kailath} is expressed $\A_D = \Tau + H$ and $\A = \A_E + \offd + \Tau + \Hank$. So
-\begin{equation}\label{decomp}
-	\Tau^{-1} \A = \Tau^{-1}(\Tau + \Hank + \A_E + \offd) = I +\Tau^{-1}\Hank + \Tau^{-1}\A_E  +\Tau^{-1}\offd
+\begin{proof}
+Recall that our stiffness matrix is dense with Toeplitz blocks on the diagonal. The $ij$ entry of $\A$ reflects the strength of the interaction between elements $i$ and $j$. Thus we observe off-diagonal decay, as elements that are physically separated in the domain have weaker interaction. The rate of decay depends on the fractional order of the PDE. 
+
+In order to prove spectral clustering of $\Tau^{-1} \A$ we will handle the Toeplitz blocks as in the previous section. Blocks that are distant from the diagonal represent the weakest entries and have small norm. Blocks that are adjacent to the diagonal are not small norm; we will resort to splitting them into a low rank and a small norm term. To represent these classifications we will use $\A_D$ for the Toeplitz blocks, $\offd$ for blocks adjacent to the diagonal, and $\A_F$ for the rest so that $\A = \A_D + \offd + \A_F$. Let $\Hank$ denote the block diagonal Hank Correction matrix, observing then that $ \A_D = \Tau + \Hank$ we see that 
+\begin{equation}
+		\Tau^{-1} \A = \Tau^{-1}(\Tau + \Hank + \offd + \A_F ) = I +\Tau^{-1}\Hank +\Tau^{-1}\offd + \Tau^{-1}\A_F.
 \end{equation}
-\subsubsection{Proof}
-It suffices to show that $\Tau^{-1}\Hank$, $\Tau^{-1}\offd$ and $\Tau^{-1}\A_E$ have spectra clustered around zero. 
+So it suffices to show that $\Tau^{-1}\Hank$, $\Tau^{-1}\offd$ and $\Tau^{-1}\A_F$ have spectra clustered around zero. 
 First notice that $\Tau^{-1} \Hank$ is block diagonal and the spectrum of each block can be characterized using the former proof on each block. 
 
 \todo[inline]{since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
 
-Assume the off-diagonal-by-one blocks are low-rank. Let $C$ be such a block with dimensions $n_C \times n_C$ and rank $r_C << n_C$. Using the SVD we can split $C$ as $$ C = \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right). $$ 
+Assume the off-diagonal-by-one blocks are well approximated by a low-rank matrix. Let $C$ be such a block with dimensions $n_C \times n_C$ and rank $r_C << n_C$. Using the SVD we can split $C$ as $$ C = \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right). $$ 
 With a slight abuse of notation, we can embed this decomposition in the appropriate ``off-diagonal'' position of an $m \times m$ matrix. Doing this for all such off-diagonal blocks we write
 \begin{align*}
 	B &= \sum_{C \in \text{off-diag}} \left[ \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right) \right]  \\
@@ -369,16 +375,16 @@ The first term in each sum can be thought of as our `low-rank' equivalent from b
 
 Finally we can make the splitting $\A = \A_{SN} + \A_{LR}$ where
 \begin{align*}
-	\A_{SN} &= \Hank|_{a_{N+1},\dots,a_m} + \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* +A_E \\
+	\A_{SN} &= \Hank|_{a_{N+1},\dots,a_m} + \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* +A_F \\
 	\A_{LR} &= \Hank|_{a_{0},\dots,a_N} + \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i*.
 \end{align*}
-$\A_{LR}$ represent outliers, IE $s := \text{rank}(\A_{LR}) \leq N + r_{\offd}$ bounds the number of outliers. \todo[inline]{Is the N part of this bound true? 2N?} So the work is showing $|| \Tau^{-1}\A_{SN}||_2 \leq \varepsilon$. Define $\tilde{\offd} = \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* $ and $\tilde{\Hank} = \Hank|_{a_{N+1},\dots,a_m}$, so that $\A_{SN} = \tilde{\Hank} + \tilde{\offd} + \A_E$. 
+$\A_{LR}$ represent outliers, IE $s := \text{rank}(\A_{LR}) \leq N + r_{\offd}$ bounds the number of outliers. \todo[inline]{Is the N part of this bound true? 2N?} So the work is showing $|| \Tau^{-1}\A_{SN}||_2 \leq \varepsilon$. Define $\tilde{\offd} = \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* $ and $\tilde{\Hank} = \Hank|_{a_{N+1},\dots,a_m}$, so that $\A_{SN} = \tilde{\Hank} + \tilde{\offd} + \A_F$. 
 \begin{align*}
-	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \tilde{\Hank}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_E ||_2
+	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \tilde{\Hank}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_F ||_2
 \end{align*}
-We can bound $||\Tau^{-1} \tilde{\Hank}||_2$ as in \cite{Kailath}. We can bound $||\Tau^{-1} \A_E||_2$ with Weyl's inequality:
+We can bound $||\Tau^{-1} \tilde{\Hank}||_2$ as in \cite{Kailath}. We can bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
 \begin{equation*}
-	||\Tau^{-1} \A_E||_2 \leq ||\Tau^{-1}||_2 ||\A_E||_2 =\sigma_{\max}(\Tau^{-1}) \sigma_{\max}(\A_E) = \frac{ \sigma_{\max}(\A_E)}{\lambda_{\min}(\Tau)}.
+	||\Tau^{-1} \A_F||_2 \leq ||\Tau^{-1}||_2 ||\A_F||_2 =\sigma_{\max}(\Tau^{-1}) \sigma_{\max}(\A_F) = \frac{ \sigma_{\max}(\A_F)}{\lambda_{\min}(\Tau)}.
 \end{equation*}
 Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$.
 \begin{align*}
@@ -390,6 +396,7 @@ Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$.
 	&= \lambda_k(\tilde{\offd})  \min_{n \in n_k} \min_{1 \leq i \leq n} \frac{\sin(\frac{\pi i}{n+1})}{\sum_{j=1}^n t_j \sin(\frac{\pi i j }{n+1})}
 \end{align*}
 Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*$ what can we say about $\lambda_k$?  
+\end{proof}
 
 \begin{itemize}
 	\item numerical test confirming off-diag low rank

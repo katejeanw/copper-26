@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  20 FEB 2026 20:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  20 FEB 2026 22:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -908,107 +908,64 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 94.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-
-LaTeX Warning: Citation `Levinson' on page 1 undefined on input line 121.
-
-Package hyperref Info: bookmark level for unknown equ defaults to 0 on input li
-ne 141.
-
-LaTeX Warning: Citation `Chan_Strang' on page 1 undefined on input line 144.
-
-[1
-
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 149.
+ine 121.
+Package hyperref Info: bookmark level for unknown equ defaults to 0 on input li
+ne 142.
+ [1
 
-
-LaTeX Warning: Citation `Xiaozhe' on page 2 undefined on input line 151.
-
-
-LaTeX Warning: Citation `Xiaozhe' on page 2 undefined on input line 155.
-
-[2]
-
-LaTeX Warning: Citation `toeplitz' on page 3 undefined on input line 177.
-
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
 Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
-nput line 188.
+nput line 189.
 
-Overfull \hbox (25.87166pt too wide) in paragraph at lines 196--198
+Overfull \hbox (25.87166pt too wide) in paragraph at lines 197--199
 \OT1/cmr/m/it/10 Similarly this ma-trix in-duces a func-tion from the trun-cate
 d se-ries, $\OML/cmm/m/it/10 `[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 z\OT1/cmr/m/n
 /10 ) = [][] \OML/cmm/m/it/10 `[]z[]$\OT1/cmr/m/it/10 . |
  []
 
 
-LaTeX Warning: Citation `Chan_89' on page 3 undefined on input line 200.
-
-
-LaTeX Warning: Citation `Bini' on page 3 undefined on input line 200.
-
-
-Overfull \hbox (34.71855pt too wide) detected at line 218
+Overfull \hbox (34.71855pt too wide) detected at line 219
 \OML/cmm/m/it/10 L \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 H \OT1/cmr/m/n/10 = []
  \OML/cmm/m/it/10 :|
  []
 
-
-LaTeX Warning: Citation `Bini' on page 3 undefined on input line 222.
-
 [3]
-
-LaTeX Warning: Citation `Kailath' on page 4 undefined on input line 231.
-
-
-LaTeX Warning: Citation `Kailath' on page 4 undefined on input line 240.
-
-
-LaTeX Warning: Citation `Bini' on page 4 undefined on input line 240.
-
-
-Overfull \hbox (6.7159pt too wide) detected at line 281
+Overfull \hbox (6.7159pt too wide) detected at line 282
 \OMS/cmsy/m/n/10 T[] \OT1/cmr/m/n/10 = [] [] [] \OML/cmm/m/it/10 :|
  []
 
 [4]
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 307.
+line 309.
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 316.
+line 319.
  [5]
-
-LaTeX Warning: Citation `Kailath' on page 6 undefined on input line 345.
-
-[6]
-Overfull \hbox (5.81287pt too wide) in paragraph at lines 363--364
+Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
+t line 345.
+ [6]
+Overfull \hbox (5.81287pt too wide) in paragraph at lines 377--378
 []\OT1/cmr/m/n/10 We ad-di-tion-ally split $\OML/cmm/m/it/10 H$ \OT1/cmr/m/n/10
  by sep-a-rat-ing the anti-diagonals with co-ef-fi-cients $\OML/cmm/m/it/10 a[]
 ; [] ; a[]$|
  []
 
-
-LaTeX Warning: Citation `Kailath' on page 7 undefined on input line 379.
-
-[7] (./WALL_KATE_paper.bbl)
+[7] (./WALL_KATE_paper.bbl [8])
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
- [8] (./WALL_KATE_paper.aux)
-
-LaTeX Warning: There were undefined references.
-
+ [9] (./WALL_KATE_paper.aux)
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 2074D712EC423ED8EBA9D99A28857D42;1024.
+(rerunfilecheck)             Checksum: FA1346B94AB3EFB17E94E9724421E98A;1317.
  ) 
 Here is how much of TeX's memory you used:
- 25817 strings out of 478994
- 465184 string characters out of 5858183
- 746525 words of memory out of 5000000
- 41265 multiletter control sequences out of 15000+600000
- 413482 words of font info for 64 fonts, out of 8000000 for 9000
+ 25843 strings out of 478994
+ 465461 string characters out of 5858183
+ 747892 words of memory out of 5000000
+ 41279 multiletter control sequences out of 15000+600000
+ 414135 words of font info for 66 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
- 102i,13n,117p,1115b,857s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 102i,13n,117p,1115b,969s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><
@@ -1025,11 +982,12 @@ e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 /2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2
 021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/202
 1/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021
-/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (8 pages, 235414 bytes).
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2021/t
+exmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on WALL_KATE_paper.pdf (9 pages, 266504 bytes).
 PDF statistics:
- 210 PDF objects out of 1000 (max. 8388607)
- 165 compressed objects within 2 object streams
- 40 named destinations out of 1000 (max. 500000)
+ 244 PDF objects out of 1000 (max. 8388607)
+ 197 compressed objects within 2 object streams
+ 51 named destinations out of 1000 (max. 500000)
  181 words of extra memory for PDF output out of 10000 (max. 10000000)
 

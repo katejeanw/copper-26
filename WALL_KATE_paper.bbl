@@ -1,0 +1,37 @@
+\begin{thebibliography}{1}
+
+\bibitem{toeplitz}
+{\sc Sheldon Axler}, {\em Paul Halmos and Toeplitz Operators}, Springer New
+  York, New York, NY, 1991, pp.~257--263.
+
+\bibitem{Bini}
+{\sc D.~Bini and F.~Benedetto}, {\em A new preconditioner for the parallel
+  solution of positive definite toeplitz systems},  (1990), p.~220–223.
+
+\bibitem{Chan_89}
+{\sc Raymond~H. Chan}, {\em The spectrum of a family of circulant
+  preconditioned toeplitz systems}, SIAM Journal on Numerical Analysis, 26
+  (1989), pp.~503--506.
+
+\bibitem{Chan_Strang}
+{\sc Raymond~H. Chan and Gilbert Strang}, {\em Toeplitz equations by conjugate
+  gradients with circulant preconditioner}, SIAM Journal on Scientific and
+  Statistical Computing, 10 (1989), pp.~104--119.
+
+\bibitem{Kailath}
+{\sc Thomas Kailath and Vadim Olshevsky}, {\em Displacement structure approach
+  to discrete-trigonometric-transform based preconditioners of g.strang type
+  and of t.chan type}, SIAM Journal on Matrix Analysis and Applications, 26
+  (2006), pp.~706--734.
+
+\bibitem{Levinson}
+{\sc Norbert Wiener}, {\em The Wiener RMS (Root Mean Square) Error Criterion in
+  Filter Design and Prediction}, 1964, pp.~129--148.
+
+\bibitem{Xiaozhe}
+{\sc Xuan Zhao, Xiaozhe Hu, Wei Cai, and George~Em Karniadakis}, {\em Adaptive
+  finite element method for fractional differential equations using
+  hierarchical matrices}, Computer Methods in Applied Mechanics and
+  Engineering, 325 (2017), pp.~56--76.
+
+\end{thebibliography}
