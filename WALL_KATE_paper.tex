@@ -34,6 +34,8 @@
 \newcommand{\A}{{A }}
 \newcommand{\offd}{{B}}
 \newcommand{\Hank}{{ H }}
+\newcommand{\Toe}{{ L }}
+\newcommand{\toe}{{ \ell }}
 \newcommand{\DST}{{ S }}
 \newcommand{\Tau}{\mathcal{T}}
 \newcommand{\ptau}{{\bm{\tau}}}
@@ -122,11 +124,11 @@ A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around
 
 \begin{equ}[H]
 	\begin{equation}
-	T = \begin{pmatrix}
-		t_0  &  t_{-1} & \cdots & t_{-(n-1)} \\
-		t_{1} & t_0 & \cdots & t_{-(n-2)} \\
+	\Toe = \begin{pmatrix}
+		\toe_0  &  \toe_{-1} & \cdots & \toe_{-(n-1)} \\
+		\toe_{1} & \toe_0 & \cdots & \toe_{-(n-2)} \\
 		\vdots & \vdots & \ddots & \vdots \\
-		t_{n-1} & t_{n-2} & \cdots & t_0 
+		\toe_{n-1} & \toe_{n-2} & \cdots & \toe_0 
 	\end{pmatrix} 
 	\hspace{.15 in}
 	C = \begin{pmatrix}
@@ -136,10 +138,10 @@ A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around
 		c_{1} & c_{2} & \cdots & c_0 
 		\end{pmatrix}
 \end{equation}
-\caption{$T$ is a Toeplitz matrix and $C$ is circulant.}
+\caption{$\Toe$ is a Toeplitz matrix and $C$ is circulant.}
 \end{equ}
 
-Toeplitz matrices commonly arise in PDE discretization, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $Tx = b$, the idea introduced by Strang and Chan is to use certain circulant preconditioners $C$ so that $C^{-1}Tx = C^{-1}b$ is solved in fewer iterations \cite{Chan_Strang}.
+Toeplitz matrices commonly arise in PDE discretization, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $\Toe x = b$, the idea introduced by Strang and Chan is to use certain circulant preconditioners $C$ so that $C^{-1}Tx = C^{-1}b$ is solved in fewer iterations \cite{Chan_Strang}.
 
 We leverage this idea to build a preconditioner for stiffness matrices generated from the adaptive finite element method (AFEM) for fractional PDEs. In this setting the problem is discretized on a nonuniform mesh, and the resulting stiffness matrix is dense. In the usual finite element method (FEM) setting an uniform mesh results in a Toeplitz stiffness matrix. In the adaptive setting, after an initial solve on a uniform grid, the error on each element is estimated and the elements with largest error are refined via bisection. It is often the case that neighboring elements are refined the same number of times. So although the mesh is not globally uniform, there are areas of local uniformity. To build an effective preconditioner, we will take advantage of these locally uniform areas and their corresponding Toeplitz blocks in the stiffness matrix. 
 % application for fractional pdes
@@ -163,6 +165,7 @@ We emphasize that our unique contributions are:
 
 \section{Background}
 %% FEM and matrix structure 
+% Classical results on the eigenvalue distribution of Toeplitz matrices (see, e.g., [GS84]) indicate that we cannot expect, in general, any clustering, and that the convergence of the method will be slow.
 To understand the need for our preconditioner, we must give a bit more detail about AFEM. We restrict our attention to problems on a one-dimensional domain, $[a,b]$ with the discretization $a = x_0, x_1, \dots, x_n = b$. Often FEM is  done on a uniform mesh, that is each element $[x_i, x_{i+1}]$ is size $x_{i+1}- x_i$ for all $0 \leq i \leq n-1$.
 
 % brief proof uniform mesh gives toeplitz?
@@ -173,57 +176,57 @@ In practice we find that adjacent elements are often refined to the same level, 
 %% Toeplitz matrices and generating functions 
 To build an effective preconditioner and investigate its properites, we have to take full advantage of these SPD Toeplitz blocks. Toeplitz matrices have many unique properties that give rise to efficient algorithms (see for example \cite{toeplitz}). For our purposes we focus on their connection to functions in the Wiener class. This will allow us to take our problem from matrix operator theory to function theory. Suppose we have a singly infinite, symmetric Toeplitz matrix
 \begin{equation*}
-	T = \begin{pmatrix}
-		t_0 & t_1 & t_2 & \\
-		t_1 & t_0 & t_1 &  \ddots \\
-		t_2 & t_1 & t_0 & \ddots  \\
+	\Toe = \begin{pmatrix}
+		\toe_0 & \toe_1 & \toe_2 & \\
+		\toe_1 & \toe_0 & \toe_1 &  \ddots \\
+		\toe_2 & \toe_1 & \toe_0 & \ddots  \\
 		 & \ddots & \ddots & \ddots  \\
 	\end{pmatrix}.
 \end{equation*}
-Assume $\sum_{k=-\infty}^{\infty} |t_k| <\infty$. Then the function $t(z) = \sum_{k=-\infty}^{\infty} t_k z^k$ is real, positive, and in the Wiener class for $|z| = 1$. It will be convenient to define the corresponding truncated function for a finite subsection of the infinite matrix: 
+Assume $\sum_{k=-\infty}^{\infty} |\toe_k| <\infty$. Then the function $\toe(z) = \sum_{k=-\infty}^{\infty} \toe_k z^k$ is real, positive, and in the Wiener class for $|z| = 1$. It will be convenient to define the corresponding truncated function for a finite subsection of the infinite matrix: 
 \begin{definition}
 	The $m \times m$ finite subsection of the singly infinite matrix $T$ is denoted $T_m$ and defined as
 	\begin{equation*}
-				T_m = \begin{pmatrix}
-			t_0 & t_1 & \cdots & t_{m-1} \\
-			t_1 & t_0 & \cdots & t_{m-2} \\
+				\Toe_m = \begin{pmatrix}
+			\toe_0 & \toe_1 & \cdots & \toe_{m-1} \\
+			\toe_1 & \toe_0 & \cdots & \toe_{m-2} \\
 			\vdots & \vdots & \ddots & \vdots \\
-			t_{m-1} & t_{m-2} & \cdots & t_0 
+			\toe_{m-1} & \toe_{m-2} & \cdots & \toe_0 
 		\end{pmatrix}.
 	\end{equation*}
-	Similarly this matrix induces a function from the truncated series, $t_m(z) = \sum_{k=-(m-1)}^{m-1} t_k z^k$. 
+	Similarly this matrix induces a function from the truncated series, $\toe_m(z) = \sum_{k=-(m-1)}^{m-1} \toe_k z^k$. 
 \end{definition}
 
-Previous work on Toeplitz systems offers a few options for circulant preconditioners. Although their construction differs, the spectrum of the preconditioned systems are asymptotically the same \cite{Chan_89}. We use the construction given by Bini and Benedetto \cite{Bini}. Given a symmetric Toeplitz matrix $T$ we build a Hankel correction, $H$ where 
+Previous work on Toeplitz systems offers a few options for circulant preconditioners. Although their construction differs, the spectrum of the preconditioned systems are asymptotically the same \cite{Chan_89}. We use the construction given by Bini and Benedetto \cite{Bini}. Given a symmetric Toeplitz matrix $\Toe$ we build a Hankel correction, $H$ where 
 \begin{equation*}
-	T = \begin{pmatrix}
-		t_0 & t_1 & t_2 & \cdots &t_{n-2}& t_{n-1} \\
-		t_1 & t_0 & t_1 &  \cdots &t_{n-3}& t_{n-2} \\
-		t_2 & t_1 & t_0 & \cdots &t_{n-4}& t_{n-3} \\
+	\Toe = \begin{pmatrix}
+		\toe_0 & \toe_1 & \toe_2 & \cdots &\toe_{n-2}& \toe_{n-1} \\
+		\toe_1 & \toe_0 & \toe_1 &  \cdots &\toe_{n-3}& \toe_{n-2} \\
+		\toe_2 & \toe_1 & \toe_0 & \cdots &\toe_{n-4}& \toe_{n-3} \\
 		\vdots & \vdots & \vdots & \ddots&\vdots & \vdots \\
-		t_{n-2} & t_{n-3} & t_{n-4} & \cdots &t_0 & t_1 \\
-		t_{n-1} & t_{n-2} & t_{n-3} & \cdots & t_1 & t_0 
+		\toe_{n-2} & \toe_{n-3} & \toe_{n-4} & \cdots &\toe_0 & \toe_1 \\
+		\toe_{n-1} & \toe_{n-2} & \toe_{n-3} & \cdots & \toe_1 & \toe_0 
 	\end{pmatrix}
 	\Hank = \begin{pmatrix}
-		t_2 & t_3 & t_4 & \cdots & t_{n-1} & 0 & 0 \\
-		t_3 & t_4 & t_5 & \cdots  & 0 & 0 & 0 \\
-		t_4 & t_5 & t_6 & \cdots & 0 & 0 & t_{n-1} \\
+		\toe_2 & \toe_3 & \toe_4 & \cdots & \toe_{n-1} & 0 & 0 \\
+		\toe_3 & \toe_4 & \toe_5 & \cdots  & 0 & 0 & 0 \\
+		\toe_4 & \toe_5 & \toe_6 & \cdots & 0 & 0 & \toe_{n-1} \\
 		\vdots & \vdots & \vdots & \cdots & \vdots & \vdots & \vdots \\
-		0 & 0 & 0 & \cdots & t_5 & t_4 & t_3 \\
-		0 & 0 & t_{n-1} & \cdots & t_4 & t_3 & t_2
+		0 & 0 & 0 & \cdots & \toe_5 & \toe_4 & \toe_3 \\
+		0 & 0 & \toe_{n-1} & \cdots & \toe_4 & \toe_3 & \toe_2
 	\end{pmatrix}.
 \end{equation*}
 
-Then Bini and Benedetto's preconditioner is defined as $\ptau := T - H$. $\Hank$ is a Hankel matrix, that is it is constant on the antidiagonals. Both $T$ and $\Hank$ are symmetric, so they can be completely represented by the at most $n$ unique values: the diagonals of $T, {t_0, t_1, \dots, t_{n-1}}$, and the antidiagonals of $\Hank, {t_2, t_3, \dots, t_{n-1},0,0}$. 
+Then Bini and Benedetto's preconditioner is defined as $\ptau := \Toe - H$. $\Hank$ is a Hankel matrix, that is it is constant on the antidiagonals. Both $\Toe$ and $\Hank$ are symmetric, so they can be completely represented by the at most $n$ unique values: the diagonals of $\Toe: \toe_0, \toe_1, \dots, \toe_{n-1}$, and the antidiagonals of $\Hank: \toe_2, \toe_3, \dots, \toe_{n-1},0,0 $. 
 	
 We summarize the important properties of $\ptau$ (see \cite{Bini} for details):
 \begin{itemize}
-	\item $\ptau$ is a circulant matrix.
-	\item $\ptau$ can be applied in $n \log n$ time .
+%	\item $\ptau$ is a circulant matrix.
 	\item $\ptau$ is diagonalized by the type-I discrete sine transform (DST) matrix, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
-	\item The $k$-th eigenvalue of $\ptau$ is proportional to the $k$-th entry of $St_1$ where $t_1$ is the first column of $T$. Specifically, define  $c_k := \sqrt{\frac{n+1}{2}} \frac{1}{\sin(\frac{\pi k }{n+1})}$, then 
-	\begin{equation} \label{eigs} \lambda_k(\ptau) = c_k [St_1]_k \end{equation}.
-	\item Each eigenvalue of $\ptau$ can be written as the truncated function $t_m$ evaluated somewhere on the unit circle, IE $\lambda_k(\ptau) = t_m(z_k)$ where $|z_k| = 1$.
+	\item $\ptau$ can be applied in $n \log n$ time .
+	\item The $k$-th eigenvalue of $\ptau$ is proportional to the $k$-th entry of $S\toe_1$ where $\toe_1$ is the first column of $\Toe$. Specifically, define  $c_k := \sqrt{\frac{n+1}{2}} \frac{1}{\sin(\frac{\pi k }{n+1})}$, then 
+	\begin{equation} \label{eigs} \lambda_k(\ptau) = c_k [S\toe_1]_k \end{equation}.
+	\item Each eigenvalue of $\ptau$ can be written as the truncated function $t_m$ evaluated somewhere on the unit circle, IE $\lambda_k(\ptau) = \toe_m(z_k)$ where $|z_k| = 1$.
 \end{itemize}
 These preconditioner can also be thought of as coming from the kernel of a displacement operator. This framework is useful for generating yet other circulant preconditioners, see \cite{Kailath}. 
 % boundaries are the problem always (not infinite, block division)}
@@ -241,11 +244,11 @@ A good preconditioner for an iterative method must in general decrease the total
 	\item The spectrum of $\ptau^{-1} \A$ should be clustered around 1
 \end{enumerate}
 
-How tightly the eigenvalues cluster around 1 will determine the speed of convergence. In proving results about the clustering we will refer to the infinite matrix framework established previously. First we summarize results established previously about the spectral clustering of $\ptau$ applied to a single Toeplitz block $T$. This result will then be used as a lemma in proving the spectral clustering for our stiffness matrix from the adaptive mesh. We will show that for $m$ large enough 
+How tightly the eigenvalues cluster around 1 will determine the speed of convergence. In proving results about the clustering we will refer to the infinite matrix framework established previously. First we summarize results established previously about the spectral clustering of $\ptau$ applied to a single Toeplitz block $\Toe$. This result will then be used as a lemma in proving the spectral clustering for our stiffness matrix from the adaptive mesh. We will show that for $m$ large enough 
 
 We make this last point more precise:
 \begin{definition}[Eigenvalue Clustering] 
-	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $C^{-1} T_m$ are clustered around a real number $\rho$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $C^{-1} T_m$ that do not lie within $ [\rho-\varepsilon, \rho+\varepsilon]$.
+	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $C^{-1} \Toe_m$ are clustered around a real number $\rho$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $C^{-1} \Toe_m$ that do not lie within $ [\rho-\varepsilon, \rho+\varepsilon]$.
 \end{definition}
 
 %The use of circulant preconditioners for Toeplitz systems originates from \cite{Chan_Strang}. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
@@ -253,10 +256,10 @@ We make this last point more precise:
 %In our numerical results we use type TODO, discussed in \cite{Bini}. Though the results could be generalized to all eight forms. An important fact that we will use later:
 %\todo[inline]{eigenvalues as points on function }
 
-Assume our stiffness matrix has $k$ Toeplitz blocks $T_1, T_2, \dots, T_k$ of respective sizes $m_1, m_2, \dots, m_k$. Assume additionally these are ordered as they appear along the main diagonal. Each block can be thought of as a singly infinite matrix with a corresponding generating function, $t_1(z), t_2(z), \dots t_k(z)$. Assume that for all $1 \leq i \leq k, t_i(z)  \sum_{j=-\infty}^{\infty} |t_j| <\infty$ and $t_i(z) > 0$ for $z$ on the unit circle. 
+Assume our stiffness matrix has $k$ Toeplitz blocks $\Toe_1, \Toe_2, \dots, \Toe_k$ of respective sizes $m_1, m_2, \dots, m_k$. Assume additionally these are ordered as they appear along the main diagonal. Each block can be thought of as a singly infinite matrix with a corresponding generating function, $\toe_1(z), \toe_2(z), \dots \toe_k(z)$. Assume that for all $1 \leq i \leq k, \toe_i(z)  \sum_{j=-\infty}^{\infty} |t_j| <\infty$ and $\toe_i(z) > 0$ for $z$ on the unit circle. 
 % Common assumptions for proof on one block 
 
-We can now construct a preconditioner, $\Tau$ for the adaptive system. To explicitly construct $\Tau$ we can calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $T_i$. Then we define $\ptau_i = T_i - \Hank_i$,  resulting in $k$ matrices $\ptau_1, \ptau_2, \dots, \ptau_k$. Finally we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
+We can now construct a preconditioner, $\Tau$ for the adaptive system. To explicitly construct $\Tau$ we can calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $\Toe_i$. Then we define $\ptau_i = \Toe_i - \Hank_i$,  resulting in $k$ matrices $\ptau_1, \ptau_2, \dots, \ptau_k$. Finally we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
 $$\Tau = \begin{pmatrix}
 		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_m
 	\end{pmatrix}.$$
@@ -277,72 +280,63 @@ Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using equation \ref{e
 		\end{pmatrix}.
 \end{equation*}
 Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{verify this is true...}
+This establishes criteria 1 and 2 for $\Tau$. 
+
+\todo[inline]{Bullet point properties of $\Tau$}
+
 
 \section{Theoretical Results} 
 % notation table ?
 % 1x1 blocks consideration 
-Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
-First, we recall some classic eigenvalue results that will be of use to us later. 
-\subsection{Eigenvalue Bounds}
-\begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $n \times n$ matrices. Then for $A := M + E$ we have 
-	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq n.$$
+% Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
+In this section we will prove that the spectral clustering in criteria 3 holds for $\Tau$. Proofs for clustering of circulant preconditioned problems int his area tend to follow a similar structure. First it's shown that the preconditioned system having a spectrum clustered around 1 is equivalent to the clustering of a related system around 0. This related system is then split into the sum of a ``low-rank'' term and a ``small-norm'' term. The small-norm term has spectrum clustered around 0, forcing the clustering of the entire system around 0 with the number of outliers bounded by the rank of the low-rank term.
+
+We present our version of the spectral clustering proof for the case of $\ptau$ acting on a single Toeplitz block. This result is then used to help us prove the clustering of our preconditioner on the adaptive grid, $\Tau^{-1} \A$. 
+\todo[inline]{hyphenation?}
+
+% \begin{corollary}	The matrices $\Sq(A_m)$ and $\Sq(A_m)^{-1}$ are positive definite.\end{corollary}
+
+%To effectively utilize the small-norm and low-rank splitting we will use the eigenvalue min-max theorem, and its corollary Weyl's inequality. Versions are both that will be useful to us are restated here. 
+%\begin{theorem}[Min-max Theorem]
+%	Let $A \in \R^{n \times n}$ be symmetric with ordered spectrum $\lambda_1 \geq \cdots \geq \lambda_n$. Then 
+%	\begin{align*}
+%		\lambda_k &= \mathop{\max_{V \subset \R^{n \times n}}}_{\dim (V) = k} \ \mathop{\min_{x \in V}}_{x \ne \zero} \frac{(Ax,x)}{(x,x)} .
+%	\end{align*} 
+%\end{theorem}
+For convenience we restate Weyl's inequality, which will be useful to us later. 
+\begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $m \times m$ matrices. Then for $A := M + E$ we have 
+	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq m.$$
 	That is the eigenvalues of $A$ are at most $||E||_2$ away from the eigenvalues of $M$. 
 \end{lemma}
-\subsubsection{Kailath-Olshevsky Proof rewritten}
-Fix $\varepsilon > 0$. 
-Assumptions:
-\begin{enumerate}
-	\item Generating function is in the Wiener Class, $$a(z) = \sum_{k = -\infty}^{\infty} a_k z^k, \  \sum_{k = -\infty}^{\infty} |a_k|< \infty.$$
-	\item Generating function is bounded away from zero on unit circle, $$a(z) > 2 \varepsilon, \ |z|=1.$$
-\end{enumerate}
 
-\begin{lemma}
-	Let $a_m(z)$ be the truncated generating function with $2m-1$ terms, $\sum_{k = -(m-1)}^{m-1} a_k z^k$.
-	Then for each $\lambda_k(\Sq(A))$ there exists $z_k$ on the unit circle such that $\lambda_k = a_m(z_k)$. 
-\end{lemma}
-
-\begin{lemma}
-	Choose $m$ and $N <m$ big enough so that $\sum_{N+1}^{\infty} |a_k| < \varepsilon$. Then assumption 2 implies that $a_m(z)$ is positive on the unit circle. 
+\begin{lemma}[Eigenvalue Clustering on a Toeplitz Block]
+	Let $\Toe$ be a singly infinite, symmetric, Toeplitz matrix with diagonals $\toe_0, \toe_1, \dots$. Then $\Toe_m$ is its $m \times m$ truncation with diagonals $\toe_0, \toe_1, \dots, \toe_{m-1}$. Assume the generating function $\toe(z)$ is in the Wiener class and positive on the unit circle. Let $\ptau$ be the corresponding preconditioner, then for $m$ large enough the spectrum of $\ptau^{-1} \Toe$ is clustered around 1. 
 \end{lemma}
 \begin{proof}
-	First notice $\varepsilon > \sum_{N+1}^{\infty} |a_k| > \sum_{m}^{\infty} |a_k|$. 
-	Now
-	\begin{align*}
-		a(z) &=  a_m(z) + \sum_{-\infty}^{-m} a_k z^k + \sum_{m}^{\infty} a_k z^k \\ 
-		&\implies 	a_m(z) =  a(z) - \sum_{-\infty}^{-m} a_k z^k - \sum_{m}^{\infty} a_k z^k \\ 
-		&\implies a(z) - 2 \varepsilon < a_m(z) \\
-		&\ 0 < a(z) - 2 \varepsilon < a_m(z)
-	\end{align*}
-\end{proof}
+	Since $\toe(z) > 0$ for $|z|=1$, compactness of the unit circle implies that for some $\varepsilon > 0$, $\toe(z) > 2 \varepsilon$ when $|z|= 1$. By the Wiener class assumption we can choose $N$ such that $\sum_{j=N}^{\infty} \toe_j z^j \leq \sum_{j=N}^{\infty} |\toe_j| < \varepsilon$. So for all $m \geq N$, 
+	$$ 2 \varepsilon < \toe(z) = \toe_m(z) + \sum_{j=m}^{\infty} \toe_j z^j < \toe_m(z) + \varepsilon.$$
+	Thus $\toe_m(z) > \varepsilon$ on the unit circle. 
 
-\begin{corollary}
-	The matrices $\Sq(A_m)$ and $\Sq(A_m)^{-1}$ are positive definite.
-\end{corollary}
-
-First we present the proof for a single Toeplitz matrix/block, adapted from \cite{Kailath}. This will be used in the proof of the full matrix spectral clustering. 
-\todo[inline]{Lemma statement }
+Recall from the construction of $\ptau$, 
 \begin{align}
-	\Sq(A) &= A + H + B \\
-	A &= \Sq(A) - (H+B)
+	\ptau &= \Toe - \Hank \\
+	\Toe &= \ptau + \Hank \\
+	\implies  \ptau^{-1} \Toe &= I + \ptau^{-1} \Hank 
 \end{align}
-Where $A$ is Toeplitz (given), $H$ is Hankel, and $B$ is `border' matrix, at most nonzero in exterior rows and columns. 
-Thus $$\Sq(A)^{-1} A = I - \Sq(A)^{-1} (H+B).$$
-So it suffices to show the spectrum of $\Sq(A)^{-1} (H+B)$ is clustered around zero. \\
-Let $\varepsilon > 0 $ and choose $N$ such that $\sum_{N+1}^{\infty} |a_k| < \varepsilon$. We can then split $H+B$ into the sum of a low-rank matrix $A_{lr}$ and a small norm matrix $A_{sn}$.  Here $A_{lr}$ contains the diagonals with entries $a_0, \dots, a_N$. Let $s := \text{rank}(A_{lr}) << m$. Now $A_{sn} := (H+B) - A_{lr}$ is a hermitian $m \times m$ matrix with at most two copies of $a_{N+1}, \dots, a_m$ in each row/column. Thus $||A_{sn}||_2 = \sqrt{||A_{sn}||_1 ||A_{sn}||_{\infty}} = ||A_{sn}||_1 < 2 \varepsilon$.  Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $H+B$ are clustered within $2 \varepsilon$ of zero. 
+where $\Hank$ is the Hankel matrix with antidiagonals $\toe_2, \toe_3, \dots, \toe_{m-1},0,0$. Therefore it suffices to show that the eigenvalues of $\ptau^{-1} \Hank$ are clustered around 0. 
 
-Now we use the min-max theorem to bound the eigenvalues of $\Sq(A)^{-1} (H+B)$. 
+We now split $\Hank$ into a low-rank matrix $\Hank_{LR}$ that contains the antidiagonals $\toe_0, \dots, \toe_N$ and a small-norm matrix $\Hank_{SN}$ such that $\Hank = \Hank_{LR} + \Hank_{SN}$.  Let $s := \text{rank}(\Hank_{LR}) << m$. The small-norm descriptor is justified since $\Hank_{SN} = \Hank - \Hank_{LR}$ is a hermitian $m \times m$ matrix with at most two copies of $\toe_{N}, \dots, \toe_{m-1}$ in each row/column. Thus $||\Hank_{SN}||_2 = \sqrt{||\Hank_{SN}||_1 ||\Hank_{SN}||_{\infty}} = ||\Hank_{SN}||_1 < 2 \varepsilon$. Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $\Hank$ are clustered within $2 \varepsilon$ of zero. 
+
+Now using the min-max theorem, 
 \begin{align*}
-	\lambda_k ( \Sq(A)^{-1} (H+B)) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{((H+B)x,x)}{(\Sq(A)x,x)}\right) \\
-	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{((H+B)x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\Sq(A)x,x)} \right) \right] \\
-	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{((H+B)x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\Sq(A)x,x)} \right)  \\
-	&= \lambda_k(H+B)   \max_{x \in \R^n} \left( \frac{(x,x)}{(\Sq(A)x,x)} \right)  \\
-	&\leq \lambda_k(H+B)  \frac{1}{\lambda_{\min}(\Sq(A))} \\
-	&= \lambda_k(H+B)  \frac{1}{a_m(z_{\min})} \\ 
-	&\leq \lambda_k(H+B)  \frac{1}{\min_{|z|=1} a_m(z)} 
+	\lambda_k ( \ptau^{-1} \Hank  ) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{(\Hank x,x)}{(\ptau x,x)}\right) \\
+	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{(\Hank x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\ptau x,x)} \right) \right] \\
+	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{(\Hank x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\ptau x,x)} \right)  \\
+	&= \lambda_k (\Hank)   \max_{x \in \R^n} \left( \frac{(x,x)}{(\ptau x,x)} \right)  \leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )} \\
+	 & = \lambda_k (\Hank)  \frac{1}{a_m(z_{\min})} \leq \lambda_k (\Hank)  \frac{1}{\varepsilon}.
 \end{align*}
-
-Can be simplified with $B = \zero$.
-Actual condition: $a(z) > 2 \varepsilon$. 
+Thus the clustering of the spectrum of $\Hank$ around 0 implies the same for $\ptau^{-1} \Hank$. 
+\end{proof}
 
 \subsection{Full Matrix Proof}
 \subsubsection{setup}
