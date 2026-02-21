@@ -33,6 +33,8 @@
 \newcommand{\zero}{{\vec  0 }}
 \newcommand{\A}{{A }}
 \newcommand{\offd}{{A_E}}
+\newcommand{\off}{{E}}
+\newcommand{\setoff}{{\text{off-diag}}}
 \newcommand{\Hank}{{ H }}
 \newcommand{\Toe}{{ L }}
 \newcommand{\toe}{{ \ell }}
@@ -280,7 +282,7 @@ Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using equation \ref{e
 		S_{m_1} &&& \\ & S_{m_2} && \\ && \ddots & \\ &&& S_{m_k}
 		\end{pmatrix}.
 \end{equation*}
-Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{verify this is true...}
+Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{How to apply diagonal? FFT w toeplitz multiplication?, maybe just cite it away}
 This establishes criteria 1 and 2 for $\Tau$. 
 
 \todo[inline]{Bullet point properties of $\Tau$}
@@ -293,7 +295,7 @@ This establishes criteria 1 and 2 for $\Tau$.
 In this section we will prove that the spectral clustering in criteria 3 holds for $\Tau$. Proofs for clustering of circulant preconditioned problems int his area tend to follow a similar structure. First it's shown that the preconditioned system having a spectrum clustered around 1 is equivalent to the clustering of a related system around 0. This related system is then split into the sum of a ``low-rank'' term and a ``small-norm'' term. The small-norm term has spectrum clustered around 0, forcing the clustering of the entire system around 0 with the number of outliers bounded by the rank of the low-rank term.
 
 We present our version of the spectral clustering proof for the case of $\ptau$ acting on a single Toeplitz block. This result is then used to help us prove the clustering of our preconditioner on the adaptive grid, $\Tau^{-1} \A$. 
-\todo[inline]{hyphenation?}
+\todo[inline]{hyphenation of low rank and small norm}
 
 % \begin{corollary}	The matrices $\Sq(A_m)$ and $\Sq(A_m)^{-1}$ are positive definite.\end{corollary}
 
@@ -312,7 +314,7 @@ For convenience we restate Weyl's inequality, which will be useful to us later.
 \end{lemma}
 
 \subsection{Spectral Clustering of a Toeplitz Block}
-\begin{lemma}[Eigenvalue Clustering on a Toeplitz Block]
+\begin{lemma}[Eigenvalue Clustering on a Toeplitz Block] \label{block}
 	Let $\Toe$ be a singly infinite, symmetric, Toeplitz matrix with diagonals $\toe_0, \toe_1, \dots$. Then $\Toe_m$ is its $m \times m$ truncation with diagonals $\toe_0, \toe_1, \dots, \toe_{m-1}$. Assume the generating function $\toe(z)$ is in the Wiener class and positive on the unit circle. Let $\ptau$ be the corresponding preconditioner, then for $m$ large enough the spectrum of $\ptau^{-1} \Toe$ is clustered around 1. 
 \end{lemma}
 \begin{proof}
@@ -328,7 +330,7 @@ Recall from the construction of $\ptau$,
 \end{align}
 where $\Hank$ is the Hankel matrix with antidiagonals $\toe_2, \toe_3, \dots, \toe_{m-1},0,0$. Therefore it suffices to show that the eigenvalues of $\ptau^{-1} \Hank$ are clustered around 0. 
 
-We now split $\Hank$ into a low-rank matrix $\Hank_{LR}$ that contains the antidiagonals $\toe_0, \dots, \toe_N$ and a small-norm matrix $\Hank_{SN}$ such that $\Hank = \Hank_{LR} + \Hank_{SN}$.  Let $s := \text{rank}(\Hank_{LR}) << m$. The small-norm descriptor is justified since $\Hank_{SN} = \Hank - \Hank_{LR}$ is a hermitian $m \times m$ matrix with at most two copies of $\toe_{N}, \dots, \toe_{m-1}$ in each row/column. Thus $||\Hank_{SN}||_2 = \sqrt{||\Hank_{SN}||_1 ||\Hank_{SN}||_{\infty}} = ||\Hank_{SN}||_1 < 2 \varepsilon$. Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $\Hank$ are clustered within $2 \varepsilon$ of zero. 
+We now split $\Hank$ into a low-rank matrix $\Hank_{LR}$ that contains the antidiagonals $\toe_0, \dots, \toe_N$ and a small-norm matrix $\Hank_{SN}$ such that $\Hank = \Hank_{LR} + \Hank_{SN}$.  Let $s := \text{rank}(\Hank_{LR}) << m$. The small-norm descriptor is justified since $\Hank_{SN} = \Hank - \Hank_{LR}$ is a hermitian $m \times m$ matrix with at most two copies of $\toe_{N}, \dots, \toe_{m-1}$ in each row/column. Thus $||\Hank_{SN}||_2 = \sqrt{||\Hank_{SN}||_1 ||\Hank_{SN}||_{\infty}} = ||\Hank_{SN}||_1 < 2 \varepsilon$. Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $\Hank_{SN}$ are clustered within $2 \varepsilon$ of zero. 
 
 Now using the min-max theorem, 
 \begin{align*}
@@ -347,67 +349,75 @@ Thus the clustering of the spectrum of $\Hank$ around 0 implies the same for $\p
 \end{theorem}
 
 \begin{proof}
+% First notice that $\Tau^{-1} \Hank$ is block diagonal and the spectrum of each block can be characterized using the former proof on each block. 
+
 Recall that our stiffness matrix is dense with Toeplitz blocks on the diagonal. The $ij$ entry of $\A$ reflects the strength of the interaction between elements $i$ and $j$. Thus we observe off-diagonal decay, as elements that are physically separated in the domain have weaker interaction. The rate of decay depends on the fractional order of the PDE. 
 
-In order to prove spectral clustering of $\Tau^{-1} \A$ we will handle the Toeplitz blocks as in the previous section. Blocks that are distant from the diagonal represent the weakest entries and have small norm. Blocks that are adjacent to the diagonal are not small norm; we will resort to splitting them into a low rank and a small norm term. To represent these classifications we will use $\A_D$ for the Toeplitz blocks, $\offd$ for blocks adjacent to the diagonal, and $\A_F$ for the rest so that $\A = \A_D + \offd + \A_F$. Let $\Hank$ denote the block diagonal Hank Correction matrix, observing then that $ \A_D = \Tau + \Hank$ we see that 
+In order to prove spectral clustering of $\Tau^{-1} \A$ we will handle the Toeplitz blocks as in the previous section. Blocks that are distant from the diagonal represent the weakest entries and have small norm. Blocks that are adjacent to the diagonal are not small norm; we will resort to splitting them into a low rank and a small norm term. To represent these classifications we will use $\A_D$ for the Toeplitz blocks, $\offd$ for blocks adjacent to the diagonal, and $\A_F$ for the rest so that $\A = \A_D + \offd + \A_F$. Let $\Hank$ denote the block diagonal Hankel Correction matrix, observing then that $ \A_D = \Tau + \Hank$ we see that $\A = \Tau + \Hank + \offd + \A_F$. Our approach is to split $\Hank + \offd + \A_F$ into a small-norm term $A_{SN}$ and a low-rank term $\A_{LR}$. Thus 
 \begin{equation}
-		\Tau^{-1} \A = \Tau^{-1}(\Tau + \Hank + \offd + \A_F ) = I +\Tau^{-1}\Hank +\Tau^{-1}\offd + \Tau^{-1}\A_F.
+		\Tau^{-1} \A = \Tau^{-1}(\Tau + \A_{SN} + \A_{LR} ) = I + \Tau^{-1}\A_{SN}  + \Tau^{-1}\A_{LR}.
 \end{equation}
-So it suffices to show that $\Tau^{-1}\Hank$, $\Tau^{-1}\offd$ and $\Tau^{-1}\A_F$ have spectra clustered around zero. 
-First notice that $\Tau^{-1} \Hank$ is block diagonal and the spectrum of each block can be characterized using the former proof on each block. 
+Hence it suffices to show that the spectrum of $\Tau^{-1}\A_{SN}$ is clustered around 0 and that $\Tau^{-1}\A_{LR}$ contributes a bounded number of eigenvalue outliers. 
 
-\todo[inline]{since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
-
-Assume the off-diagonal-by-one blocks are well approximated by a low-rank matrix. Let $C$ be such a block with dimensions $n_C \times n_C$ and rank $r_C << n_C$. Using the SVD we can split $C$ as $$ C = \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right). $$ 
-With a slight abuse of notation, we can embed this decomposition in the appropriate ``off-diagonal'' position of an $m \times m$ matrix. Doing this for all such off-diagonal blocks we write
+Recall that blocks in $\offd$ can be well-approximated as a low-rank matrix. To that end, we begin by examining a single block in $\offd$, call it $\off$. Let $\off$ be a $m_{\off} \times m_{\off}$ matrix with approximation rank $r_{\off}$. Then we can split $\off$ via its singular value decomposition (SVD):  
+$$ \off = \left( \sum_{i=1}^{r_{\off}} \sigma_i^{(\off)} \u_i ^{(\off)}\v_i^{(\off)}* \right) + \left(  \sum_{i=r_{\off}+1}^{m_{\off}} \sigma_i^{(\off)} \u_i^{(\off)} \v_i^{(\off)}*  \right). $$ 
+In the above equation $\u$ and $\v$ are length $m_{\off}$ vectors. With a slight abuse of notation, we will embed these in length $m$ vectors to express the block matrix $\offd$ as the SVD of its blocks. Let $\setoff$ represent the set of off-diagonal blocks in $\offd$. Define $r := \max_{\off \in \setoff} r_{\off}$ and $M := \max_{\off \in \setoff} m_{\off}$. We can now express $\offd$ as the sum of the SVD of its blocks, and then regroup terms into a low-rank sum and a small-norm sum. 
 \begin{align*}
-	B &= \sum_{C \in \text{off-diag}} \left[ \left( \sum_{i=1}^{r_{C}} \sigma_i^{(C)} \u_i ^{(C)}\v_i^{(C)}* \right) + \left(  \sum_{i=r_{C}+1}^{n_{C}} \sigma_i^{(C)} \u_i^{(C)} \v_i^{(C)}*  \right) \right]  \\
-	&= \left( \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*  \right) 
+	\offd &= \sum_{\off \in \setoff} \left[ \left( \sum_{i=1}^{r} \sigma_i^{(\off)} \u_i ^{(\off)}\v_i^{(\off)}* \right) + \left(  \sum_{i=r+1}^{m_{\off}} \sigma_i^{(\off)} \u_i^{(\off)} \v_i^{(\off)}*  \right) \right]  \\
+	&= \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i*  \right) .
 \end{align*}
-where $r_{\offd} = \max_{C \in \text{off-diag}} r_C$.
 
+As before, we have $\varepsilon > 0$ and choose $N$ much smaller than $m$ so that for every Toeplitz block the truncated function for the block $a_{m_i} (z) > \varepsilon$ on the unit circle and $\sum_{i = N}^{\infty} |a_i| < \varepsilon$. 
+\todo[inline]{since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
 We additionally split $\Hank$ by separating the anti-diagonals with coefficients $a_0, \dots, a_N$ and the anti-diagonals comprising of $a_{N+1}, \dots a_m$. So we have two splittings, 
 \begin{align*} 
-	\offd &= \left( \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*  \right) \\
-	\Hank &= \Hank|_{a_{0},\dots,a_N} + \Hank|_{a_{N+1},\dots,a_m}.
+	\offd &= \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i*  \right) \\
+	\Hank &= \Hank|_{a_{2},\dots,a_N} + \Hank|_{a_{N+1},\dots,a_m}.
 \end{align*}
-The first term in each sum can be thought of as our `low-rank' equivalent from before and similarly the second term is our `small-norm' summand. \todo[inline]{Bound on number of off diagonal blocks} 
-
-Finally we can make the splitting $\A = \A_{SN} + \A_{LR}$ where
+The first term in each sum can be thought of as the low-rank equivalent from before and similarly the second term is the small-norm summand.
+Finally we can make the splitting $\A = \Tau + \A_{SN} + \A_{LR}$ where
 \begin{align*}
-	\A_{SN} &= \Hank|_{a_{N+1},\dots,a_m} + \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* +A_F \\
-	\A_{LR} &= \Hank|_{a_{0},\dots,a_N} + \sum_{i=1}^{r_{\offd}} \sigma_i \u_i \v_i*.
+	\A_{SN} &= \Hank|_{a_{N+1},\dots,a_m} + \sum_{i=r+1}^{M} \sigma_i \u_i \v_i* +A_F \\
+	\A_{LR} &= \Hank|_{a_{2},\dots,a_N} + \sum_{i=1}^{r} \sigma_i \u_i \v_i*.
 \end{align*}
-$\A_{LR}$ represent outliers, IE $s := \text{rank}(\A_{LR}) \leq N + r_{\offd}$ bounds the number of outliers. \todo[inline]{Is the N part of this bound true? 2N?} So the work is showing $|| \Tau^{-1}\A_{SN}||_2 \leq \varepsilon$. Define $\tilde{\offd} = \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* $ and $\tilde{\Hank} = \Hank|_{a_{N+1},\dots,a_m}$, so that $\A_{SN} = \tilde{\Hank} + \tilde{\offd} + \A_F$. 
+\todo[inline]{Hankel notation needs to be better, diagonals come from different blocks, what is m? etc }
+% \todo[inline]{Bound on number of off diagonal blocks} 
+Now $s := \text{rank}(\Tau^{-1}\A_{LR}) \leq \text{rank}(\A_{LR}) \leq 2(N-1) + r$ bounds the number of outlier eigenvalues. It remains to show $|| \Tau^{-1}\A_{SN}||_2 \leq \varepsilon$. Define $\tilde{\offd} = \sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i* $ and $\Hank_{SN} = \Hank|_{a_{N+1},\dots,a_m}$, so that $\A_{SN} = \Hank_{SN} + \tilde{\offd} + \A_F$. 
 \begin{align*}
-	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \tilde{\Hank}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_F ||_2
+	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \Hank_{SN}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_F ||_2
 \end{align*}
-We can bound $||\Tau^{-1} \tilde{\Hank}||_2$ as in \cite{Kailath}. We can bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
+Since the block multiplication $\Tau^{-1} \Hank_{SN}$ is each $\ptau$ acting on its corresponding Hankel correction we can bound it by \ref{block}. 
+We can bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
 \begin{equation*}
 	||\Tau^{-1} \A_F||_2 \leq ||\Tau^{-1}||_2 ||\A_F||_2 =\sigma_{\max}(\Tau^{-1}) \sigma_{\max}(\A_F) = \frac{ \sigma_{\max}(\A_F)}{\lambda_{\min}(\Tau)}.
 \end{equation*}
-Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$.
+Since $\A_F$ are small-norm this value is small. 
+Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$,
 \begin{align*}
 	\lambda_k ( \Tau^{-1} \tilde{\offd}) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{(\tilde{\offd}x,x)}{(\Tau x,x)}\right) \\
 	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{(\tilde{\offd} x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\Tau x,x)} \right) \right] \\
 	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{(\tilde{\offd} x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\Tau x,x)} \right)  \\
 	&= \lambda_k(\tilde{\offd})   \max_{x \in \R^n} \left( \frac{(x,x)}{(\Tau x,x)} \right)  \\
 	&\leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} \\
-	&= \lambda_k(\tilde{\offd})  \min_{n \in n_k} \min_{1 \leq i \leq n} \frac{\sin(\frac{\pi i}{n+1})}{\sum_{j=1}^n t_j \sin(\frac{\pi i j }{n+1})}
+	&= \lambda_k(\tilde{\offd})  \min_{n \in n_k} \min_{1 \leq i \leq n} \frac{\sin(\frac{\pi i}{n+1})}{\sum_{j=1}^n t_j \sin(\frac{\pi i j }{n+1})}. 
 \end{align*}
-Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*$ what can we say about $\lambda_k$?  
+\todo[inline]{Where to stop with $\lambda_{\min}\Tau$? can take it to generating function or expression for eigs (like above) or leave as is} 
+To finish the proof we need to relate the $k$-th eigenvalue of the preconditioned matrices to their 2-norm, 
+\begin{align*}
+	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \Hank_{SN}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_F ||_2 \\
+	&= \lambda_{\max}(\Tau^{-1} \Hank_{SN}) + \lambda_{\max}(\Tau^{-1} \tilde{\offd}) + \lambda_{\max}(\Tau^{-1} \A_F) \\
+	&\leq \frac{1}{\lambda_{\min}(\Tau)} \left( \lambda_{\max}(\Hank_{SN}) +  \lambda_{\max}(\tilde{\offd}) + \lambda_{\max}(\A_F) \right)
+\end{align*}
+\todo[inline]{SPSD justifying eig to sv to norm}
+%Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*$ what can we say about $\lambda_k$?  
 \end{proof}
 
-\begin{itemize}
-	\item numerical test confirming off-diag low rank
-	\item Explanation and tests showing off-off-diag are small norm 
-	\item technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi inverse treatment so are clustered around 1 
-	\item Comment - all problems come from boundaries
-	\item Extend proof to different kinds of circulant preconditioner
-\end{itemize}
+\todo[inline]{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - Extend proof to different kinds of circulant preconditioner}
 
 \section{Numerical Results}
 \begin{itemize}
+	\item numerical test confirming off-diag low rank
+	\item Explanation and tests showing off-off-diag are small norm 
 	\item enough info to reproduce 
 	\item Single block clustering
 	\item Adaptive clustering (what happens to smallest eigenvalue?)
