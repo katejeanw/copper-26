@@ -297,9 +297,6 @@ In this section we will prove that the spectral clustering in criteria 3 holds f
 We present our version of the spectral clustering proof for the case of $\ptau$ acting on a single Toeplitz block. This result is then used to help us prove the clustering of our preconditioner on the adaptive grid, $\Tau^{-1} \A$. 
 \todo[inline]{hyphenation of low rank and small norm}
 
-% \begin{corollary}	The matrices $\Sq(A_m)$ and $\Sq(A_m)^{-1}$ are positive definite.\end{corollary}
-
-%To effectively utilize the small-norm and low-rank splitting we will use the eigenvalue min-max theorem, and its corollary Weyl's inequality. Versions are both that will be useful to us are restated here. 
 %\begin{theorem}[Min-max Theorem]
 %	Let $A \in \R^{n \times n}$ be symmetric with ordered spectrum $\lambda_1 \geq \cdots \geq \lambda_n$. Then 
 %	\begin{align*}
@@ -307,11 +304,23 @@ We present our version of the spectral clustering proof for the case of $\ptau$ 
 %	\end{align*} 
 %\end{theorem}
 
-For convenience we restate Weyl's inequality, which will be useful to us later. 
+For convenence we state Weyl's inequality and one other lemma that will be useful to us later. Both these results are corollaries to the min-max theorem. 
 \begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $m \times m$ matrices. Then for $A := M + E$ we have 
 	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq m.$$
 	That is the eigenvalues of $A$ are at most $||E||_2$ away from the eigenvalues of $M$. 
 \end{lemma}
+\begin{lemma} \label{eig_lemma}
+	Let $T \in \R^{n \times n}$ be an invertible matrix. Let $A \in \R^{n \times n}$, then $$\lambda_k(T^{-1}A) \leq \frac{\lambda_k(A)}{\lambda_{\min}(T)}$$. 
+\end{lemma}
+\begin{proof}
+	Using the min-max theorem, 
+	\begin{align*}
+		\lambda_k ( T^{-1} A) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{(Ax,x)}{(T x,x)}\right) \\
+		&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{(A x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(T x,x)} \right) \right] \\
+		&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{(A x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(T x,x)} \right)  \\
+		&= \lambda_k(A)   \max_{x \in \R^n} \left( \frac{(x,x)}{(T x,x)} \right) \leq \lambda_k(A)  \frac{1}{\lambda_{\min}(T)}. 
+	\end{align*}
+\end{proof}
 
 \subsection{Spectral Clustering of a Toeplitz Block}
 \begin{lemma}[Eigenvalue Clustering on a Toeplitz Block] \label{block}
@@ -326,18 +335,15 @@ Recall from the construction of $\ptau$,
 \begin{align}
 	\ptau &= \Toe - \Hank \\
 	\Toe &= \ptau + \Hank \\
-	\implies  \ptau^{-1} \Toe &= I + \ptau^{-1} \Hank 
+	\ptau^{-1} \Toe &= I + \ptau^{-1} \Hank 
 \end{align}
 where $\Hank$ is the Hankel matrix with antidiagonals $\toe_2, \toe_3, \dots, \toe_{m-1},0,0$. Therefore it suffices to show that the eigenvalues of $\ptau^{-1} \Hank$ are clustered around 0. 
 
 We now split $\Hank$ into a low-rank matrix $\Hank_{LR}$ that contains the antidiagonals $\toe_0, \dots, \toe_N$ and a small-norm matrix $\Hank_{SN}$ such that $\Hank = \Hank_{LR} + \Hank_{SN}$.  Let $s := \text{rank}(\Hank_{LR}) << m$. The small-norm descriptor is justified since $\Hank_{SN} = \Hank - \Hank_{LR}$ is a hermitian $m \times m$ matrix with at most two copies of $\toe_{N}, \dots, \toe_{m-1}$ in each row/column. Thus $||\Hank_{SN}||_2 = \sqrt{||\Hank_{SN}||_1 ||\Hank_{SN}||_{\infty}} = ||\Hank_{SN}||_1 < 2 \varepsilon$. Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $\Hank_{SN}$ are clustered within $2 \varepsilon$ of zero. 
 
-Now using the min-max theorem, 
+Now by lemma \ref{eig_lemma},
 \begin{align*}
-	\lambda_k ( \ptau^{-1} \Hank  ) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{(\Hank x,x)}{(\ptau x,x)}\right) \\
-	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{(\Hank x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\ptau x,x)} \right) \right] \\
-	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{(\Hank x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\ptau x,x)} \right)  \\
-	&= \lambda_k (\Hank)   \max_{x \in \R^n} \left( \frac{(x,x)}{(\ptau x,x)} \right)  \leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )} \\
+	\lambda_k ( \ptau^{-1} \Hank  ) &\leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )} \\
 	 & = \lambda_k (\Hank)  \frac{1}{a_m(z_{\min})} \leq \lambda_k (\Hank)  \frac{1}{\varepsilon}.
 \end{align*}
 Thus the clustering of the spectrum of $\Hank$ around 0 implies the same for $\ptau^{-1} \Hank$. 
@@ -368,7 +374,7 @@ In the above equation $\u$ and $\v$ are length $m_{\off}$ vectors. With a slight
 \end{align*}
 
 As before, we have $\varepsilon > 0$ and choose $N$ much smaller than $m$ so that for every Toeplitz block the truncated function for the block $a_{m_i} (z) > \varepsilon$ on the unit circle and $\sum_{i = N}^{\infty} |a_i| < \varepsilon$. 
-\todo[inline]{since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
+\todo[inline]{Possible comment: since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
 We additionally split $\Hank$ by separating the anti-diagonals with coefficients $a_0, \dots, a_N$ and the anti-diagonals comprising of $a_{N+1}, \dots a_m$. So we have two splittings, 
 \begin{align*} 
 	\offd &= \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i*  \right) \\
@@ -392,19 +398,15 @@ We can bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
 	||\Tau^{-1} \A_F||_2 \leq ||\Tau^{-1}||_2 ||\A_F||_2 =\sigma_{\max}(\Tau^{-1}) \sigma_{\max}(\A_F) = \frac{ \sigma_{\max}(\A_F)}{\lambda_{\min}(\Tau)}.
 \end{equation*}
 Since $\A_F$ are small-norm this value is small. 
-Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$,
+Finally we bound $||\Tau^{-1} \tilde{\offd}||_2$. Using lemma \ref{eig_lemma} 
 \begin{align*}
-	\lambda_k ( \Tau^{-1} \tilde{\offd}) &= \min_{\dim V=k} \max_{x \in V} \left(  \frac{(\tilde{\offd}x,x)}{(\Tau x,x)}\right) \\
-	&\leq   \min_{\dim V =k} \left[ \max_{x \in V} \left( \frac{(\tilde{\offd} x,x)}{(x,x)} \right)  \max_{x \in V} \left( \frac{(x,x)}{(\Tau x,x)} \right) \right] \\
-	&\leq \left[  \min_{\dim V =k}  \max_{x \in V} \left( \frac{(\tilde{\offd} x,x)}{(x,x)} \right)  \right] \max_{x \in \R^n} \left( \frac{(x,x)}{(\Tau x,x)} \right)  \\
-	&= \lambda_k(\tilde{\offd})   \max_{x \in \R^n} \left( \frac{(x,x)}{(\Tau x,x)} \right)  \\
-	&\leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} \\
+	\lambda_k ( \Tau^{-1} \tilde{\offd}) &\leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} \\
 	&= \lambda_k(\tilde{\offd})  \min_{n \in n_k} \min_{1 \leq i \leq n} \frac{\sin(\frac{\pi i}{n+1})}{\sum_{j=1}^n t_j \sin(\frac{\pi i j }{n+1})}. 
 \end{align*}
-\todo[inline]{Where to stop with $\lambda_{\min}\Tau$? can take it to generating function or expression for eigs (like above) or leave as is} 
+\todo[inline]{Where to stop with $\lambda_{\min}\Tau$? can take it to generating function or bound on gen func or expression for eigs (like above) or leave as is} 
 To finish the proof we need to relate the $k$-th eigenvalue of the preconditioned matrices to their 2-norm, 
 \begin{align*}
-	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \Hank_{SN}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_F ||_2 \\
+	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \Hank_{SN}||_2 + ||\Tau^{-1} A||_2 +||\Tau^{-1} \A_F ||_2 \\
 	&= \lambda_{\max}(\Tau^{-1} \Hank_{SN}) + \lambda_{\max}(\Tau^{-1} \tilde{\offd}) + \lambda_{\max}(\Tau^{-1} \A_F) \\
 	&\leq \frac{1}{\lambda_{\min}(\Tau)} \left( \lambda_{\max}(\Hank_{SN}) +  \lambda_{\max}(\tilde{\offd}) + \lambda_{\max}(\A_F) \right)
 \end{align*}
@@ -415,14 +417,38 @@ To finish the proof we need to relate the $k$-th eigenvalue of the preconditione
 \todo[inline]{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - Extend proof to different kinds of circulant preconditioner}
 
 \section{Numerical Results}
+\subsection{Validating Assumptions}
+In order to prove the spectral clustering, we made two assumptions beyond the standard literature in the field. First, that the blocks adjacent to the diagonal are well-approximated by low-rank matrices. Second, that the other off-diagonal blocks are small-norm. We tested those assumptions at the ? level of refinement, for fractional order ?. 
+\todo[inline]{one matrix as an example? one for all alpha? }
+
 \begin{itemize}
 	\item numerical test confirming off-diag low rank
 	\item Explanation and tests showing off-off-diag are small norm 
 	\item enough info to reproduce 
+\end{itemize}
+
+\subsection{Improved Convergence}
+\begin{figure}
+	\centering
+	\includegraphics[width= .9 \textwidth]{figures/eig_compt.png} \\
+	\caption{Eigenvalue clustering $n = 31$, one block}
+\end{figure}
+
+
+% todo 1x1 come from overlapping boundaries, extend toeplitz blocks by one each direction and add corrections? 
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width= .9 \textwidth]{figures/convergence.png}
+	\caption{caption}
+\end{figure}
+
+\begin{itemize}
+	\item enough info to reproduce 
 	\item Single block clustering
 	\item Adaptive clustering (what happens to smallest eigenvalue?)
 	\item behavior for different $\alpha$
-	\item Verify assumptions from proof
 	\item convergence of solving with PCG (superlinear convergence)
 \end{itemize}
 

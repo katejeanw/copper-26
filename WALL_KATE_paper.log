@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  21 FEB 2026 15:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  22 FEB 2026 11:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -937,32 +937,48 @@ Overfull \hbox (6.7159pt too wide) detected at line 284
 
 [4]
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 311.
+line 308.
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 321.
+line 316.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
  [5]
 Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 347.
- [6]
-Overfull \hbox (5.81287pt too wide) in paragraph at lines 372--373
+t line 353.
+
+[6]
+Overfull \hbox (5.81287pt too wide) in paragraph at lines 378--379
 []\OT1/cmr/m/n/10 We ad-di-tion-ally split $\OML/cmm/m/it/10 H$ \OT1/cmr/m/n/10
  by sep-a-rat-ing the anti-diagonals with co-ef-fi-cients $\OML/cmm/m/it/10 a[]
 ; [] ; a[]$|
  []
 
-[7] [8] (./WALL_KATE_paper.bbl)
+[7] [8]
+<figures/eig_compt.png, id=180, 1328.965pt x 803.0pt>
+File: figures/eig_compt.png Graphic file (type png)
+<use figures/eig_compt.png>
+Package pdftex.def Info: figures/eig_compt.png  used on input line 433.
+(pdftex.def)             Requested size: 333.3431pt x 201.41115pt.
+<figures/convergence.png, id=181, 1335.99126pt x 1206.5075pt>
+File: figures/convergence.png Graphic file (type png)
+<use figures/convergence.png>
+Package pdftex.def Info: figures/convergence.png  used on input line 443.
+(pdftex.def)             Requested size: 333.3431pt x 301.03702pt.
+ (./WALL_KATE_paper.bbl [9 <./figures/eig_compt.png (PNG copy)>])
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
- [9] (./WALL_KATE_paper.aux)
+
+[10 <./figures/convergence.png>] (./WALL_KATE_paper.aux)
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 321B30D6A8215C445620B38E5CEAFB33;1317.
+(rerunfilecheck)             Checksum: B4AEED37C30923F9DAB4A66E43FE11DA;1653.
  ) 
 Here is how much of TeX's memory you used:
- 25852 strings out of 478994
- 465627 string characters out of 5858183
- 748004 words of memory out of 5000000
- 41287 multiletter control sequences out of 15000+600000
+ 25883 strings out of 478994
+ 466174 string characters out of 5858183
+ 748139 words of memory out of 5000000
+ 41306 multiletter control sequences out of 15000+600000
  414135 words of font info for 66 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
  102i,13n,117p,1115b,973s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -983,11 +999,12 @@ e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/202
 1/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2021/t
-exmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (9 pages, 267126 bytes).
+exmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/20
+21/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on WALL_KATE_paper.pdf (10 pages, 386940 bytes).
 PDF statistics:
- 244 PDF objects out of 1000 (max. 8388607)
- 197 compressed objects within 2 object streams
- 52 named destinations out of 1000 (max. 500000)
- 181 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 271 PDF objects out of 1000 (max. 8388607)
+ 219 compressed objects within 3 object streams
+ 60 named destinations out of 1000 (max. 500000)
+ 207 words of extra memory for PDF output out of 10000 (max. 10000000)
 

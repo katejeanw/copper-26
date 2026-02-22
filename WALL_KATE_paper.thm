@@ -1,7 +1,9 @@
 \contentsline {definition}{{Definition}{2.1}{}}{3}{theorem.7}%
 \contentsline {definition}{{Definition}{3.1}{Eigenvalue Clustering}}{4}{theorem.13}%
 \contentsline {lemma}{{Lemma}{4.1}{Weyl's Inequality}}{5}{theorem.18}%
-\contentsline {lemma}{{Lemma}{4.2}{Eigenvalue Clustering on a Toeplitz Block}}{5}{theorem.20}%
-\contentsline {proof}{{Proof}{1}{}}{5}{proof.21}%
-\contentsline {theorem}{{Theorem}{4.3}{Full Matrix Clustering}}{6}{theorem.26}%
-\contentsline {proof}{{Proof}{2}{}}{6}{proof.27}%
+\contentsline {lemma}{{Lemma}{4.2}{}}{5}{theorem.19}%
+\contentsline {proof}{{Proof}{1}{}}{5}{proof.20}%
+\contentsline {lemma}{{Lemma}{4.3}{Eigenvalue Clustering on a Toeplitz Block}}{6}{theorem.22}%
+\contentsline {proof}{{Proof}{2}{}}{6}{proof.23}%
+\contentsline {theorem}{{Theorem}{4.4}{Full Matrix Clustering}}{7}{theorem.28}%
+\contentsline {proof}{{Proof}{3}{}}{7}{proof.29}%

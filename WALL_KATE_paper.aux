@@ -42,34 +42,46 @@
 \@writefile{toc}{\contentsline {section}{\numberline {3}Our Preconditioner}{4}{section.9}\protected@file@percent }
 \@writefile{thm}{\contentsline {definition}{{Definition}{3.1}{Eigenvalue Clustering}}{4}{theorem.13}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{How to apply diagonal? FFT w toeplitz multiplication?, maybe just cite it away}{5}{section*.14}\protected@file@percent }
-\pgfsyspdfmark {pgfid3}{16332348}{32677255}
+\pgfsyspdfmark {pgfid3}{16332348}{31930262}
 \@writefile{tdo}{\contentsline {todo}{Bullet point properties of $\mathcal  {T}$}{5}{section*.15}\protected@file@percent }
-\pgfsyspdfmark {pgfid4}{16332348}{30758507}
+\pgfsyspdfmark {pgfid4}{16332348}{30011514}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Theoretical Results}{5}{section.16}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{hyphenation of low rank and small norm}{5}{section*.17}\protected@file@percent }
-\pgfsyspdfmark {pgfid5}{16332348}{20503997}
+\pgfsyspdfmark {pgfid5}{16332348}{19072697}
 \@writefile{thm}{\contentsline {lemma}{{Lemma}{4.1}{Weyl's Inequality}}{5}{theorem.18}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Spectral Clustering of a Toeplitz Block}{5}{theorem.20}\protected@file@percent }
-\@writefile{thm}{\contentsline {lemma}{{Lemma}{4.2}{Eigenvalue Clustering on a Toeplitz Block}}{5}{theorem.20}\protected@file@percent }
-\newlabel{block}{{4.2}{5}{Spectral Clustering of a Toeplitz Block}{theorem.20}{}}
-\newlabel{block@cref}{{[lemma][2][4]4.2}{[1][5][]5}}
-\@writefile{thm}{\contentsline {proof}{{Proof}{1}{}}{5}{proof.21}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Spectral Clustering of the Full System}{6}{theorem.26}\protected@file@percent }
-\@writefile{thm}{\contentsline {theorem}{{Theorem}{4.3}{Full Matrix Clustering}}{6}{theorem.26}\protected@file@percent }
-\@writefile{thm}{\contentsline {proof}{{Proof}{2}{}}{6}{proof.27}\protected@file@percent }
-\@writefile{tdo}{\contentsline {todo}{since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon $. Over all the blocks we can take the max $\varepsilon $ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}{7}{section*.29}\protected@file@percent }
-\pgfsyspdfmark {pgfid6}{16332348}{21838881}
-\@writefile{tdo}{\contentsline {todo}{Hankel notation needs to be better, diagonals come from different blocks, what is m? etc }{7}{section*.30}\protected@file@percent }
-\pgfsyspdfmark {pgfid7}{16332348}{5064484}
-\@writefile{tdo}{\contentsline {todo}{Where to stop with $\lambda _{\qopname  \relax m{min}}\mathcal  {T}$? can take it to generating function or expression for eigs (like above) or leave as is}{8}{section*.31}\protected@file@percent }
-\pgfsyspdfmark {pgfid8}{15577819}{18057254}
-\@writefile{tdo}{\contentsline {todo}{SPSD justifying eig to sv to norm}{8}{section*.32}\protected@file@percent }
-\pgfsyspdfmark {pgfid9}{15577819}{9358102}
-\global\def\markiiproofviii{\proofbox }
-\@writefile{tdo}{\contentsline {todo}{Possible comments: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi inverse treatment so are clustered around 1 \\ - all problems come from boundaries \\ - Extend proof to different kinds of circulant preconditioner}{8}{section*.33}\protected@file@percent }
-\pgfsyspdfmark {pgfid10}{15577819}{6307848}
+\@writefile{thm}{\contentsline {lemma}{{Lemma}{4.2}{}}{5}{theorem.19}\protected@file@percent }
+\newlabel{eig_lemma}{{4.2}{5}{Theoretical Results}{theorem.19}{}}
+\newlabel{eig_lemma@cref}{{[lemma][2][4]4.2}{[1][5][]5}}
+\@writefile{thm}{\contentsline {proof}{{Proof}{1}{}}{5}{proof.20}\protected@file@percent }
+\global\def\markiproofi{\proofbox }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Spectral Clustering of a Toeplitz Block}{6}{theorem.22}\protected@file@percent }
+\@writefile{thm}{\contentsline {lemma}{{Lemma}{4.3}{Eigenvalue Clustering on a Toeplitz Block}}{6}{theorem.22}\protected@file@percent }
+\newlabel{block}{{4.3}{6}{Spectral Clustering of a Toeplitz Block}{theorem.22}{}}
+\newlabel{block@cref}{{[lemma][3][4]4.3}{[1][6][]6}}
+\@writefile{thm}{\contentsline {proof}{{Proof}{2}{}}{6}{proof.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Spectral Clustering of the Full System}{7}{theorem.28}\protected@file@percent }
+\@writefile{thm}{\contentsline {theorem}{{Theorem}{4.4}{Full Matrix Clustering}}{7}{theorem.28}\protected@file@percent }
+\@writefile{thm}{\contentsline {proof}{{Proof}{3}{}}{7}{proof.29}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{Possible comment: since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon $. Over all the blocks we can take the max $\varepsilon $ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}{7}{section*.31}\protected@file@percent }
+\pgfsyspdfmark {pgfid6}{16332348}{5914632}
+\@writefile{tdo}{\contentsline {todo}{Hankel notation needs to be better, diagonals come from different blocks, what is m? etc }{8}{section*.32}\protected@file@percent }
+\pgfsyspdfmark {pgfid7}{15577819}{29353340}
+\@writefile{tdo}{\contentsline {todo}{Where to stop with $\lambda _{\qopname  \relax m{min}}\mathcal  {T}$? can take it to generating function or bound on gen func or expression for eigs (like above) or leave as is}{8}{section*.33}\protected@file@percent }
+\pgfsyspdfmark {pgfid8}{15577819}{12716289}
+\@writefile{tdo}{\contentsline {todo}{SPSD justifying eig to sv to norm}{8}{section*.34}\protected@file@percent }
+\pgfsyspdfmark {pgfid9}{15577819}{4734984}
 \bibstyle{siamplain}
 \bibdata{references}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Eigenvalue clustering $n = 31$, one block\relax }}{9}{figure.caption.40}\protected@file@percent }
+\global\def\markiiiproofviii{\proofbox }
+\@writefile{tdo}{\contentsline {todo}{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - Extend proof to different kinds of circulant preconditioner}{9}{section*.35}\protected@file@percent }
+\pgfsyspdfmark {pgfid10}{16332348}{24397916}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Numerical Results}{9}{section.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Validating Assumptions}{9}{subsection.37}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{one matrix as an example? one for all alpha? }{9}{section*.38}\protected@file@percent }
+\pgfsyspdfmark {pgfid11}{16332348}{15509441}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Improved Convergence}{9}{figure.caption.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.42}\protected@file@percent }
 \bibcite{toeplitz}{1}
 \bibcite{Bini}{2}
 \bibcite{Chan_89}{3}
@@ -77,7 +89,6 @@
 \bibcite{Kailath}{5}
 \bibcite{Levinson}{6}
 \bibcite{Xiaozhe}{7}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Numerical Results}{9}{section.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.35}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{9}{section.35}\protected@file@percent }
-\gdef \@abspage@last{9}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces caption\relax }}{10}{figure.caption.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{10}{section.42}\protected@file@percent }
+\gdef \@abspage@last{10}
