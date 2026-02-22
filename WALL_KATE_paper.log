@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  22 FEB 2026 13:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  22 FEB 2026 13:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -955,47 +955,29 @@ Overfull \hbox (5.81287pt too wide) in paragraph at lines 378--379
  []
 
 [7] [8]
-
-Package caption Warning: \label without proper reference on input line 435.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `fig:eigen_clusters' on page 9 undefined on input line
- 431.
-
-<figures/eig_comp.png, id=181, 1393.205pt x 887.315pt>
+<figures/eig_comp.png, id=180, 1393.205pt x 887.315pt>
 File: figures/eig_comp.png Graphic file (type png)
 <use figures/eig_comp.png>
-Package pdftex.def Info: figures/eig_comp.png  used on input line 437.
+Package pdftex.def Info: figures/eig_comp.png  used on input line 432.
 (pdftex.def)             Requested size: 333.3431pt x 212.29652pt.
 <figures/convJ.png, id=182, 1774.63pt x 512.91624pt>
 File: figures/convJ.png Graphic file (type png)
 <use figures/convJ.png>
 Package pdftex.def Info: figures/convJ.png  used on input line 442.
 (pdftex.def)             Requested size: 351.86342pt x 101.69704pt.
-
-Package caption Warning: \label without proper reference on input line 440.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `fig:conv' on page 9 undefined on input line 445.
-
-(./WALL_KATE_paper.bbl [9])
+ [9 <./figures/eig_comp.png (PNG copy)>] (./WALL_KATE_paper.bbl)
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
- [10 <./figures/eig_comp.png (PNG copy)> <./figures/convJ.png>] (./WALL_KATE_pa
-per.aux)
 
-LaTeX Warning: There were undefined references.
-
+[10 <./figures/convJ.png>] (./WALL_KATE_paper.aux)
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: ABBF69E7D12735F71D3E71269A7640ED;1649.
+(rerunfilecheck)             Checksum: F526769B5F1DE151E1B9A9ECD53E72D9;1653.
  ) 
 Here is how much of TeX's memory you used:
  25889 strings out of 478994
- 466229 string characters out of 5858183
- 748422 words of memory out of 5000000
+ 466233 string characters out of 5858183
+ 748760 words of memory out of 5000000
  41311 multiletter control sequences out of 15000+600000
  414135 words of font info for 66 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
@@ -1019,7 +1001,7 @@ e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2021/t
 exmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/20
 21/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (10 pages, 354784 bytes).
+Output written on WALL_KATE_paper.pdf (10 pages, 354604 bytes).
 PDF statistics:
  276 PDF objects out of 1000 (max. 8388607)
  224 compressed objects within 3 object streams

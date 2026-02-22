@@ -426,21 +426,22 @@ In order to prove the spectral clustering, we made two assumptions beyond the st
 	\item Explanation and tests showing off-off-diag are small norm 
 	\item enough info to reproduce 
 \end{itemize}
-
 \subsection{Improved Convergence}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width= .9 \textwidth]{figures/eig_comp.png} \\
+	\caption{Eigenvalue clustering before and after preconditioning. Each column represent a different matrix size. The first row shows the spectrum before preconditioning, the second shows the spectrum at the same scale after preconditioning. The third row shows the preconditioned spectrum on a smaller interval. }
+	\label{fig:eigen_clusters}
+\end{figure}
 In figure \ref{fig:eigen_clusters} we can see some example results of the preconditioner on the spectrum of $\A$. These tests are for problem TODO where $\alpha = 1.7$.  The three different matrix sizes are $n = 31, 71, 2795$ and reflect $0, 3$ and $11$ levels of refinement respectively. 
 
 The left-most column represents a matrix that consists of a single Toeplitz block, so the preconditioner reduces to the case of $\ptau$. In this case the clustering of the spectrum around 1 is very strong. In the $n = 71$ case the biggest Toeplitz blocks are size $11$, and there are two such blocks. The eigenvalue clustering around 1 is still observable, but the size of the cluster has grown. Finally for $n=2795$, the preconditioner reduces the spectral radius by several orders of magnitude. The spectrum is concentrated around 1, but the distribution of eigenvalues between 0 and 2 is more uniform. For this matrix the biggest Toeplitz block is size $939$ and there are two other blocks just bigger than $200$. On the other hand, there are $245$ $1 \times 1$ blocks. For all cases, the strength of the clustering is explained by the amount of smaller Toeplitz blocks in $\A$.
 % todo would love to be able to show error for PDE for the three different matrices
-\begin{figure} \label{fig:eigen_clusters}
-	\centering
-	\includegraphics[width= .9 \textwidth]{figures/eig_comp.png} \\
-	\caption{Eigenvalue clustering before and after preconditioning. Each column represent a different matrix size. The first row shows the spectrum before preconditioning, the second shows the spectrum at the same scale after preconditioning. The third row shows the preconditioned spectrum on a smaller interval. }
-\end{figure}
-\begin{figure} \label{fig:conv}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width= .95 \textwidth]{figures/convJ.png}
 	\caption{Comparing the residual vector norm across PCG iterations. The blue line uses a Jacobi preconditioner and the orange line uses our $\Tau$ preconditioner. }
+	\label{fig:conv}
 \end{figure}
 We can see how the clustered spectrum translates to accelereted convergence. In figure \ref{fig:conv} the same matrices are used for preconditioned conjugate gradient (PCG), comparing our preconditioner and a Jacobi preconditioner with a tolerance of $10^{-8}$. For the two smaller matrices the preconditioner clearly accelerates the point of superlinear convergence \cite{MINRES_super}. For the final matrix the Jacobi-preconditioned system fails to converge within the maximum of $600$ iterations, but with the $\Tau$ preconditioner converges in about $300$ iterations. 
 % todo ? behavior for different $\alpha$ 
