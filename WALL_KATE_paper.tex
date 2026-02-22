@@ -176,12 +176,10 @@ A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around
 	\end{equation}
 	\caption{$\Toe$ is a Toeplitz matrix and $C$ is circulant.}
 \end{equ}
-
 % Classical results on the eigenvalue distribution of Toeplitz matrices indicate that we cannot expect, in general, any clustering, and that the convergence of the method will be slow.
-
 %% Toeplitz matrices and generating functions 
-As will be discussed in section \ref{stiffness}, the stiffness matrix resulting from AFEM is not Toeplitz, but does contain SPD Toeplitz blocks. 
-To build an effective preconditioner and investigate its properties, we have to take full advantage of these SPD Toeplitz blocks. Toeplitz matrices have many unique properties that give rise to efficient algorithms (see for example \cite{toeplitz}). For our purposes we focus on their connection to functions in the Wiener class. This will allow us to take our problem from matrix operator theory to function theory. Suppose we have a singly infinite, symmetric Toeplitz matrix
+As discussed in section \ref{stiffness}, the stiffness matrix resulting from AFEM is not Toeplitz, but does contain SPD Toeplitz blocks. 
+To build an effective preconditioner and investigate its properties, we have to take full advantage of these blocks. Toeplitz matrices have many unique properties, for our purposes we focus on their connection to functions in the Wiener class. This will allow us to take our problem from matrix operator theory to function theory. Suppose we have a singly infinite, symmetric Toeplitz matrix
 \begin{equation*}
 	\Toe = \begin{pmatrix}
 		\toe_0 & \toe_1 & \toe_2 & \\
@@ -218,12 +216,11 @@ Previous work on Toeplitz systems offers a few options for circulant preconditio
 		\toe_2 & \toe_3 & \toe_4 & \cdots & \toe_{n-1} & 0 & 0 \\
 		\toe_3 & \toe_4 & \toe_5 & \cdots  & 0 & 0 & 0 \\
 		\toe_4 & \toe_5 & \toe_6 & \cdots & 0 & 0 & \toe_{n-1} \\
-		\vdots & \vdots & \vdots & \cdots & \vdots & \vdots & \vdots \\
+		\vdots & \vdots & \vdots & s\cdots & \vdots & \vdots & \vdots \\
 		0 & 0 & 0 & \cdots & \toe_5 & \toe_4 & \toe_3 \\
 		0 & 0 & \toe_{n-1} & \cdots & \toe_4 & \toe_3 & \toe_2
 	\end{pmatrix}.
 \end{equation}
-
 Then Bini and Di Benedetto's preconditioner is defined as $\ptau := \Toe - H$. $\Hank$ is a Hankel matrix, that is it is constant on the antidiagonals. Both $\Toe$ and $\Hank$ are symmetric, so they can be completely represented by the at most $n$ unique values: the diagonals of $\Toe: \toe_0, \toe_1, \dots, \toe_{n-1}$, and the antidiagonals of $\Hank: \toe_2, \toe_3, \dots, \toe_{n-1},0,0 $. 
 	
 The following lemma summarizes properties of $\ptau$.
