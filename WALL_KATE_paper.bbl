@@ -24,6 +24,10 @@
   and of t.chan type}, SIAM Journal on Matrix Analysis and Applications, 26
   (2006), pp.~706--734.
 
+\bibitem{MINRES_super}
+{\sc V.~Simoncini and D.~B. Szyld}, {\em On the superlinear convergence of
+  minres},  (2013).
+
 \bibitem{Levinson}
 {\sc Norbert Wiener}, {\em The Wiener RMS (Root Mean Square) Error Criterion in
   Filter Design and Prediction}, 1964, pp.~129--148.
