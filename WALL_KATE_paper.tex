@@ -121,31 +121,28 @@ We present a preconditioner for solving fractional partial differential equation
 % Availabilitty of Xiaozhe's code / stiffness matrices 
 
 \todo[inline]{problem statement, describe A block by block, visually? decay, dependence on alpha}
-There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$, in other words, $A$ has constant diagonals. Arbitrary $n \times n$ matrices have up to $n^2$ unique entries and are solved directly by traditional techniques in $\bigOh(n^3)$ time. Since a Toeplitz matrix has just at most $2n-1$ unique entries, we may expect to be able to solve it in $\bigOh (n^2)$ time. This is indeed the case via techniques such as Levinson's algorithm \cite{Levinson}. Even this improvement, however, is infeasible for large systems. Instead we turn to iterative Krylov and multigrid methods. For these methods we can still take advantage of Toeplitz structure by using circulant preconditioners. 
-
-A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around'' property where the last entry each row is the first entry of the subsequent row. 
-
-\begin{equ}[H]
-	\begin{equation}
-	\Toe = \begin{pmatrix}
-		\toe_0  &  \toe_{-1} & \cdots & \toe_{-(n-1)} \\
-		\toe_{1} & \toe_0 & \cdots & \toe_{-(n-2)} \\
-		\vdots & \vdots & \ddots & \vdots \\
-		\toe_{n-1} & \toe_{n-2} & \cdots & \toe_0 
-	\end{pmatrix} 
-	\hspace{.15 in}
-	C = \begin{pmatrix}
-		c_0 & c_1 & \cdots & c_{n-1} \\
-		c_{n-1} & c_0 & \cdots & c_{n-2} \\
-		\vdots & \vdots & \ddots & \vdots \\
-		c_{1} & c_{2} & \cdots & c_0 
-		\end{pmatrix}
-\end{equation}
-\caption{$\Toe$ is a Toeplitz matrix and $C$ is circulant.}
-\end{equ}
+There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$. Arbitrary $n \times n$ matrices have up to $n^2$ entries and are in general, solved directly in $\bigOh(n^3)$ time. Since a Toeplitz matrix has at most $2n-1$ unique entries, we may expect to be able to solve it in $\bigOh (n^2)$ time. This is indeed the case via techniques such as Levinson's algorithm \cite{Levinson}. Even this improvement, however, is infeasible for large systems. Instead we turn to iterative Krylov and multigrid methods \cite{schrod, hierarch, Xiaozhe}. For these methods we can still take advantage of Toeplitz structure by using circulant preconditioners. 
 
 Toeplitz matrices commonly arise in PDE discretization, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $\Toe x = b$, the idea introduced by Strang and Chan is to use certain circulant preconditioners $C$ so that $C^{-1}Tx = C^{-1}b$ is solved in fewer iterations \cite{Chan_Strang}.
-
+A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around'' property where the last entry each row is the first entry of the subsequent row. 
+\begin{equ}[H]
+	\begin{equation}
+		\Toe = \begin{pmatrix}
+			\toe_0  &  \toe_{-1} & \cdots & \toe_{-(n-1)} \\
+			\toe_{1} & \toe_0 & \cdots & \toe_{-(n-2)} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			\toe_{n-1} & \toe_{n-2} & \cdots & \toe_0 
+		\end{pmatrix} 
+		\hspace{.15 in}
+		C = \begin{pmatrix}
+			c_0 & c_1 & \cdots & c_{n-1} \\
+			c_{n-1} & c_0 & \cdots & c_{n-2} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			c_{1} & c_{2} & \cdots & c_0 
+		\end{pmatrix}
+	\end{equation}
+	\caption{$\Toe$ is a Toeplitz matrix and $C$ is circulant.}
+\end{equ}
 We leverage this idea to build a preconditioner for stiffness matrices generated from the adaptive finite element method (AFEM) for fractional PDEs. In this setting the problem is discretized on a nonuniform mesh, and the resulting stiffness matrix is dense. In the usual finite element method (FEM) setting an uniform mesh results in a Toeplitz stiffness matrix. In the adaptive setting, after an initial solve on a uniform grid, the error on each element is estimated and the elements with largest error are refined via bisection. It is often the case that neighboring elements are refined the same number of times. So although the mesh is not globally uniform, there are areas of local uniformity. To build an effective preconditioner, we will take advantage of these locally uniform areas and their corresponding Toeplitz blocks in the stiffness matrix. 
 % application for fractional pdes
 % similar systems result from mixed precision 
@@ -201,7 +198,7 @@ Assume $\sum_{k=-\infty}^{\infty} |\toe_k| <\infty$. Then the function $\toe(z) 
 \end{definition}
 
 Previous work on Toeplitz systems offers a few options for circulant preconditioners. Although their construction differs, the spectrum of the preconditioned systems are asymptotically the same \cite{Chan_89}. We use the construction given by Bini and Benedetto \cite{Bini}. Given a symmetric Toeplitz matrix $\Toe$ we build a Hankel correction, $H$ where 
-\begin{equation*}
+\begin{equation} \label{Hank}
 	\Toe = \begin{pmatrix}
 		\toe_0 & \toe_1 & \toe_2 & \cdots &\toe_{n-2}& \toe_{n-1} \\
 		\toe_1 & \toe_0 & \toe_1 &  \cdots &\toe_{n-3}& \toe_{n-2} \\
@@ -218,19 +215,22 @@ Previous work on Toeplitz systems offers a few options for circulant preconditio
 		0 & 0 & 0 & \cdots & \toe_5 & \toe_4 & \toe_3 \\
 		0 & 0 & \toe_{n-1} & \cdots & \toe_4 & \toe_3 & \toe_2
 	\end{pmatrix}.
-\end{equation*}
+\end{equation}
 
 Then Bini and Benedetto's preconditioner is defined as $\ptau := \Toe - H$. $\Hank$ is a Hankel matrix, that is it is constant on the antidiagonals. Both $\Toe$ and $\Hank$ are symmetric, so they can be completely represented by the at most $n$ unique values: the diagonals of $\Toe: \toe_0, \toe_1, \dots, \toe_{n-1}$, and the antidiagonals of $\Hank: \toe_2, \toe_3, \dots, \toe_{n-1},0,0 $. 
 	
-We summarize the important properties of $\ptau$ (see \cite{Bini} for details):
-\begin{itemize}
+The following lemma summarizes properties of $\ptau$.
+\begin{lemma}[Properties of $\ptau$, see \cite{Bini}]
+	Let $\Toe$ be a Toeplitz matrix and $\Hank$ the corresponding Hankel correction as in equation \ref{Hank}. Then $\ptau = \Toe - \Hank$ has the following properties: 
+\begin{enumerate}
 %	\item $\ptau$ is a circulant matrix.
 	\item $\ptau$ is diagonalized by the type-I discrete sine transform (DST) matrix, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
 	\item $\ptau$ can be applied in $n \log n$ time .
-	\item The $k$-th eigenvalue of $\ptau$ is proportional to the $k$-th entry of $S\toe_1$ where $\toe_1$ is the first column of $\Toe$. Specifically, define  $c_k := \sqrt{\frac{n+1}{2}} \frac{1}{\sin(\frac{\pi k }{n+1})}$, then 
-	\begin{equation} \label{eigs} \lambda_k(\ptau) = c_k [S\toe_1]_k \end{equation}.
+	\item Let $\toe_1$ be the first column of $\Toe$. Then the $k$-th eigenvalue of $\ptau$ is proportional to the $k$-th entry of $S\toe_1$. Specifically, 
+	\begin{equation} \label{eigs} \lambda_k(\ptau) = c_k [S\toe_1]_k, \ \text{where } c_k := \sqrt{\frac{n+1}{2}} \frac{1}{\sin(\frac{\pi k }{n+1})}\end{equation}.
 	\item Each eigenvalue of $\ptau$ can be written as the truncated function $t_m$ evaluated somewhere on the unit circle, IE $\lambda_k(\ptau) = \toe_m(z_k)$ where $|z_k| = 1$.
-\end{itemize}
+\end{enumerate}
+\end{lemma}
 These preconditioner can also be thought of as coming from the kernel of a displacement operator. This framework is useful for generating yet other circulant preconditioners, see \cite{Kailath}. 
 % boundaries are the problem always (not infinite, block division)}
 % Hankel matrices
@@ -238,13 +238,13 @@ These preconditioner can also be thought of as coming from the kernel of a displ
 % discrete convolution for exact solution and the boundary problem 
 
 \section{Our Preconditioner} \label{precond}
-In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building our preconditioner, and how to build and apply our preconditioner efficiently.
+In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building our preconditioner $\Tau$, and how to build and apply our preconditioner efficiently.
 
-A good preconditioner for an iterative method must in general decrease the total number of iterations, without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, though similar criteria has been established in literature (for example \cite{Bini}). 
+A good preconditioner for an iterative method must in general decrease the total number of iterations, without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, similar criteria is well-established in literature (for example \cite{Bini}). 
 \begin{enumerate}
-	\item Complexity of constructing  applying $\ptau$ should be $\bigOh (m \log m)$.
-	\item A linear system with $\ptau$ should be solved in $ \bigOh (m \log m)$ operations.
-	\item The spectrum of $\ptau^{-1} \A$ should be clustered around 1
+	\item Complexity of constructing and applying $\Tau$ should be $\bigOh (m \log m)$.
+	\item A linear system with $\Tau$ should be solved in $ \bigOh (m \log m)$ operations.
+	\item The spectrum of $\Tau^{-1} \A$ should be clustered around 1
 \end{enumerate}
 
 How tightly the eigenvalues cluster around 1 will determine the speed of convergence. In proving results about the clustering we will refer to the infinite matrix framework established previously. First we summarize results established previously about the spectral clustering of $\ptau$ applied to a single Toeplitz block $\Toe$. This result will then be used as a lemma in proving the spectral clustering for our stiffness matrix from the adaptive mesh. We will show that for $m$ large enough 
@@ -285,7 +285,7 @@ Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using equation \ref{e
 Multiplication of the $m \times m$ matrices that consist of the DST blocks can be done via the fast Fourier transform in $m \log m $ time. The eigenvalue matrix is diagonal and can be inverted in $m$ operations. The scaling done by this diagonal matrix could in the worst case cost $\bigOh(m^2)$, but as we will see in the next section, we need not scale our entire stiffness matrix. \todo[inline]{How to apply diagonal? FFT w toeplitz multiplication?, maybe just cite it away}
 This establishes criteria 1 and 2 for $\Tau$. 
 
-\todo[inline]{Bullet point properties of $\Tau$}
+\todo[inline]{Lemma: summarize properties of $\Tau$ like we did for $\ptau$}
 
 
 \section{Theoretical Results} 
@@ -374,7 +374,7 @@ In the above equation $\u$ and $\v$ are length $m_{\off}$ vectors. With a slight
 \end{align*}
 
 As before, we have $\varepsilon > 0$ and choose $N$ much smaller than $m$ so that for every Toeplitz block the truncated function for the block $a_{m_i} (z) > \varepsilon$ on the unit circle and $\sum_{i = N}^{\infty} |a_i| < \varepsilon$. 
-\todo[inline]{Possible comment: since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
+\todo[inline]{Need to add this comment: since we don't really choose block size in practice the actual block size dictates the size of $\varepsilon$. Over all the blocks we can take the max $\varepsilon$ for a uniform bound, but many will be clustered tighter than that. Supports argument that bigger Toeplitz blocks = better clustering}
 We additionally split $\Hank$ by separating the anti-diagonals with coefficients $a_0, \dots, a_N$ and the anti-diagonals comprising of $a_{N+1}, \dots a_m$. So we have two splittings, 
 \begin{align*} 
 	\offd &= \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i* \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i*  \right) \\
@@ -410,11 +410,11 @@ To finish the proof we need to relate the $k$-th eigenvalue of the preconditione
 	&= \lambda_{\max}(\Tau^{-1} \Hank_{SN}) + \lambda_{\max}(\Tau^{-1} \tilde{\offd}) + \lambda_{\max}(\Tau^{-1} \A_F) \\
 	&\leq \frac{1}{\lambda_{\min}(\Tau)} \left( \lambda_{\max}(\Hank_{SN}) +  \lambda_{\max}(\tilde{\offd}) + \lambda_{\max}(\A_F) \right)
 \end{align*}
-\todo[inline]{SPSD justifying eig to sv to norm}
+\todo[inline]{SPSD justifying 2-norm to sing val to eig}
 %Since $\tilde{\offd}$ made of blocks that have form $\sum_{i=r_{\offd}+1}^{n_{\offd}} \sigma_i \u_i \v_i*$ what can we say about $\lambda_k$?  
 \end{proof}
 
-\todo[inline]{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - Extend proof to different kinds of circulant preconditioner}
+\todo[inline]{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - proof easily extended to different kinds of circulant preconditioner}
 
 \section{Numerical Results}
 \subsection{Validating Assumptions}
