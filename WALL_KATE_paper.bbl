@@ -18,10 +18,21 @@
   gradients with circulant preconditioner}, SIAM Journal on Scientific and
   Statistical Computing, 10 (1989), pp.~104--119.
 
+\bibitem{Chan_Yeung}
+{\sc Raymond~H. Chan and Man-Chung Yeung}, {\em Circulant preconditioners
+  constructed from kernels}, SIAM Journal on Numerical Analysis, 29 (1992),
+  pp.~1093--1103.
+
 \bibitem{schrod}
 {\sc Chao Chen, Xi~Yang, and Fei-Yan Zhang}, {\em Sine-transform-based fast
   solvers for riesz fractional nonlinear schr\"odinger equations with
   attractive nonlinearities}, 2024.
+
+\bibitem{JZ}
+{\sc Bangti Jin and Zhi Zhou}, {\em A {Finite} {Element} {Method} with
+  {Singularity} {Reconstruction} for {Fractional} {Boundary} {Value}
+  {Problems}}, ESAIM: Mathematical Modelling and Numerical Analysis, 49 (2015),
+  pp.~1261--1283.
 
 \bibitem{Kailath}
 {\sc Thomas Kailath and Vadim Olshevsky}, {\em Displacement structure approach
@@ -35,9 +46,20 @@
   fractional differential equations using hierarchical matrix approximation},
   Computer Methods in Applied Mechanics and Engineering, 366 (2020), p.~113053.
 
+\bibitem{AFEM}
+{\sc Ricardo~H. Nochetto, Kunibert~G. Siebert, and Andreas Veeser}, {\em Theory
+  of adaptive finite element methods: An introduction}, in Multiscale,
+  Nonlinear and Adaptive Approximation, Ronald DeVore and Angela Kunoth, eds.,
+  Berlin, Heidelberg, 2009, Springer Berlin Heidelberg, pp.~409--542.
+
 \bibitem{MINRES_super}
 {\sc V.~Simoncini and D.~B. Szyld}, {\em On the superlinear convergence of
   minres},  (2013).
+
+\bibitem{superfast}
+{\sc Hong Wang and Ning Du}, {\em A superfast-preconditioned iterative method
+  for steady-state space-fractional diffusion equations}, Journal of
+  Computational Physics, 240 (2013), pp.~49--57.
 
 \bibitem{Levinson}
 {\sc Norbert Wiener}, {\em The Wiener RMS (Root Mean Square) Error Criterion in

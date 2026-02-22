@@ -3,7 +3,7 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: WALL_KATE_paper.aux
 The style file: siamplain.bst
 Database file #1: references.bib
-Repeated entry---line 178 of file references.bib
+Repeated entry---line 204 of file references.bib
  : @inproceedings{MINRES_super
  :                            ,
 I'm skipping whatever remains of this entry
@@ -11,45 +11,45 @@ Warning--can't use both author and editor fields in toeplitz
 Warning--empty journal in Bini
 Warning--empty journal in MINRES_super
 Warning--empty publisher in Levinson
-You've used 10 entries,
+You've used 14 entries,
             2030 wiz_defined-function locations,
-            571 strings with 5950 characters,
-and the built_in function-call counts, 3746 in all, are:
-= -- 359
-> -- 147
+            603 strings with 6703 characters,
+and the built_in function-call counts, 5479 in all, are:
+= -- 535
+> -- 212
 < -- 0
-+ -- 62
-- -- 48
-* -- 268
-:= -- 550
-add.period$ -- 10
-call.type$ -- 10
-change.case$ -- 52
++ -- 88
+- -- 68
+* -- 394
+:= -- 798
+add.period$ -- 14
+call.type$ -- 14
+change.case$ -- 73
 chr.to.int$ -- 0
-cite$ -- 14
-duplicate$ -- 190
-empty$ -- 279
-format.name$ -- 48
-if$ -- 832
+cite$ -- 18
+duplicate$ -- 272
+empty$ -- 410
+format.name$ -- 68
+if$ -- 1223
 int.to.chr$ -- 0
-int.to.str$ -- 10
-missing$ -- 11
-newline$ -- 33
-num.names$ -- 20
-pop$ -- 60
+int.to.str$ -- 14
+missing$ -- 15
+newline$ -- 45
+num.names$ -- 30
+pop$ -- 77
 preamble$ -- 1
-purify$ -- 44
+purify$ -- 61
 quote$ -- 0
-skip$ -- 179
+skip$ -- 261
 stack$ -- 0
-substring$ -- 248
-swap$ -- 97
+substring$ -- 398
+swap$ -- 139
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 36
+type$ -- 52
 warning$ -- 4
-while$ -- 35
-width$ -- 12
-write$ -- 87
+while$ -- 54
+width$ -- 16
+write$ -- 125
 (There was 1 error message)
