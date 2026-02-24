@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  23 FEB 2026 23:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  24 FEB 2026 01:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -913,51 +913,54 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 Package hyperref Info: bookmark level for unknown equ defaults to 0 on input li
 ne 169.
 Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
-nput line 185.
+nput line 176.
  [2]
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 223.
- [3]
-Underfull \vbox (badness 1173) has occurred while \output is active []
-
- [4]
+line 220.
+ [3] [4]
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 323.
-
-[5]
+line 319.
+ [5]
 Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 360.
- [6] [7]
+t line 350.
+
+[6] [7]
 Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 409.
- [8]
-<figures/eig_comp.png, id=220, 1393.205pt x 887.315pt>
+ine 429.
+<figures/eig_comp.png, id=212, 1393.205pt x 887.315pt>
 File: figures/eig_comp.png Graphic file (type png)
 <use figures/eig_comp.png>
-Package pdftex.def Info: figures/eig_comp.png  used on input line 449.
+Package pdftex.def Info: figures/eig_comp.png  used on input line 434.
 (pdftex.def)             Requested size: 333.3431pt x 212.29652pt.
-<figures/convJ.png, id=224, 1774.63pt x 512.91624pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/convJ.png, id=216, 1774.63pt x 512.91624pt>
 File: figures/convJ.png Graphic file (type png)
 <use figures/convJ.png>
-Package pdftex.def Info: figures/convJ.png  used on input line 459.
+Package pdftex.def Info: figures/convJ.png  used on input line 444.
 (pdftex.def)             Requested size: 351.86342pt x 101.69704pt.
- [9 <./figures/eig_comp.png (PNG copy)>] (./WALL_KATE_paper.bbl
-[10 <./figures/convJ.png>])
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[8] [9 <./figures/eig_comp.png (PNG copy)> <./figures/convJ.png>]
+(./WALL_KATE_paper.bbl)
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
- [11] (./WALL_KATE_paper.aux)
+ [10] (./WALL_KATE_paper.aux)
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: A86367CDDCC57DFA3815C1B902AA90FD;2100.
+(rerunfilecheck)             Checksum: 377CD04F13FE8891517F4A8CE3E75B6E;2100.
  ) 
 Here is how much of TeX's memory you used:
- 25913 strings out of 478994
- 466247 string characters out of 5858183
- 749465 words of memory out of 5000000
- 41324 multiletter control sequences out of 15000+600000
+ 25906 strings out of 478994
+ 466155 string characters out of 5858183
+ 748413 words of memory out of 5000000
+ 41322 multiletter control sequences out of 15000+600000
  415337 words of font info for 71 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
- 102i,13n,117p,1271b,970s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 102i,13n,117p,1271b,859s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><
@@ -978,10 +981,10 @@ e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 exmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/te
 xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/202
 1/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (11 pages, 369709 bytes).
+Output written on WALL_KATE_paper.pdf (10 pages, 368330 bytes).
 PDF statistics:
- 326 PDF objects out of 1000 (max. 8388607)
- 272 compressed objects within 3 object streams
- 69 named destinations out of 1000 (max. 500000)
+ 316 PDF objects out of 1000 (max. 8388607)
+ 263 compressed objects within 3 object streams
+ 64 named destinations out of 1000 (max. 500000)
  223 words of extra memory for PDF output out of 10000 (max. 10000000)
 
