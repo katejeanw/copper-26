@@ -1,12 +1,9 @@
 \begin{thebibliography}{10}
 
-\bibitem{toeplitz}
-{\sc Sheldon Axler}, {\em Paul Halmos and Toeplitz Operators}, Springer New
-  York, New York, NY, 1991, pp.~257--263.
-
 \bibitem{Bini}
-{\sc D.~Bini and F.~Benedetto}, {\em A new preconditioner for the parallel
-  solution of positive definite toeplitz systems},  (1990), p.~220–223.
+{\sc Dario Bini and Fabio Di~Benedetto}, {\em A new preconditioner for the
+  parallel solution of positive definite toeplitz systems}, Association for
+  Computing Machinery,  (1990), p.~220–223.
 
 \bibitem{Chan_89}
 {\sc Raymond~H. Chan}, {\em The spectrum of a family of circulant
@@ -25,8 +22,8 @@
 
 \bibitem{schrod}
 {\sc Chao Chen, Xi~Yang, and Fei-Yan Zhang}, {\em Sine-transform-based fast
-  solvers for riesz fractional nonlinear schr\"odinger equations with
-  attractive nonlinearities}, 2024.
+  solvers for riesz fractional nonlinear schrödinger equations with attractive
+  nonlinearities}, Applied Mathematics and Computation, 510 (2026), p.~129674.
 
 \bibitem{JZ}
 {\sc Bangti Jin and Zhi Zhou}, {\em A {Finite} {Element} {Method} with
@@ -44,17 +41,16 @@
 {\sc Xianjuan Li, Zhiping Mao, Nan Wang, Fangying Song, Hong Wang, and
   George~Em Karniadakis}, {\em A fast solver for spectral elements applied to
   fractional differential equations using hierarchical matrix approximation},
-  Computer Methods in Applied Mechanics and Engineering, 366 (2020), p.~113053.
+  Computer Methods in Applied Mechanics and Engineering, 366 (2020).
 
 \bibitem{AFEM}
-{\sc Ricardo~H. Nochetto, Kunibert~G. Siebert, and Andreas Veeser}, {\em Theory
-  of adaptive finite element methods: An introduction}, in Multiscale,
-  Nonlinear and Adaptive Approximation, Ronald DeVore and Angela Kunoth, eds.,
-  Berlin, Heidelberg, 2009, Springer Berlin Heidelberg, pp.~409--542.
+{\sc Ricardo Nochetto, Kunibert Siebert, and Andreas Veeser}, {\em Theory of
+  adaptive finite element methods: An introduction}, in Multiscale, Nonlinear
+  and Adaptive Approximation, 2009, pp.~409--542.
 
 \bibitem{MINRES_super}
-{\sc V.~Simoncini and D.~B. Szyld}, {\em On the superlinear convergence of
-  minres},  (2013).
+{\sc Valeria Simoncini and Daniel Szyld}, {\em On the superlinear convergence
+  of minres},  (2013).
 
 \bibitem{superfast}
 {\sc Hong Wang and Ning Du}, {\em A superfast-preconditioned iterative method
