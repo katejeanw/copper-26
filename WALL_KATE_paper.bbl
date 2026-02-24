@@ -5,6 +5,11 @@
   parallel solution of positive definite toeplitz systems}, Association for
   Computing Machinery,  (1990), p.~220–223.
 
+\bibitem{stable}
+{\sc James~R. Bunch}, {\em Stability of methods for solving toeplitz systems of
+  equations}, SIAM Journal on Scientific and Statistical Computing, 6 (1985),
+  pp.~349--364.
+
 \bibitem{Chan_89}
 {\sc Raymond~H. Chan}, {\em The spectrum of a family of circulant
   preconditioned toeplitz systems}, SIAM Journal on Numerical Analysis, 26
@@ -56,10 +61,6 @@
 {\sc Hong Wang and Ning Du}, {\em A superfast-preconditioned iterative method
   for steady-state space-fractional diffusion equations}, Journal of
   Computational Physics, 240 (2013), pp.~49--57.
-
-\bibitem{Levinson}
-{\sc Norbert Wiener}, {\em The Wiener RMS (Root Mean Square) Error Criterion in
-  Filter Design and Prediction}, 1964, pp.~129--148.
 
 \bibitem{Xiaozhe}
 {\sc Xuan Zhao, Xiaozhe Hu, Wei Cai, and George~Em Karniadakis}, {\em Adaptive

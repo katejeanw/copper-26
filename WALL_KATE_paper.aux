@@ -32,19 +32,19 @@
 \newlabel{FDE@cref}{{[equation][1][1]1.1}{[1][1][]1}}
 \newlabel{AFEM}{{1.2}{1}{Introduction}{equation.3}{}}
 \newlabel{AFEM@cref}{{[equation][2][1]1.2}{[1][1][]1}}
-\citation{Levinson}
+\citation{stable}
 \citation{schrod}
 \citation{hierarch}
 \citation{Xiaozhe}
 \citation{Chan_Strang}
-\citation{Chan_89}
-\citation{Bini}
+\citation{Chan_Strang}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Background}{2}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Properties of Structured Matrices}{2}{subsection.5}\protected@file@percent }
 \@writefile{loequ}{\contentsline {equ}{\numberline {1}{\ignorespaces ${ L }$ is a Toeplitz matrix and $C$ is circulant.\relax }}{2}{equ.7}\protected@file@percent }
-\@writefile{thm}{\contentsline {definition}{{Definition}{2.1}{}}{2}{theorem.8}\protected@file@percent }
+\@writefile{thm}{\contentsline {definition}{{Definition}{2.1}{\cite {Chan_Strang}}}{2}{theorem.8}\protected@file@percent }
+\citation{Chan_89}
 \citation{Bini}
-\citation{Kailath}
+\citation{Bini}
 \citation{Xiaozhe}
 \newlabel{Hank}{{2.2}{3}{Properties of Structured Matrices}{equation.9}{}}
 \newlabel{Hank@cref}{{[equation][2][2]2.2}{[1][3][]3}}
@@ -66,6 +66,8 @@
 \newlabel{crit3}{{3}{4}{Adaptive \texorpdfstring {$\ptau $}{tau} Preconditioner}{Item.20}{}}
 \newlabel{crit3@cref}{{[enumi][3][]3}{[1][4][]4}}
 \@writefile{thm}{\contentsline {definition}{{Definition}{3.1}{Eigenvalue Clustering}}{4}{theorem.21}\protected@file@percent }
+\citation{Bini}
+\citation{Kailath}
 \newlabel{diag}{{3.1}{5}{Adaptive \texorpdfstring {$\ptau $}{tau} Preconditioner}{equation.22}{}}
 \newlabel{diag@cref}{{[equation][1][3]3.1}{[1][4][]5}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Theoretical Results}{5}{section.23}\protected@file@percent }
@@ -75,8 +77,10 @@
 \newlabel{eig_lemma@cref}{{[lemma][2][4]4.2}{[1][5][]5}}
 \@writefile{thm}{\contentsline {proof}{{Proof}{1}{}}{5}{proof.26}\protected@file@percent }
 \global\def\markiproofi{\proofbox }
+\newlabel{sec:block}{{4.1}{6}{Spectral Clustering of a Toeplitz Block}{subsection.27}{}}
+\newlabel{sec:block@cref}{{[subsection][1][4]4.1}{[1][5][]6}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Spectral Clustering of a Toeplitz Block}{6}{theorem.28}\protected@file@percent }
-\@writefile{thm}{\contentsline {lemma}{{Lemma}{4.3}{Eigenvalue Clustering on a Toeplitz Block}}{6}{theorem.28}\protected@file@percent }
+\@writefile{thm}{\contentsline {lemma}{{Lemma}{4.3}{Eigenvalue Clustering on a Toeplitz Block, \cite {Bini, Kailath}}}{6}{theorem.28}\protected@file@percent }
 \newlabel{block}{{4.3}{6}{Spectral Clustering of a Toeplitz Block}{theorem.28}{}}
 \newlabel{block@cref}{{[lemma][3][4]4.3}{[1][5][]6}}
 \@writefile{thm}{\contentsline {proof}{{Proof}{2}{}}{6}{proof.29}\protected@file@percent }
@@ -96,8 +100,12 @@
 \newlabel{validate@cref}{{[subsection][1][5]5.1}{[1][8][]8}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Validating Assumptions}{8}{subsection.35}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{two tables for presenting these numerical results}{8}{section*.36}\protected@file@percent }
-\pgfsyspdfmark {pgfid1}{15577819}{18548159}
+\pgfsyspdfmark {pgfid1}{15577819}{20025242}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Improved Convergence}{8}{figure.caption.38}\protected@file@percent }
+\bibstyle{siamplain}
+\bibdata{references}
+\bibcite{Bini}{1}
+\bibcite{stable}{2}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Eigenvalue clustering before and after preconditioning. Each column represent a different matrix size. The first row shows the spectrum before preconditioning, the second shows the spectrum at the same scale after preconditioning. The third row shows the preconditioned spectrum on a smaller interval. \relax }}{9}{figure.caption.38}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:eigen_clusters}{{5.1}{9}{Eigenvalue clustering before and after preconditioning. Each column represent a different matrix size. The first row shows the spectrum before preconditioning, the second shows the spectrum at the same scale after preconditioning. The third row shows the preconditioned spectrum on a smaller interval. \relax }{figure.caption.38}{}}
@@ -106,20 +114,16 @@
 \newlabel{fig:conv}{{5.2}{9}{Comparing the residual vector norm across PCG iterations. The blue line uses a Jacobi preconditioner and the orange line uses our $\Tau $ preconditioner. \relax }{figure.caption.39}{}}
 \newlabel{fig:conv@cref}{{[figure][2][5]5.2}{[1][8][]9}}
 \@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.40}\protected@file@percent }
-\bibstyle{siamplain}
-\bibdata{references}
-\bibcite{Bini}{1}
-\bibcite{Chan_89}{2}
-\bibcite{Chan_Strang}{3}
-\bibcite{Chan_Yeung}{4}
-\bibcite{schrod}{5}
-\bibcite{JZ}{6}
-\bibcite{Kailath}{7}
-\bibcite{hierarch}{8}
-\bibcite{AFEM}{9}
-\bibcite{MINRES_super}{10}
-\bibcite{superfast}{11}
-\bibcite{Levinson}{12}
+\@writefile{toc}{\contentsline {section}{References}{9}{section.40}\protected@file@percent }
+\bibcite{Chan_89}{3}
+\bibcite{Chan_Strang}{4}
+\bibcite{Chan_Yeung}{5}
+\bibcite{schrod}{6}
+\bibcite{JZ}{7}
+\bibcite{Kailath}{8}
+\bibcite{hierarch}{9}
+\bibcite{AFEM}{10}
+\bibcite{MINRES_super}{11}
+\bibcite{superfast}{12}
 \bibcite{Xiaozhe}{13}
-\@writefile{toc}{\contentsline {section}{References}{10}{section.40}\protected@file@percent }
 \gdef \@abspage@last{10}
