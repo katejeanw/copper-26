@@ -38,7 +38,7 @@
 \newcommand{\A}{{A }}
 \newcommand{\offd}{{A_E}}
 \newcommand{\off}{{E}}
-\newcommand{\setoff}{{\text{off-diag}}}
+\newcommand{\setoff}{{W}}
 \newcommand{\Hank}{{ H }}
 \newcommand{\Toe}{{ L }}
 \newcommand{\toe}{{ \ell }}
@@ -378,8 +378,8 @@ Recall that the stiffness matrix is dense with Toeplitz blocks on the diagonal (
 Hence, it suffices to show that the spectrum of $\Tau^{-1}\A_{SN}$ is clustered around 0 and that $\Tau^{-1}\A_{LR}$ contributes a bounded number of eigenvalue outliers. 
 
 Recall that blocks in $\offd$ are well-approximated as a low-rank matrix. To that end, we begin by examining a single block in $\offd$, call it $\off$ (see Figure (\ref{fig:A_split}) for reference). Let $\off$ be a $m_{\off} \times m_{\off}$ matrix with approximation rank $r_{\off}$. Then we split $\off$ via its singular value decomposition (SVD):  
-$$ \off = \left( \sum_{i=1}^{r_{\off}} \sigma_i^{(\off)} \u_i ^{(\off)}(\v_i^{(\off)})^{\top} \right) + \left(  \sum_{i=r_{\off}+1}^{m_{\off}} \sigma_i^{(\off)} \u_i^{(\off)} (\v_i^{(\off)})^{\top} \right). $$ 
-In the above equation, $\u$ and $\v$ are length $m_{\off}$ vectors. With a slight abuse of notation, we embed these in length $m$ vectors to express the block matrix $\offd$ as the SVD of its blocks. Let $\setoff$ represent the set of off-diagonal blocks in $\offd$. Define $r := \max_{\off \in \setoff} r_{\off}$ and $M := \max_{\off \in \setoff} m_{\off}$. We now express $\offd$ as the sum of the SVD of its blocks, and then regroup terms into a low-rank sum and a small-norm sum. 
+$ \off = \left( \sum_{i=1}^{r_{\off}} \sigma_i^{(\off)} \u_i ^{(\off)}(\v_i^{(\off)})^{\top} \right) + \left(  \sum_{i=r_{\off}+1}^{m_{\off}} \sigma_i^{(\off)} \u_i^{(\off)} (\v_i^{(\off)})^{\top} \right). $
+Here $\u$ and $\v$ are length $m_{\off}$ vectors, with a slight abuse of notation, we embed these in length $m$ vectors to express the block matrix $\offd$ as the SVD of its blocks. Let $\setoff$ represent the set of blocks in $\offd$. Define $r := \max_{\off \in \setoff} r_{\off}$ and $M := \max_{\off \in \setoff} m_{\off}$. We write $\offd$ as the sum of the SVD of its blocks, and then regroup terms into a low-rank sum and a small-norm sum. 
 \begin{align*}
 	\offd &= \sum_{\off \in \setoff} \left[ \left( \sum_{i=1}^{r} \sigma_i^{(\off)} \u_i ^{(\off)} (\v_i^{(\off)})^{\top} \right) + \left(  \sum_{i=r+1}^{m_{\off}} \sigma_i^{(\off)} \u_i^{(\off)} (\v_i^{(\off)})^{\top}  \right) \right]  \\
 	&= \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i^{\top} \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i^{\top}  \right) .
@@ -387,16 +387,16 @@ In the above equation, $\u$ and $\v$ are length $m_{\off}$ vectors. With a sligh
 
 As before, we have $\varepsilon > 0$ and choose $N$ much smaller than $m$ so that for every Toeplitz block the truncated function for the block $a_{m_i} (z) > \varepsilon$ on the unit circle and $\sum_{i = N}^{\infty} |a_i| < \varepsilon$. 
 We additionally split $\Hank$ by separating into $\Hank_{LR}$ the anti-diagonals with coefficients $a_0, \dots, a_N$ and into $\Hank_{SN}$ the anti-diagonals comprising of $a_{N+1}, \dots a_{m_i}$ for each block. So we have two splittings, 
-\begin{align*} 
-	\offd &= \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i^{\top} \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i^{\top}  \right), \\
-	\Hank &= \Hank_{SN} + \Hank_{LR}.
-\end{align*}
+\begin{equation*} 
+	\offd = \left( \sum_{i=1}^{r} \sigma_i \u_i \v_i^{\top} \right) + \left(  \sum_{i=r+1}^{M} \sigma_i \u_i \v_i^{\top}  \right), \quad
+	\Hank = \Hank_{SN} + \Hank_{LR}.
+\end{equation*}
 The first term in each sum can be thought of as the low-rank equivalent from before and similarly the second term is the small-norm summand.
 Finally, we make the splitting $\A = \Tau + \A_{SN} + \A_{LR}$, where
-\begin{align*}
-	\A_{SN} &= \Hank_{SN}+ \sum_{i=r+1}^{M} \sigma_i \u_i \v_i^{\top} +A_F, \\
-	\A_{LR} &= \Hank_{LR} + \sum_{i=1}^{r} \sigma_i \u_i \v_i^{\top}.
-\end{align*}
+\begin{equation*}
+	\A_{SN} = \Hank_{SN}+ \sum_{i=r+1}^{M} \sigma_i \u_i \v_i^{\top} +A_F, \quad
+	\A_{LR} = \Hank_{LR} + \sum_{i=1}^{r} \sigma_i \u_i \v_i^{\top}.
+\end{equation*}
 % \todo[inline]{Bound on number of off diagonal blocks} 
 Now $s := \text{rank}(\Tau^{-1}\A_{LR}) \leq \text{rank}(\A_{LR}) \leq 2(N-1) + r$ bounds the number of outlier eigenvalues. It remains to show $|| \Tau^{-1}\A_{SN}||_2 \leq \varepsilon$. Define $\tilde{\offd} = \sum_{i=r_{\offd}+1}^{M} \sigma_i \u_i \v_i^{\top} $, so that $\A_{SN} = \Hank_{SN} + \tilde{\offd} + \A_F$, then
 \begin{align*}
@@ -428,8 +428,7 @@ To finish the proof, we utilize the fact that the matrices are SPD and relate th
 The strength of this bound depends on $\lambda_{\min} (\Tau)$, but can be written independently of $\Tau$ in terms of the generating functions as in Equation (\ref{eq:gen_bound_ad}). This dependence is the same for the single block case, and appears in similar proofs for circulant preconditioners (see for example \cite{Kailath}). 
 
 In practice the block size, $m_i$, is determined by the AFEM algorithm, which in turn dictates the actual size $\varepsilon$ and hence the strength of clustering. So bigger Toeplitz blocks in $\A$ result in tighter eigenvalue clustering. 
-
-Notice that extending the proof from one Toeplitz block to the adaptive stiffness matrix relies only on being able to split the block into a small-norm and a low-rank piece. Thus, nothing about this proof is overly-specific to $\ptau$ and the methods could easily be extended to the other types of circulant preconditioners in \cite{Chan_89, Chan_Strang, Chan_Yeung}. 
+%Notice that extending the proof from one Toeplitz block to the adaptive stiffness matrix relies only on being able to split the block into a small-norm and a low-rank piece. Thus, nothing about this proof is overly-specific to $\ptau$ and the methods could easily be extended to the other types of circulant preconditioners in \cite{Chan_89, Chan_Strang, Chan_Yeung}. 
 
 % \todo[inline]{Lemma: summarize properties of $\Tau$ like we did for $\ptau$}
 %\begin{lemma}
@@ -445,7 +444,7 @@ Notice that extending the proof from one Toeplitz block to the adaptive stiffnes
 
 \section{Numerical Results}
 \subsection{Validating Assumptions}\label{validate}
-In order to prove the spectral clustering, we made two assumptions about the structure of $\A$: the blocks adjacent to the diagonal are well-approximated by low-rank matrices and the other off-diagonal blocks are small-norm. Table (\ref{table:validate_rk}) displays the  maximum and average (median) rank needed to achieve an approximation under $\varepsilon$ on each block. Table (\ref{table:validate_norm}) shows the norm and relative norm of $||A_F||_2$. Both tables include results for $\alpha = 1.3, 1.5, 1.9$, after 7 levels of refinement, but similar trends were seen across all fractional orders and refinement levels. In the case of $1 \times 1$ Toeplitz blocks we found that including the entry to the right and underneath in $\offd$ was not sufficient to capture all the low-rank information. Instead, the corresponding block in $\offd$ was extended to dimensions $5 \times 5$ such that the original entry is the center of that block. In terms of spectral clustering, this could increase the number of outliers, but better characterizes the size of the cluster. 
+In order to prove the spectral clustering, we made two assumptions about the structure of $\A$: the blocks adjacent to the diagonal are well-approximated by low-rank matrices and the other off-diagonal blocks are small-norm. Table (\ref{table:validate_rk}) displays the  maximum and average (median) rank needed to achieve an approximation under $\varepsilon$ on each block. Table (\ref{table:validate_norm}) shows the norm and relative norm of $A_F$. Both tables include results for $\alpha = 1.3, 1.5, 1.9$, after 7 levels of refinement, but similar trends were seen across all fractional orders and refinement levels. In the case of $1 \times 1$ Toeplitz blocks we found that including the entry to the right and underneath in $\offd$ was not sufficient to capture all the low-rank information. Instead, the corresponding block in $\offd$ was extended to dimensions $5 \times 5$ such that the original entry is the center of that block. In terms of spectral clustering, this could increase the number of outliers, but better characterizes the size of the cluster. 
 
 \begin{table}[h]
 		\centering
@@ -477,19 +476,19 @@ In order to prove the spectral clustering, we made two assumptions about the str
 	\caption{Eigenvalue clustering before and after preconditioning. Each column represent a different matrix size. The first row shows the spectrum before preconditioning, the second shows the spectrum at the same scale after preconditioning. The third row shows the preconditioned spectrum on a smaller interval. }
 	\label{fig:eigen_clusters}
 \end{figure}
-In Figure \ref{fig:eigen_clusters}, we see some example results of the preconditioner on the spectrum of $\A$. These tests are for the problem (\ref{FDE}) with $\alpha = 1.7$ and exact solution $u(x) = 10x^2 (1-x^2)$ on $[0,1]$ (see \cite{Xiaozhe} example 6.1 for more details). The three different matrix sizes are $n = 31, 71, 2795$ and reflect 0, 3, and 11 levels of refinement respectively. Note that zero levels of refinement corresponds to a uniform mesh. 
+Example results of the spectrum before and after preconditioning are in Figure (\ref{fig:eigen_clusters}). These tests are for the problem (\ref{FDE}) with $\alpha = 1.7$ and exact solution $u(x) = 10x^2 (1-x^2)$ on $[0,1]$ (see \cite{Xiaozhe} example 6.1 for more details). The three matrix sizes are $n = 31, 71, 2795$ and reflect 0, 3, and 11 levels of refinement respectively. Note that zero levels of refinement is a uniform mesh. 
 
-The left-most column represents a matrix that consists of a single Toeplitz block, so the preconditioner reduces to the case of $\ptau$. In this case the clustering of the spectrum around 1 is very strong. In the $n = 71$ case the biggest Toeplitz blocks are size $11$, and there are two such blocks. The eigenvalue clustering around 1 is still observable, but the size of the cluster has grown. Finally for $n=2795$, the preconditioner reduces the spectral radius by several orders of magnitude. The spectrum is concentrated around 1, but the distribution of eigenvalues between 0 and 2 is more uniform. For this matrix the biggest Toeplitz block is size $939$ and there are two other blocks just bigger than $200$. On the other hand, there are $245$ $1 \times 1$ blocks. For all cases, the strength of the clustering is explained by the amount of smaller Toeplitz blocks in $\A$. Notice that although the proof allows for eigenvalue outliers beyond the cluster, in practice everything remains within the interval $(0,2)$. 
+The left-most column represents a matrix that consists of a single Toeplitz block, so the preconditioner reduces to the case of $\ptau$. In this case the clustering of the spectrum around 1 is very strong. In the $n = 71$ case the biggest Toeplitz blocks are size $11$, and there are two such blocks. The eigenvalue clustering around 1 is still observable, but the size of the cluster has grown. Finally for $n=2795$, the preconditioner reduces the spectral radius by several orders of magnitude. The spectrum is concentrated around 1, but the distribution of eigenvalues between 0 and 2 is more uniform. For this matrix, the biggest Toeplitz block is size $939$ and there are two other blocks just bigger than $200$. On the other hand, there are $245$ $1 \times 1$ blocks. For all cases, the strength of the clustering is explained by the amount of smaller Toeplitz blocks in $\A$. Notice that although the proof allows for eigenvalue outliers beyond the cluster, in practice everything remains within the interval $(0,2)$. 
 
 % todo would love to be able to show error for PDE for the three different matrices
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width= .95 \textwidth]{figures/convJ.png}
+	\includegraphics[width= .95 \textwidth]{figures/conv.png}
 	\caption{Comparing the residual vector norm across PCG iterations. The blue line uses a Jacobi preconditioner and the orange line uses our $\Tau$ preconditioner. }
 	\label{fig:conv}
 \end{figure}
-We see how the clustered spectrum translates to accelerated convergence. In Figure (\ref{fig:conv}) the same matrices are used for preconditioned conjugate gradient (PCG), comparing the adaptive $\ptau$ preconditioner and a Jacobi preconditioner with a tolerance of $10^{-8}$. For the two smaller matrices the preconditioner clearly accelerates the point of superlinear convergence \cite{MINRES_super}. For the final matrix the Jacobi-preconditioned system fails to converge within the maximum of $600$ iterations, but with the $\Tau$ preconditioner converges in about $300$ iterations. 
+We see how the clustered spectrum translates to accelerated convergence. In Figure (\ref{fig:conv}) the same matrices are used for preconditioned conjugate gradient (PCG), comparing the adaptive $\ptau$ preconditioner and a Jacobi preconditioner with a tolerance of $10^{-8}$. For the two smaller matrices, the preconditioner clearly accelerates the point of superlinear convergence \cite{MINRES_super}. For the final matrix, the Jacobi-preconditioned system fails to converge within the maximum of $600$ iterations, but with the $\Tau$ preconditioner converges in about $300$ iterations. 
 % todo ? behavior for different $\alpha$ 
 
 
