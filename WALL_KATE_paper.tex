@@ -17,6 +17,8 @@
 \usepackage{todonotes}
 \usepackage{caption}
 \usepackage{float}
+\usepackage{adjustbox}
+\usepackage{multirow}
 
 \DeclareCaptionType{equ}[Equation][List of Equations]
 %\captionsetup[equ]{labelformat=empty}
@@ -218,7 +220,7 @@ Previous work on Toeplitz systems offers a few options for circulant preconditio
 Then define $\ptau := \Toe - H$. Both $\Toe$ and $\Hank$ are symmetric, so they are completely represented by at most $n$ unique values: the diagonals of $\Toe: \toe_0, \toe_1, \dots, \toe_{n-1}$, and the anti-diagonals of $\Hank: \toe_2, \toe_3, \dots, \toe_{n-1},0,0 $. 
 	
 The following lemma summarizes properties of $\ptau$.
-\begin{lemma}[see \cite{Bini}]
+\begin{lemma}[see \cite{Bini}] \label{lemma:tau}
 	Let $\Toe$ be a Toeplitz matrix and $\Hank$ the corresponding Hankel correction as in Equation (\ref{Hank}). Then $\ptau = \Toe - \Hank$ has the following properties: 
 \begin{enumerate}
 %	\item $\ptau$ is a circulant matrix.
@@ -236,12 +238,23 @@ The following lemma summarizes properties of $\ptau$.
 % discrete convolution for exact solution and the boundary problem 
 
 \subsection{AFEM stiffness matrix} \label{stiffness}
-Again, let $\A$ be the stiffness matrix resulting from AFEM applied to Equation \ref{FDE}. During the $\texttt{MARK}$ module of AFEM (\ref{AFEM}), it is often the case that adjacent elements have similar error estimates, and are either both marked or both not marked for refinement. As a result, after several refinements there are still subsections of the domain that have been refined to the same level. We refer to these subdomains as \emph{locally uniform}.  Since uniform meshes give rise to SPD Toeplitz systems, if we formed the stiffness matrix for a locally uniform subdomain we would have an SPD Toeplitz matrix. So wherever there are adjacent elements of the same size we find a corresponding Toeplitz block on the main diagonal of our stiffness matrix, $\A$. The size of this block depends on how many adjacent elements are the same size. In practice we have observed that the boundary of the domain almost always requires the greatest level of refinement. In general we have larger Toeplitz blocks from locally uniform subdomains in the middle of the matrix, and smaller blocks---or indeed $1 \times 1$ blocks---near the boundary. We use $\A_d$ to denote the block diagonal with Toeplitz blocks part of $\A$. 
+Again, let $\A$ be the stiffness matrix resulting from AFEM applied to Equation \ref{FDE}. During the $\texttt{MARK}$ module of AFEM (\ref{AFEM}), it is often the case that adjacent elements have similar error estimates, and are either both marked or both not marked for refinement. As a result, after several refinements there are still subsections of the domain that have been refined to the same level. We refer to these subdomains as \emph{locally uniform}.  Since uniform meshes give rise to SPD Toeplitz systems, if we formed the stiffness matrix for a locally uniform subdomain we would have an SPD Toeplitz matrix. So wherever there are adjacent elements of the same size we find a corresponding Toeplitz block on the main diagonal of our stiffness matrix, $\A$. The size of this block depends on how many adjacent elements are the same size. In practice we have observed that the boundary of the domain almost always requires the greatest level of refinement. In general we have larger Toeplitz blocks from locally uniform subdomains in the middle of the matrix, and smaller blocks---or indeed $1 \times 1$ blocks---near the boundary. We use $\A_D$ to denote the block diagonal with Toeplitz blocks part of $\A$. 
 
-As mentioned previously, the fractional derivative results in a dense matrix, but we observe off-diagonal decay, as elements that are physically separated in the domain have weaker interaction. The rate of decay depends on the fractional order $\alpha$. Blocks that are most distant from the diagonal contain less information and we assume they have small-norm. We denote these blocks as $\A_F$. Blocks that are adjacent to the diagonal are not in general small-norm, but due to the weaker interaction, are well-suited for low-rank approximation, (see \cite{Xiaozhe} for more details).  These blocks are denoted $\offd$. 
+As mentioned previously, the fractional derivative results in a dense matrix, but we observe off-diagonal decay, as elements that are physically separated in the domain have weaker interaction. The rate of decay depends on the fractional order $\alpha$. Blocks that are most distant from the diagonal contain less information and we assume they have small-norm. We denote these blocks as $\A_F$. We call the blocks that are either directly below or to the right of the Toeplitz blocks ``blocks adjacent to the diagonal", together they are denoted $\offd$. 
+These blocks are not in general small-norm, but due to the weaker interaction, are well-suited for low-rank approximation, (see \cite{Xiaozhe} for more details).  
 %These assumptions are made precise in section \ref{proof} and numerically validated in section \ref{validate}. 
-Using this notation, we write our stiffness matrix as the sum of the Toeplitz blocks, blocks adjacent to the diagonal, and blocks further removed from the diagonal, $\A = \A_D + \offd + \A_F$. 
+Using this notation, we write our stiffness matrix as the sum of the Toeplitz blocks, blocks adjacent to the diagonal, and blocks further removed from the diagonal, $\A = \A_D + \offd + \A_F$ (see Figure (\ref{fig:A_split}))). 
 
+\begin{figure}[h]
+	\begin{equation*}
+		\adjincludegraphics[valign=c,width=.22\textwidth]{figures/A.png}  \ = \ 
+		\adjincludegraphics[valign=c,width=.22\textwidth]{figures/AD.png} \ + \
+		\adjincludegraphics[valign=c,width=.22\textwidth]{figures/AE.png} \ + \
+		\adjincludegraphics[valign=c,width=.22\textwidth]{figures/AF.png} 
+	\end{equation*}
+	\caption{Illustration of the stiffness matrix splitting. $\A_d$ consists of Toeplitz blocks on the diagonal, $\offd$ i the block to the right of and below the each Toeplitz block, and $\A_F$ is everything else. }
+	\label{fig:A_split}
+\end{figure}
 % brief proof uniform mesh gives toeplitz?
 % If the mesh is not fine enough to give the desired accuracy, one approach is to increase the number of elements, $n$. While this approach preserves uniformity, it usually requires recomputing the stiffness matrix entirely. Alternatively, if the level of refinement gives sufficiently small error for some parts of the domain, we can leave those unchanged and only refine in areas of larger error. This approach allows us to take advantage of computations that have already been performed, but the mesh is no longer uniform. 
 
@@ -273,10 +286,10 @@ To build $\Tau$, assume the stiffness matrix has $k$ Toeplitz blocks $\Toe_1, \T
 %We now construct a preconditioner, $\Tau$ for the adaptive system. 
 To explicitly construct $\Tau$ for the adaptive system, we calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $\Toe_i$. Then we define $\ptau_i = \Toe_i - \Hank_i$,  resulting in $k$ matrices $\ptau_1, \ptau_2, \dots, \ptau_k$. Finally, we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
 $$\Tau = \begin{pmatrix}
-		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_m
+		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_k
 	\end{pmatrix}.$$
 
-This explicit construction is not the most efficient, instead we apply $\Tau^{-1}$ implicitly in $m \log m $ time where $m = \sum_{j=1}^k m_j$. Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using Equation (\ref{eigs}) to calculate the eigenvalues of $\ptau_i$, we write $\ptau_i =  S_{m_i} \Lambda_i S_{m_i}$. 
+This explicit construction is not the most efficient, instead we apply $\Tau^{-1}$ implicitly in $\bigOh \left( \sum_{j=1}^k m_j \log(m_j) \right) = \bigOh \left( k m \log ( m) \right) $,  where $m:= \max_j m_j$. Let $S_{m_i}$ denote the type-I DST matrix of size $m_i$.  Using Equation (\ref{eigs}) to calculate the eigenvalues of $\ptau_i$, we write $\ptau_i =  S_{m_i} \Lambda_i S_{m_i}$. 
 \begin{equation} \label{diag}
 	\Tau^{-1} = 
 	\begingroup % keep the change local
@@ -341,12 +354,13 @@ Recall that by construction $\ptau= \Toe - \Hank$, where $\Hank$ is the Hankel m
 We split $\Hank$ into a low-rank matrix $\Hank_{LR}$ that contains the anti-diagonals $\toe_0, \dots, \toe_N$ and a small-norm matrix $\Hank_{SN}$ such that $\Hank = \Hank_{LR} + \Hank_{SN}$.  Let $s := \text{rank}(\Hank_{LR}) \ll m$. The small-norm descriptor is justified since $\Hank_{SN} = \Hank - \Hank_{LR}$ is a Hermitian $m \times m$ matrix with at most two copies of $\toe_{N}, \dots, \toe_{m-1}$ in each row/column. Thus $||\Hank_{SN}||_2 = \sqrt{||\Hank_{SN}||_1 ||\Hank_{SN}||_{\infty}} = ||\Hank_{SN}||_1 < 2 \varepsilon$. Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $\Hank_{SN}$ are clustered within $2 \varepsilon$ of zero. 
 
 Now by Lemma (\ref{eig_lemma}),
-\begin{align*}
-	\lambda_k ( \ptau^{-1} \Hank  ) &\leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )} \\
-	 & = \lambda_k (\Hank)  \frac{1}{\toef_m(z_{\min})} \leq \lambda_k (\Hank)  \frac{1}{\varepsilon}.
-\end{align*}
+\begin{align}
+	\lambda_k ( \ptau^{-1} \Hank  ) &\leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )}  \label{eq:tau_min} \\
+	 & = \lambda_k (\Hank)  \frac{1}{\toef_m(z_{\min})} \leq \lambda_k (\Hank)  \frac{1}{\varepsilon}. \label{eq:gen_bound}
+\end{align}
 Thus, the clustering of the spectrum of $\Hank$ around 0 implies the same for $\ptau^{-1} \Hank$. 
 \end{proof}
+Equation (\ref{eq:tau_min}) shows that the bigger $\lambda_{\min}(\ptau)$, the stronger the bound. We can get this eigenvalue exactly using Lemma (\ref{lemma:tau}), Equation (\ref{eigs}). It can also be bounded in terms independent of $\ptau$, using the generating function as in Equation (\ref{eq:gen_bound}). 
 
 \subsection{Spectral Clustering of the Full System} \label{proof}
 \begin{theorem}[Full Matrix Clustering]
@@ -362,7 +376,7 @@ Recall that the stiffness matrix is dense with Toeplitz blocks on the diagonal (
 \end{equation}
 Hence, it suffices to show that the spectrum of $\Tau^{-1}\A_{SN}$ is clustered around 0 and that $\Tau^{-1}\A_{LR}$ contributes a bounded number of eigenvalue outliers. 
 
-Recall that blocks in $\offd$ are well-approximated as a low-rank matrix. To that end, we begin by examining a single block in $\offd$, call it $\off$. Let $\off$ be a $m_{\off} \times m_{\off}$ matrix with approximation rank $r_{\off}$. Then we split $\off$ via its singular value decomposition (SVD):  
+Recall that blocks in $\offd$ are well-approximated as a low-rank matrix. To that end, we begin by examining a single block in $\offd$, call it $\off$ (see Figure (\ref{fig:A_split}) for reference). Let $\off$ be a $m_{\off} \times m_{\off}$ matrix with approximation rank $r_{\off}$. Then we split $\off$ via its singular value decomposition (SVD):  
 $$ \off = \left( \sum_{i=1}^{r_{\off}} \sigma_i^{(\off)} \u_i ^{(\off)}(\v_i^{(\off)})^{\top} \right) + \left(  \sum_{i=r_{\off}+1}^{m_{\off}} \sigma_i^{(\off)} \u_i^{(\off)} (\v_i^{(\off)})^{\top} \right). $$ 
 In the above equation, $\u$ and $\v$ are length $m_{\off}$ vectors. With a slight abuse of notation, we embed these in length $m$ vectors to express the block matrix $\offd$ as the SVD of its blocks. Let $\setoff$ represent the set of off-diagonal blocks in $\offd$. Define $r := \max_{\off \in \setoff} r_{\off}$ and $M := \max_{\off \in \setoff} m_{\off}$. We now express $\offd$ as the sum of the SVD of its blocks, and then regroup terms into a low-rank sum and a small-norm sum. 
 \begin{align*}
@@ -394,11 +408,11 @@ We bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
 \end{equation*}
 Since $\A_F$ are small-norm this value is small. 
 Finally, we bound $||\Tau^{-1} \tilde{\offd}||_2$ using Lemma (\ref{eig_lemma}):
-\begin{align*}
+\begin{align}
 	\lambda_k ( \Tau^{-1} \tilde{\offd}) &\leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} \\
 	&= \lambda_k ( \Tau^{-1} \tilde{\offd}) \min_{i} \left( \toef_i (z_{\min}) \right) \leq 
-	 \lambda_k ( \Tau^{-1} \tilde{\offd}) \frac{1}{\varepsilon}.
-\end{align*}
+	 \lambda_k ( \Tau^{-1} \tilde{\offd}) \frac{1}{\varepsilon}. \label{eq:gen_bound_ad}
+\end{align}
 % \todo[inline]{Where to stop with $\lambda_{\min}\Tau$? can take it to generating function or bound on gen func or expression for eigs (like above) or leave as is} 
 To finish the proof, we utilize the fact that the matrices are SPD and relate the $k$-th eigenvalue of the preconditioned matrices to their 2-norm, 
 \begin{align*}
@@ -410,6 +424,8 @@ To finish the proof, we utilize the fact that the matrices are SPD and relate th
 \end{proof}
 
 % \todo[inline]{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - proof easily extended to different kinds of circulant preconditioner}
+The strength of this bound depends on $\lambda_{\min} (\Tau)$, but can be written independently of $\Tau$ in terms of the generating functions as in Equation (\ref{eq:gen_bound_ad}). This dependence is the same for the single block case, and appears in similar proofs for circulant preconditioners (see for example \cite{Kailath}). 
+
 In practice the block size, $m_i$, is determined by the AFEM algorithm, which in turn dictates the actual size $\varepsilon$ and hence the strength of clustering. So bigger Toeplitz blocks in $\A$ result in tighter eigenvalue clustering. 
 
 Notice that extending the proof from one Toeplitz block to the adaptive stiffness matrix relies only on being able to split the block into a small-norm and a low-rank piece. Thus, nothing about this proof is overly-specific to $\ptau$ and the methods could easily be extended to the other types of circulant preconditioners in \cite{Chan_89, Chan_Strang, Chan_Yeung}. 
@@ -428,8 +444,29 @@ Notice that extending the proof from one Toeplitz block to the adaptive stiffnes
 
 \section{Numerical Results}
 \subsection{Validating Assumptions}\label{validate}
-In order to prove the spectral clustering, we made two assumptions about the structure of $\A$: the blocks adjacent to the diagonal are well-approximated by low-rank matrices and the other off-diagonal blocks are small-norm. We tested those assumptions at the ? level of refinement, for fractional order ? 
-\todo[inline]{two tables for presenting these numerical results}
+In order to prove the spectral clustering, we made two assumptions about the structure of $\A$: the blocks adjacent to the diagonal are well-approximated by low-rank matrices and the other off-diagonal blocks are small-norm. The table displays maximum and average (median) results for $\alpha = 1.3, 1.7$, but similar trends were seen for all fractional orders. TODO level of refinement?
+
+\begin{tabular}{|c||c|c|c|}
+	\hline
+	\multicolumn{2}{|c|}{}&$\alpha = 1.3$ & $\alpha = 1.7$ \\ \hline
+	\multirow{2}{*}{max} 
+	& $n$ && \\ \cline{2-4} 
+	&$|| \cdot ||_2$ && \\ \hline
+		\multirow{2}{*}{avg} 
+	& $n$ && \\ \cline{2-4} 
+	&$|| \cdot ||_2$ && \\ \hline
+\end{tabular}
+\quad
+\begin{tabular}{|c||c|c|c|}
+	\hline
+	\multicolumn{2}{|c|}{}&$\alpha = 1.3$ & $\alpha = 1.7$ \\ \hline
+	\multirow{2}{*}{max} 
+	& $n$ (rank) && \\ \cline{2-4} 
+	&$|| \cdot ||_2$ && \\ \hline
+	\multirow{2}{*}{avg} 
+	& $n$ (rank) && \\ \cline{2-4} 
+	&$|| \cdot ||_2$ && \\ \hline
+\end{tabular}
 
 \subsection{Improved Convergence}
 \begin{figure}[h]

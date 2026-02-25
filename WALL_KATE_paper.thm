@@ -1,10 +1,10 @@
 \contentsline {definition}{{Definition}{2.1}{\cite {Chan_Strang}}}{2}{theorem.8}%
 \contentsline {lemma}{{Lemma}{2.2}{see \cite {Bini}}}{3}{theorem.10}%
-\contentsline {definition}{{Definition}{3.1}{Eigenvalue Clustering}}{4}{theorem.21}%
-\contentsline {lemma}{{Lemma}{4.1}{Weyl's Inequality}}{5}{theorem.24}%
-\contentsline {lemma}{{Lemma}{4.2}{}}{5}{theorem.25}%
-\contentsline {proof}{{Proof}{1}{}}{5}{proof.26}%
-\contentsline {lemma}{{Lemma}{4.3}{Eigenvalue Clustering on a Toeplitz Block, \cite {Bini, Kailath}}}{6}{theorem.28}%
-\contentsline {proof}{{Proof}{2}{}}{6}{proof.29}%
-\contentsline {theorem}{{Theorem}{4.4}{Full Matrix Clustering}}{6}{theorem.31}%
-\contentsline {proof}{{Proof}{3}{}}{6}{proof.32}%
+\contentsline {definition}{{Definition}{3.1}{Eigenvalue Clustering}}{4}{theorem.22}%
+\contentsline {lemma}{{Lemma}{4.1}{Weyl's Inequality}}{5}{theorem.25}%
+\contentsline {lemma}{{Lemma}{4.2}{}}{5}{theorem.26}%
+\contentsline {proof}{{Proof}{1}{}}{6}{proof.27}%
+\contentsline {lemma}{{Lemma}{4.3}{Eigenvalue Clustering on a Toeplitz Block, \cite {Bini, Kailath}}}{6}{theorem.29}%
+\contentsline {proof}{{Proof}{2}{}}{6}{proof.30}%
+\contentsline {theorem}{{Theorem}{4.4}{Full Matrix Clustering}}{7}{theorem.34}%
+\contentsline {proof}{{Proof}{3}{}}{7}{proof.35}%
