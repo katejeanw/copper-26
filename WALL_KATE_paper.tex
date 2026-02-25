@@ -19,6 +19,8 @@
 \usepackage{float}
 \usepackage{adjustbox}
 \usepackage{multirow}
+\usepackage{makecell}
+\usepackage{subfig}
 
 \DeclareCaptionType{equ}[Equation][List of Equations]
 %\captionsetup[equ]{labelformat=empty}
@@ -354,13 +356,12 @@ Recall that by construction $\ptau= \Toe - \Hank$, where $\Hank$ is the Hankel m
 We split $\Hank$ into a low-rank matrix $\Hank_{LR}$ that contains the anti-diagonals $\toe_0, \dots, \toe_N$ and a small-norm matrix $\Hank_{SN}$ such that $\Hank = \Hank_{LR} + \Hank_{SN}$.  Let $s := \text{rank}(\Hank_{LR}) \ll m$. The small-norm descriptor is justified since $\Hank_{SN} = \Hank - \Hank_{LR}$ is a Hermitian $m \times m$ matrix with at most two copies of $\toe_{N}, \dots, \toe_{m-1}$ in each row/column. Thus $||\Hank_{SN}||_2 = \sqrt{||\Hank_{SN}||_1 ||\Hank_{SN}||_{\infty}} = ||\Hank_{SN}||_1 < 2 \varepsilon$. Hence by Weyl's Inequality at least $m-s$ of the eigenvalues of $\Hank_{SN}$ are clustered within $2 \varepsilon$ of zero. 
 
 Now by Lemma (\ref{eig_lemma}),
-\begin{align}
-	\lambda_k ( \ptau^{-1} \Hank  ) &\leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )}  \label{eq:tau_min} \\
-	 & = \lambda_k (\Hank)  \frac{1}{\toef_m(z_{\min})} \leq \lambda_k (\Hank)  \frac{1}{\varepsilon}. \label{eq:gen_bound}
-\end{align}
+\begin{equation}  \label{eq:gen_bound}
+	\lambda_k ( \ptau^{-1} \Hank  ) \leq \lambda_k (\Hank)  \frac{1}{\lambda_{\min}(\ptau )}  = \lambda_k (\Hank)  \frac{1}{\toef_m(z_{\min})} \leq \lambda_k (\Hank)  \frac{1}{\varepsilon}.
+\end{equation}
 Thus, the clustering of the spectrum of $\Hank$ around 0 implies the same for $\ptau^{-1} \Hank$. 
 \end{proof}
-Equation (\ref{eq:tau_min}) shows that the bigger $\lambda_{\min}(\ptau)$, the stronger the bound. We can get this eigenvalue exactly using Lemma (\ref{lemma:tau}), Equation (\ref{eigs}). It can also be bounded in terms independent of $\ptau$, using the generating function as in Equation (\ref{eq:gen_bound}). 
+Equation (\ref{eq:gen_bound}) shows that the bigger $\lambda_{\min}(\ptau)$, the stronger the bound. We can get this eigenvalue exactly using Lemma (\ref{lemma:tau}), Equation (\ref{eigs}). It can also be bounded in terms independent of $\ptau$, using the generating function $\toef(z)$, as above. 
 
 \subsection{Spectral Clustering of the Full System} \label{proof}
 \begin{theorem}[Full Matrix Clustering]
@@ -408,11 +409,11 @@ We bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
 \end{equation*}
 Since $\A_F$ are small-norm this value is small. 
 Finally, we bound $||\Tau^{-1} \tilde{\offd}||_2$ using Lemma (\ref{eig_lemma}):
-\begin{align}
-	\lambda_k ( \Tau^{-1} \tilde{\offd}) &\leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} \\
-	&= \lambda_k ( \Tau^{-1} \tilde{\offd}) \min_{i} \left( \toef_i (z_{\min}) \right) \leq 
-	 \lambda_k ( \Tau^{-1} \tilde{\offd}) \frac{1}{\varepsilon}. \label{eq:gen_bound_ad}
-\end{align}
+\begin{equation} \label{eq:gen_bound_ad}
+	\lambda_k ( \Tau^{-1} \tilde{\offd}) \leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} 
+	= \lambda_k ( \Tau^{-1} \tilde{\offd}) \min_{i} \left( \toef_i (z_{\min}) \right) \leq 
+	 \lambda_k ( \Tau^{-1} \tilde{\offd}) \frac{1}{\varepsilon}.
+\end{equation}
 % \todo[inline]{Where to stop with $\lambda_{\min}\Tau$? can take it to generating function or bound on gen func or expression for eigs (like above) or leave as is} 
 To finish the proof, we utilize the fact that the matrices are SPD and relate the $k$-th eigenvalue of the preconditioned matrices to their 2-norm, 
 \begin{align*}
@@ -444,29 +445,30 @@ Notice that extending the proof from one Toeplitz block to the adaptive stiffnes
 
 \section{Numerical Results}
 \subsection{Validating Assumptions}\label{validate}
-In order to prove the spectral clustering, we made two assumptions about the structure of $\A$: the blocks adjacent to the diagonal are well-approximated by low-rank matrices and the other off-diagonal blocks are small-norm. The table displays maximum and average (median) results for $\alpha = 1.3, 1.7$, but similar trends were seen for all fractional orders. TODO level of refinement?
+In order to prove the spectral clustering, we made two assumptions about the structure of $\A$: the blocks adjacent to the diagonal are well-approximated by low-rank matrices and the other off-diagonal blocks are small-norm. Table (\ref{table:validate_rk}) displays the  maximum and average (median) rank needed to achieve an approximation under $\varepsilon$ on each block. Table (\ref{table:validate_norm}) shows the norm and relative norm of $||A_F||_2$. Both tables include results for $\alpha = 1.3, 1.5, 1.9$, after 7 levels of refinement, but similar trends were seen across all fractional orders and refinement levels. In the case of $1 \times 1$ Toeplitz blocks we found that including the entry to the right and underneath in $\offd$ was not sufficient to capture all the low-rank information. Instead, the corresponding block in $\offd$ was extended to dimensions $5 \times 5$ such that the original entry is the center of that block. In terms of spectral clustering, this could increase the number of outliers, but better characterizes the size of the cluster. 
 
-\begin{tabular}{|c||c|c|c|}
+\begin{table}[h]
+		\centering
+		\begin{tabular}{|l||c|c|c|}
+			\hline
+			\diaghead{\theadfont longer te}{$\varepsilon$}{$\alpha$}&
+			\thead{$1.3$}&\thead{$1.5$}&\thead{$1.9$}\\ \hline
+			$10^{-3}$ &4(5)&4(6)&5(6) \\ \hline
+			$10^{-4}$ &5(7)&5(7)&6(8) \\ \hline
+			$10^{-5}$ &6(8)&6(9)&7(9) \\ \hline
+		\end{tabular}
+		\caption{ This table shows the approximation rank needed for the error to be less than $\varepsilon$ for varying fractional indices $\alpha$. Table entries are displayed as $\texttt{median (max)}$. }
+	\label{table:validate_rk}
+\begin{tabular}{|l||c|c|c|}
 	\hline
-	\multicolumn{2}{|c|}{}&$\alpha = 1.3$ & $\alpha = 1.7$ \\ \hline
-	\multirow{2}{*}{max} 
-	& $n$ && \\ \cline{2-4} 
-	&$|| \cdot ||_2$ && \\ \hline
-		\multirow{2}{*}{avg} 
-	& $n$ && \\ \cline{2-4} 
-	&$|| \cdot ||_2$ && \\ \hline
+	\diaghead{\theadfont longer te}{}{$\alpha$}&
+	\thead{$1.3$}&\thead{$1.5$}&\thead{$1.9$}\\ \hline
+	$||A_F||_2$ &0.6138 &1.528 &4.479 \\ \hline
+	$\frac{||A_F||_2}{||A||_2}$ & $4.893 \times 10^{-2}$ &$2.368 \times 10^{-2}$ & $2.533 \times 10^{-3} $\\ \hline
 \end{tabular}
-\quad
-\begin{tabular}{|c||c|c|c|}
-	\hline
-	\multicolumn{2}{|c|}{}&$\alpha = 1.3$ & $\alpha = 1.7$ \\ \hline
-	\multirow{2}{*}{max} 
-	& $n$ (rank) && \\ \cline{2-4} 
-	&$|| \cdot ||_2$ && \\ \hline
-	\multirow{2}{*}{avg} 
-	& $n$ (rank) && \\ \cline{2-4} 
-	&$|| \cdot ||_2$ && \\ \hline
-\end{tabular}
+		\caption{This table shows the norm of $||A_F||_2$ and $||A_F||_2 / ||A||_2$ across values of $\alpha$. }
+		\label{table:validate_norm}
+\end{table}
 
 \subsection{Improved Convergence}
 \begin{figure}[h]
@@ -477,7 +479,7 @@ In order to prove the spectral clustering, we made two assumptions about the str
 \end{figure}
 In Figure \ref{fig:eigen_clusters}, we see some example results of the preconditioner on the spectrum of $\A$. These tests are for the problem (\ref{FDE}) with $\alpha = 1.7$ and exact solution $u(x) = 10x^2 (1-x^2)$ on $[0,1]$ (see \cite{Xiaozhe} example 6.1 for more details). The three different matrix sizes are $n = 31, 71, 2795$ and reflect 0, 3, and 11 levels of refinement respectively. Note that zero levels of refinement corresponds to a uniform mesh. 
 
-The left-most column represents a matrix that consists of a single Toeplitz block, so the preconditioner reduces to the case of $\ptau$. In this case the clustering of the spectrum around 1 is very strong. In the $n = 71$ case the biggest Toeplitz blocks are size $11$, and there are two such blocks. The eigenvalue clustering around 1 is still observable, but the size of the cluster has grown. Finally for $n=2795$, the preconditioner reduces the spectral radius by several orders of magnitude. The spectrum is concentrated around 1, but the distribution of eigenvalues between 0 and 2 is more uniform. For this matrix the biggest Toeplitz block is size $939$ and there are two other blocks just bigger than $200$. On the other hand, there are $245$ $1 \times 1$ blocks. For all cases, the strength of the clustering is explained by the amount of smaller Toeplitz blocks in $\A$.
+The left-most column represents a matrix that consists of a single Toeplitz block, so the preconditioner reduces to the case of $\ptau$. In this case the clustering of the spectrum around 1 is very strong. In the $n = 71$ case the biggest Toeplitz blocks are size $11$, and there are two such blocks. The eigenvalue clustering around 1 is still observable, but the size of the cluster has grown. Finally for $n=2795$, the preconditioner reduces the spectral radius by several orders of magnitude. The spectrum is concentrated around 1, but the distribution of eigenvalues between 0 and 2 is more uniform. For this matrix the biggest Toeplitz block is size $939$ and there are two other blocks just bigger than $200$. On the other hand, there are $245$ $1 \times 1$ blocks. For all cases, the strength of the clustering is explained by the amount of smaller Toeplitz blocks in $\A$. Notice that although the proof allows for eigenvalue outliers beyond the cluster, in practice everything remains within the interval $(0,2)$. 
 
 % todo would love to be able to show error for PDE for the three different matrices
 

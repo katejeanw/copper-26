@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  25 FEB 2026 14:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  25 FEB 2026 17:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -866,43 +866,77 @@ Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@dima=\skip71
 \bigstrutjot=\dimen307
 )
+(/usr/local/texlive/2021/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/array.sty
+Package: array 2020/10/01 v2.5c Tabular extension package (FMi)
+\col@sep=\dimen308
+\ar@mcellbox=\box65
+\extrarowheight=\dimen309
+\NC@list=\toks57
+\extratabsurround=\skip72
+\backup@length=\skip73
+\ar@cellbox=\box66
+)
+\rotheadsize=\dimen310
+\c@nlinenum=\count340
+\TeXr@lab=\toks58
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+\c@KVtest=\count341
+\sf@farskip=\skip74
+\sf@captopadj=\dimen311
+\sf@capskip=\skip75
+\sf@nearskip=\skip76
+\c@subfigure=\count342
+\c@subfigure@save=\count343
+\c@lofdepth=\count344
+\c@subtable=\count345
+\c@subtable@save=\count346
+\c@lotdepth=\count347
+\sf@top=\skip77
+\sf@bottom=\skip78
+)
 Package caption Info: Option `declare type' requires the `newfloat' package on 
-input line 23.
+input line 25.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/newfloat/newfloat.sty
 Package: newfloat 2019/09/02 v1.1l Defining new floating environments (AR)
 )
-Package newfloat Info: New float `equ' with options `' on input line 23.
-\c@equ=\count340
-Package newfloat Info: float type `equ'=8 on input line 23.
+Package newfloat Info: New float `equ' with options `' on input line 25.
+\c@equ=\count348
+Package newfloat Info: float type `equ'=8 on input line 25.
+\c@loequdepth=\count349
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count341
-\l__pdf_internal_box=\box65
+\l__color_backend_stack_int=\count350
+\l__pdf_internal_box=\box67
 )
 (./WALL_KATE_paper.aux)
 \openout1 = `WALL_KATE_paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 95.
-LaTeX Font Info:    ... okay on input line 95.
-Package hyperref Info: Link coloring ON on input line 95.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+Package hyperref Info: Link coloring ON on input line 97.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -914,11 +948,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count342
+\c@section@level=\count351
 )
-LaTeX Info: Redefining \ref on input line 95.
-LaTeX Info: Redefining \pageref on input line 95.
-LaTeX Info: Redefining \nameref on input line 95.
+LaTeX Info: Redefining \ref on input line 97.
+LaTeX Info: Redefining \pageref on input line 97.
+LaTeX Info: Redefining \nameref on input line 97.
  (./WALL_KATE_paper.out) (./WALL_KATE_paper.out)
 \@outlinefile=\write4
 \openout4 = `WALL_KATE_paper.out'.
@@ -926,34 +960,35 @@ LaTeX Info: Redefining \nameref on input line 95.
 
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count343
-\scratchdimen=\dimen308
-\scratchbox=\box66
-\nofMPsegments=\count344
-\nofMParguments=\count345
-\everyMPshowfont=\toks57
-\MPscratchCnt=\count346
-\MPscratchDim=\dimen309
-\MPnumerator=\count347
-\makeMPintoPDFobject=\count348
-\everyMPtoPDFconversion=\toks58
+\scratchcounter=\count352
+\scratchdimen=\dimen312
+\scratchbox=\box68
+\nofMPsegments=\count353
+\nofMParguments=\count354
+\everyMPshowfont=\toks59
+\MPscratchCnt=\count355
+\MPscratchDim=\dimen313
+\MPnumerator=\count356
+\makeMPintoPDFobject=\count357
+\everyMPtoPDFconversion=\toks60
 )
 
 Package todonotes Warning: The length marginparwidth is less than 2cm and will 
 most likely cause issues with the appearance of inserted todonotes. The issue c
 an be solved by adding a line like \setlength {\marginparwidth }{2cm} prior to 
-loading the todonotes package. on input line 95.
+loading the todonotes package. on input line 97.
 
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package newfloat Info: `float' package detected.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 98.
-
+LaTeX Font Info:    Trying to load font information for U+msa on input line 100
+.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 98.
-
+LaTeX Font Info:    Trying to load font information for U+msb on input line 100
+.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -961,72 +996,77 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 Package hyperref Info: bookmark level for unknown equ defaults to 0 on input li
-ne 172.
+ne 174.
 Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
-nput line 178.
+nput line 180.
  [2]
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 223.
+line 225.
  [3]
 <figures/A.png, id=163, 344.487pt x 371.7087pt>
 File: figures/A.png Graphic file (type png)
 <use figures/A.png>
-Package pdftex.def Info: figures/A.png  used on input line 250.
+Package pdftex.def Info: figures/A.png  used on input line 252.
 (pdftex.def)             Requested size: 344.48615pt x 371.70778pt.
 <figures/AD.png, id=164, 344.487pt x 376.2858pt>
 File: figures/AD.png Graphic file (type png)
 <use figures/AD.png>
-Package pdftex.def Info: figures/AD.png  used on input line 251.
+Package pdftex.def Info: figures/AD.png  used on input line 253.
 (pdftex.def)             Requested size: 344.48615pt x 376.28487pt.
 <figures/AE.png, id=165, 344.487pt x 376.2858pt>
 File: figures/AE.png Graphic file (type png)
 <use figures/AE.png>
-Package pdftex.def Info: figures/AE.png  used on input line 252.
+Package pdftex.def Info: figures/AE.png  used on input line 254.
 (pdftex.def)             Requested size: 344.48615pt x 376.28487pt.
 <figures/AF.png, id=166, 344.487pt x 376.2858pt>
 File: figures/AF.png Graphic file (type png)
 <use figures/AF.png>
-Package pdftex.def Info: figures/AF.png  used on input line 253.
+Package pdftex.def Info: figures/AF.png  used on input line 255.
 (pdftex.def)             Requested size: 344.48615pt x 376.28487pt.
  [4 <./figures/A.png (PNG copy)> <./figures/AD.png (PNG copy)> <./figures/AE.pn
 g (PNG copy)> <./figures/AF.png (PNG copy)>]
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 334.
+line 336.
  [5]
 Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 366.
- [6] [7] [8]
-<figures/eig_comp.png, id=236, 1393.205pt x 618.31pt>
-File: figures/eig_comp.png Graphic file (type png)
-<use figures/eig_comp.png>
-Package pdftex.def Info: figures/eig_comp.png  used on input line 474.
-(pdftex.def)             Requested size: 333.3431pt x 147.93513pt.
-<figures/convJ.png, id=240, 1736.4875pt x 515.9275pt>
-File: figures/convJ.png Graphic file (type png)
-<use figures/convJ.png>
-Package pdftex.def Info: figures/convJ.png  used on input line 486.
-(pdftex.def)             Requested size: 351.86342pt x 104.53772pt.
-
+t line 367.
+ [6] [7]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[9 <./figures/eig_comp.png (PNG copy)>] (./WALL_KATE_paper.bbl [10 <./figures/c
-onvJ.png>])
+<figures/eig_comp.png, id=230, 1393.205pt x 618.31pt>
+File: figures/eig_comp.png Graphic file (type png)
+<use figures/eig_comp.png>
+Package pdftex.def Info: figures/eig_comp.png  used on input line 476.
+(pdftex.def)             Requested size: 333.3431pt x 147.93513pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[8] [9 <./figures/eig_comp.png (PNG copy)>]
+<figures/convJ.png, id=247, 1736.4875pt x 515.9275pt>
+File: figures/convJ.png Graphic file (type png)
+<use figures/convJ.png>
+Package pdftex.def Info: figures/convJ.png  used on input line 488.
+(pdftex.def)             Requested size: 351.86342pt x 104.53772pt.
+ (./WALL_KATE_paper.bbl
+Underfull \vbox (badness 2478) has occurred while \output is active []
+
+ [10 <./figures/convJ.png>])
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
  [11] (./WALL_KATE_paper.aux)
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 9B65E9FFBF7842156684043E4CA65119;2100.
+(rerunfilecheck)             Checksum: 9D24638B8851E9C7D1243649ACD99213;2100.
  ) 
 Here is how much of TeX's memory you used:
- 26774 strings out of 478994
- 480760 string characters out of 5858183
- 763939 words of memory out of 5000000
- 42154 multiletter control sequences out of 15000+600000
+ 27136 strings out of 478994
+ 485611 string characters out of 5858183
+ 772569 words of memory out of 5000000
+ 42507 multiletter control sequences out of 15000+600000
  415337 words of font info for 71 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
- 102i,13n,117p,1271b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 102i,29n,117p,1271b,543s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><
@@ -1034,23 +1074,25 @@ Here is how much of TeX's memory you used:
 usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></u
 sr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr
 /local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/l
-ocal/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/l
-ocal/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/loc
-al/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/
-texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/tex
-live/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texliv
-e/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
-/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2
-021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/202
-1/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2021/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/te
-xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/202
-1/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (11 pages, 414024 bytes).
+ocal/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/loc
+al/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/loc
+al/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local
+/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/te
+xlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texli
+ve/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/
+2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
+021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/202
+1/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2021/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2021/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2021/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/texm
+f-dist/fonts/type1/public/amsfonts/latxfont/line10.pfb></usr/local/texlive/2021
+/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/
+2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on WALL_KATE_paper.pdf (11 pages, 427067 bytes).
 PDF statistics:
- 340 PDF objects out of 1000 (max. 8388607)
- 282 compressed objects within 3 object streams
- 69 named destinations out of 1000 (max. 500000)
+ 348 PDF objects out of 1000 (max. 8388607)
+ 288 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
  243 words of extra memory for PDF output out of 10000 (max. 10000000)
 
