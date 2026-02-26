@@ -51,7 +51,7 @@
 
 % 2. Paper title
 \newcommand{\TheTitle}{%
-  Reviving Circulant Preconditioners for Adaptive Mesh Refinement
+  A Discrete-Sine-Transform based Preconditioner for Adaptive Meshes
 }
 
 % 2.5. Short title for running heads (if needed)
@@ -107,7 +107,7 @@ In collaboration with:
 % ---------------------------------------------
 
 \begin{abstract}
-We present a preconditioner for solving fractional differential equations (FDEs) on an adaptive mesh. Adaptive refinement of the problem domain results in a stiffness matrix with Toeplitz blocks along the main diagonal, while the FDE yields a dense stiffness matrix, where off-diagonal blocks are stored as low-rank approximations. Our adaptive preconditioner utilizes ideas from the circulant preconditioner of Chan and Strang [SIAM Journal on Scientific Computing, 1989], which takes advantage of the Toeplitz blocks on the diagonal and accounts for the low-rank nature of the off-diagonal blocks. We demonstrate its effectiveness at accelerating convergence for our systems and emphasize its efficient application. This work presents theoretical results about the spectral clustering of the preconditioned system. In order to prove these results, special consideration is taken on how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system. Numerical tests are used to inspect any assumptions and validate our results.
+We present a preconditioner for solving fractional differential equations (FDEs) on an adaptive mesh. Adaptive refinement of the problem domain results in a stiffness matrix with Toeplitz blocks along the main diagonal, while the FDE yields a dense stiffness matrix, where off-diagonal blocks are stored as low-rank approximations. Our adaptive preconditioner utilizes ideas from the circulant preconditioner of Chan and Strang [SIAM Journal on Scientific Computing, 1989] and the discrete-sine-transform based preconditioner of Bini and Di Benedetto [Association for Computing Machinery, 1990]. We take advantage of the Toeplitz blocks on the diagonal and accounts for the low-rank nature of the off-diagonal blocks. We demonstrate the adaptive preconditioner's effectiveness at accelerating convergence for our systems and emphasize its efficient application. This work presents theoretical results about the spectral clustering of the preconditioned system. In order to prove these results, special consideration is taken on how the low-rank blocks perturb the eigenvalues of the Toeplitz block-diagonal system. Numerical tests are used to inspect any assumptions and validate our results.
 \end{abstract}
 
 
@@ -133,7 +133,7 @@ The above methods, however, require uniform meshes. An optimal mesh would have t
 \end{equation} 
 but the computational cost is dominated by the \texttt{SOLVE} step \cite{Xiaozhe}. 
 
-Our aim is to build a preconditioner for the stiffness matrix, $\A$, from an AFEM discretization of Equation (\ref{FDE}) that will reduce this work. We investigate what structure the adaptive mesh retains and how that is reflected in the structure of $\A$. Then, using preconditioning techniques formulated for Toeplitz matrices \cite{Chan_89, Chan_Strang, Chan_Yeung, schrod}, we build a preconditioner, show the preconditioned system has eigenvalues clustered around 1 and demonstrate numerical results with superlinear convergence. 
+Our aim is to build a preconditioner for the stiffness matrix, $\A$, from an AFEM discretization of Equation (\ref{FDE}) that will reduce this work. We investigate what structure the adaptive mesh retains and how that is reflected in the structure of $\A$. Then, using preconditioning techniques formulated for Toeplitz matrices \cite{Chan_Strang, Chan_Yeung, precond_review, schrod}, we build a preconditioner, show the preconditioned system has eigenvalues clustered around 1 and demonstrate numerical results with superlinear convergence. 
 % We leverage this idea to build a preconditioner for stiffness matrices generated from the adaptive finite-element method (AFEM) for FDEs. In this setting the problem is discretized on a nonuniform mesh, and the resulting stiffness matrix is dense. In the usual finite-element method (FEM) setting an uniform mesh results in a Toeplitz stiffness matrix. In the adaptive setting, after an initial solve on a uniform grid, the error on each element is estimated and the elements with largest error are refined via bisection. 
 
 % application for FDEs
@@ -150,10 +150,10 @@ Our aim is to build a preconditioner for the stiffness matrix, $\A$, from an AFE
 % overview of subsequent sections?
 
 \section{Background}
-\subsection{Properties of Structured Matrices}
+\subsection{Properties of Structured Matrices} \label{sec:matrix_props}
 There has long been interest in solving Toeplitz linear systems efficiently. A matrix $A$ is called Toeplitz if $a_{ij} = a_{i-j}$. Arbitrary $n \times n$ matrices have up to $n^2$ entries and, in general, arbitrary linear systems are solved directly in $\bigOh(n^3)$ FLOPS. Since a Toeplitz matrix has at most $2n-1$ unique entries, we expect to solve Toeplitz systems with $\bigOh (n^2)$ FLOPS, (see for example Levinson's algorithm, Trench's algorithm). Even with these improvements, however, fast Toeplitz algorithms are unstable in general and infeasible for large systems that arise in application \cite{stable}. Instead we turn to iterative Krylov and multigrid methods \cite{schrod, hierarch, Xiaozhe}. For these methods we take advantage of Toeplitz structure by using circulant preconditioners. 
 
-Toeplitz matrices commonly arise in partial differential equations discretization, FDEs, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $\Toe x = b$, the idea introduced by Strang and Chan \cite{Chan_Strang} is to use certain circulant preconditioners $C$ so that $C^{-1}Tx = C^{-1}b$ is solved in fewer iterations.
+Toeplitz matrices commonly arise in partial differential equations discretization, FDEs, signal processing, and control theory. Often the Toeplitz matrices are also symmetric positive definite (SPD). Given an SPD Toeplitz system $\Toe x = b$, the idea introduced by Strang and Chan \cite{Chan_Strang} is to use certain circulant preconditioners $C$ so that $C^{-1}Tx = C^{-1}b$ is solved in fewer iterations. 
 A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around'' property where the last entry of each row is the first entry of the subsequent row:
 \begin{equ}[H]
 	\begin{equation} 
@@ -169,7 +169,7 @@ A circulant matrix is a Toeplitz matrix, that additionally has the ``wrap-around
 			c_{n-1} & c_0 & \cdots & c_{n-2} \\
 			\vdots & \vdots & \ddots & \vdots \\
 			c_{1} & c_{2} & \cdots & c_0 
-		\end{pmatrix}
+		\end{pmatrix}.
 	\end{equation}
 	\caption{$\Toe$ is a Toeplitz matrix and $C$ is circulant.}
 \end{equ}
@@ -196,7 +196,9 @@ Toeplitz matrices have many special properties, but we focus on their connection
 	Assume $\sum_{k=-\infty}^{\infty} |\toe_k| <\infty$, then the matrices induce functions $\toef(z) = \sum_{k=-\infty}^{\infty} \toe_k z^k$ and $\toef_m(z) = \sum_{k=-(m-1)}^{m-1} \toe_k z^k$ are real, positive, and in the Wiener class for $|z| = 1$.
 \end{definition}
 
-Previous work on Toeplitz systems offers a few options for circulant preconditioners. Although their construction differs, the spectrum of the preconditioned systems are asymptotically the same \cite{Chan_89}. Following \cite{Bini}, given a symmetric Toeplitz matrix $\Toe$ we build a Hankel correction, $H$, where 
+Previous work on Toeplitz systems offers many options for circulant preconditioners, (see \cite{precond_review}). Although their construction differs, they are all diagonalized by the discrete Fourier transform matrix and are thus efficiently applied via the fast Fourier transform (FFT). The spectrum of the preconditioned systems are asymptotically the same \cite{precond_review}. In this paper the preconditioner we construct is based on the $\ptau$ matrix class, introduced in \cite{Bini}. 
+
+The $\ptau$ preconditioner is not itself circulant, but is diagonalized by the type-I discrete sine transform (DST) matrix. Kailath and Olshevsky used a displacement operator kernel framework to unify the circulant preconditioners, $\ptau$, and generate more preconditioners diagonalized by other discrete trigonometric matrices. Together these form a class of discrete-trigonometric-based preconditioners. Though our construction could be generalized to circulant preconditioners, we use $\ptau$ because it does not require complex arithmetic needed for the FFT. Following \cite{Bini}, given a symmetric Toeplitz matrix $\Toe$ we build a Hankel correction, $H$, where 
 \begin{equation} \label{Hank}
 	\Toe = 
 	\begingroup % keep the change local
@@ -225,8 +227,7 @@ The following lemma summarizes properties of $\ptau$.
 \begin{lemma}[see \cite{Bini}] \label{lemma:tau}
 	Let $\Toe$ be a Toeplitz matrix and $\Hank$ the corresponding Hankel correction as in Equation (\ref{Hank}). Then $\ptau = \Toe - \Hank$ has the following properties: 
 \begin{enumerate}
-%	\item $\ptau$ is a circulant matrix.
-	\item $\ptau$ is diagonalized by the type-I discrete sine transform (DST) matrix, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
+	\item $\ptau$ is diagonalized by the DST, $S$. We write $\ptau = S \Lambda S^{-1} = S \Lambda S$.  
 	\item $\ptau$ can be applied in $\bigOh(n \log n)$ FLOPS.
 	\item Let $\Toe_1$ be the first column of $\Toe$. Then, the $k$-th eigenvalue of $\ptau$ is proportional to the $k$-th entry of $S\Toe_1$. Specifically, 
 	\begin{equation} \label{eigs} \lambda_k(\ptau) = c_k [S\Toe_1]_k, \ \text{where } c_k := \sqrt{\frac{n+1}{2}} \frac{1}{\sin(\frac{\pi k }{n+1})}.\end{equation}
@@ -261,8 +262,7 @@ Using this notation, we write our stiffness matrix as the sum of the Toeplitz bl
 % If the mesh is not fine enough to give the desired accuracy, one approach is to increase the number of elements, $n$. While this approach preserves uniformity, it usually requires recomputing the stiffness matrix entirely. Alternatively, if the level of refinement gives sufficiently small error for some parts of the domain, we can leave those unchanged and only refine in areas of larger error. This approach allows us to take advantage of computations that have already been performed, but the mesh is no longer uniform. 
 
 \section{Adaptive \texorpdfstring{$\ptau$}{tau} Preconditioner} \label{precond} 
-In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building our adaptive $\ptau$ preconditioner, which we call $\Tau$, and how to build and apply $\Tau$ efficiently.
-
+%In this section we set forth the properties we require from a preconditioner, how we use $\ptau$ in building the adaptive $\ptau$ preconditioner, which we call $\Tau$, and how to build and apply $\Tau$ efficiently.
 A good preconditioner for an iterative method must in general decrease the total number of iterations, without increasing the cost of a single iteration. We borrow Kailath's \cite{Kailath} criteria for preconditioners, similar criteria is well-established in literature (for example \cite{Bini}). 
 \begin{enumerate} 
 	\item Complexity of constructing and applying $\Tau \in \R^{m \times m}$ should be $\bigOh (m \log m)$. \label{crit1}
@@ -270,12 +270,8 @@ A good preconditioner for an iterative method must in general decrease the total
 	\item The spectrum of $\Tau^{-1} \A$ should be clustered around 1. \label{crit3}
 \end{enumerate}
 
-We make this last point more precise:
-\begin{definition}[Eigenvalue Clustering] 
-	For any $\varepsilon > 0$ we say the eigenvalues of a matrix $C^{-1} \Toe_m$ are clustered around a real number $\rho$ if there exists $N_1$ and $N_2$ such that for all $m > N_1$ there are at most $N_2$ eigenvalues of $C^{-1} \Toe_m$ that do not lie within $ [\rho-\varepsilon, \rho+\varepsilon]$.
-\end{definition}
-
-How tightly the eigenvalues cluster around 1 determines the speed of convergence. In proving results about the clustering we use the infinite matrix framework established previously. In Section (\ref{sec:block}), we summarize results established previously about the spectral clustering of $\ptau$ applied to a single Toeplitz block $\Toe$. This result is then used as a lemma in proving the spectral clustering for our stiffness matrix from the adaptive mesh. 
+How tightly the eigenvalues cluster around 1 determines the speed of convergence. 
+We use the infinite matrix framework established in Section (\ref{sec:matrix_props}). In Section (\ref{sec:block}), we summarize results established previously about the spectral clustering of $\ptau$ applied to a single Toeplitz block, $\Toe$. This result is then used as a lemma in proving the spectral clustering for our stiffness matrix from the adaptive mesh. 
 
 %The use of circulant preconditioners for Toeplitz systems originates from \cite{Chan_Strang}. Kailath showed how both Strang and Chan type preconditioners come from the kernel of displacement operators, they further detail eight specific preconditioners for each form of the discrete sine and cosine transforms. \todo[inline]{apply in n log n time}
 %
@@ -286,7 +282,7 @@ To build $\Tau$, assume the stiffness matrix has $k$ Toeplitz blocks $\Toe_1, \T
 % Common assumptions for proof on one block 
 
 %We now construct a preconditioner, $\Tau$ for the adaptive system. 
-To explicitly construct $\Tau$ for the adaptive system, we calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $\Toe_i$. Then we define $\ptau_i = \Toe_i - \Hank_i$,  resulting in $k$ matrices $\ptau_1, \ptau_2, \dots, \ptau_k$. Finally, we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
+To explicitly construct $\Tau$ for the adaptive system, we calculate the Hankel correction $\Hank_i$ for every Toeplitz block, $\Toe_i$ and define $\ptau_i = \Toe_i - \Hank_i$.  Using the matrices $\ptau_1, \ptau_2, \dots, \ptau_k$ we assemble $\Tau$ as the block diagonal matrix with $\ptau_i$ as the $i$-th block. 
 $$\Tau = \begin{pmatrix}
 		\ptau_1 &&& \\ & \ptau_2 && \\ && \ddots & \\ &&& \ptau_k
 	\end{pmatrix}.$$
@@ -307,13 +303,13 @@ This explicit construction is not the most efficient, instead we apply $\Tau^{-1
 		\end{pmatrix}.
 	\endgroup
 \end{equation}
-The DST blocks in the outside matrices can be applied via fast Fourier transform (FFT) to do matrix multiplication in $\bigOh(m \log m)$ FLOPS. The eigenvalue matrix is diagonal and inverted in $m$ operations, and can be multiplied against a Toeplitz matrix embedded in a $2m \times 2m$ circulant matrix in $ \bigOh(m \log m)$ FLOPS. This establishes Criteria (\ref{crit1}) and (\ref{crit2}) for $\Tau$. 
+The DST blocks in the outside matrices can be applied via the fast sine transform (FST) to do matrix multiplication in $\bigOh(m \log m)$ FLOPS. The eigenvalue matrix is diagonal and inverted in $m$ operations, and can be multiplied against a Toeplitz matrix embedded in a $2m \times 2m$ circulant matrix in $ \bigOh(m \log m)$ FLOPS. Moreover, both the FST and block arithmetic are highly parallelizable for more efficient implementation. This establishes Criteria (\ref{crit1}) and (\ref{crit2}) for $\Tau$. 
 
 \section{Theoretical Results} 
 % notation table ?
 % 1x1 blocks consideration 
 % Story: we know how this works on one block, what about block diagonal, what about with things happening outside of block diagonal? 
-In this section we prove that the spectral clustering in criteria (\ref{crit3}) holds for $\Tau$. Proofs for clustering of circulant preconditioned problems in this area tend to follow a similar structure. First it is shown that the preconditioned system having a spectrum clustered around 1 is equivalent to the clustering of a related system around 0. This related system is then split into the sum of a low-rank term and a small-norm term. The small-norm term has spectrum clustered around 0, forcing the clustering of the entire system around 0 with the number of outliers bounded by the rank of the low-rank term.
+In this section we prove that the spectral clustering in criteria (\ref{crit3}) holds for $\Tau$. Proofs for clustering of discrete-trigonometric-transform based preconditioned problems in this area tend to follow a similar structure. First it is shown that the preconditioned system having a spectrum clustered around 1 is equivalent to the clustering of a related system around 0. This related system is then split into the sum of a low-rank term and a small-norm term. The small-norm term has spectrum clustered around 0, forcing the clustering of the entire system around 0 with the number of outliers bounded by the rank of the low-rank term.
 
 We present our version of the spectral clustering proof for the case of $\ptau$ acting on a single Toeplitz block. This result is then used to help prove the clustering of the adaptive preconditioner on the adaptive grid, $\Tau^{-1} \A$. 
 
@@ -324,8 +320,8 @@ We present our version of the spectral clustering proof for the case of $\ptau$ 
 %	\end{align*} 
 %\end{theorem}
 
-For convenience we state Weyl's inequality and one other lemma that is useful to us later. Both these results are corollaries to the min-max theorem. 
-\begin{lemma}[Weyl's Inequality] \\ Let $M$ and $E$ be Hermitian $m \times m$ matrices. Then for $A := M + E$ we have 
+For convenience we state Weyl's Inequality and one other lemma that is useful to us later. Both these results are corollaries to the min-max theorem. 
+\begin{lemma}[Weyl's Inequality] \label{lemma:weyl} Let $M$ and $E$ be Hermitian $m \times m$ matrices. Then for $A := M + E$ we have 
 	$$ | \lambda_k(A) - \lambda_k(M) | \leq ||E||_2 \ , 1 \leq k \leq m.$$
 	That is the eigenvalues of $A$ are at most $||E||_2$ away from the eigenvalues of $M$. 
 \end{lemma}
@@ -364,7 +360,7 @@ Thus, the clustering of the spectrum of $\Hank$ around 0 implies the same for $\
 Equation (\ref{eq:gen_bound}) shows that the bigger $\lambda_{\min}(\ptau)$, the stronger the bound. We can get this eigenvalue exactly using Lemma (\ref{lemma:tau}), Equation (\ref{eigs}). It can also be bounded in terms independent of $\ptau$, using the generating function $\toef(z)$, as above. 
 
 \subsection{Spectral Clustering of the Full System} \label{proof}
-\begin{theorem}[Full Matrix Clustering]
+\begin{theorem}
 	Let $\A$ be the stiffness matrix as described in Section (\ref{stiffness}) and $\Tau$ as described in Section (\ref{precond}). Then the spectrum of $\Tau^{-1} \A$ is clustered around 1. 
 \end{theorem}
 
@@ -403,12 +399,12 @@ Now $s := \text{rank}(\Tau^{-1}\A_{LR}) \leq \text{rank}(\A_{LR}) \leq 2(N-1) + 
 	|| \Tau^{-1}\A_{SN}||_2 &\leq ||\Tau^{-1} \Hank_{SN}||_2 + ||\Tau^{-1} \tilde{\offd}||_2 +||\Tau^{-1} \A_F ||_2.
 \end{align*}
 Since the block multiplication $\Tau^{-1} \Hank_{SN}$ is each $\ptau$ acting on its corresponding Hankel correction, it is bounded by Lemma (\ref{block}). 
-We bound $||\Tau^{-1} \A_F||_2$ with Weyl's inequality:
+We bound $||\Tau^{-1} \A_F||_2$ by Lemma (\ref{lemma:weyl}),
 \begin{equation*}
 	||\Tau^{-1} \A_F||_2 \leq ||\Tau^{-1}||_2 ||\A_F||_2 =\sigma_{\max}(\Tau^{-1}) \sigma_{\max}(\A_F) = \frac{ \sigma_{\max}(\A_F)}{\lambda_{\min}(\Tau)}.
 \end{equation*}
 Since $\A_F$ are small-norm this value is small. 
-Finally, we bound $||\Tau^{-1} \tilde{\offd}||_2$ using Lemma (\ref{eig_lemma}):
+Using Lemma (\ref{eig_lemma}) we bound $||\Tau^{-1} \tilde{\offd}||_2$:
 \begin{equation} \label{eq:gen_bound_ad}
 	\lambda_k ( \Tau^{-1} \tilde{\offd}) \leq \lambda_k(\tilde{\offd})  \frac{1}{\lambda_{\min}(\Tau)} 
 	= \lambda_k ( \Tau^{-1} \tilde{\offd}) \min_{i} \left( \toef_i (z_{\min}) \right) \leq 
@@ -425,7 +421,7 @@ To finish the proof, we utilize the fact that the matrices are SPD and relate th
 \end{proof}
 
 % \todo[inline]{Possible comments to add: \\ - technically lots of $ 1 \times 1$ blocks at boundaries, these get jacobi? inverse so are clustered around 1 \\ - all problems come from boundaries \\ - proof easily extended to different kinds of circulant preconditioner}
-The strength of this bound depends on $\lambda_{\min} (\Tau)$, but can be written independently of $\Tau$ in terms of the generating functions as in Equation (\ref{eq:gen_bound_ad}). This dependence is the same for the single block case, and appears in similar proofs for circulant preconditioners (see for example \cite{Kailath}). 
+The strength of this bound depends on $\lambda_{\min} (\Tau)$, but can be written independently of $\Tau$ in terms of the generating functions as in Equation (\ref{eq:gen_bound_ad}). This dependence is the same for the single block case, and appears in similar proofs for discrete-trigonometric preconditioners (see for example \cite{Kailath}). 
 
 In practice the block size, $m_i$, is determined by the AFEM algorithm, which in turn dictates the actual size $\varepsilon$ and hence the strength of clustering. So bigger Toeplitz blocks in $\A$ result in tighter eigenvalue clustering. 
 %Notice that extending the proof from one Toeplitz block to the adaptive stiffness matrix relies only on being able to split the block into a small-norm and a low-rank piece. Thus, nothing about this proof is overly-specific to $\ptau$ and the methods could easily be extended to the other types of circulant preconditioners in \cite{Chan_89, Chan_Strang, Chan_Yeung}. 

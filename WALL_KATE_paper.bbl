@@ -10,10 +10,9 @@
   equations}, SIAM Journal on Scientific and Statistical Computing, 6 (1985),
   pp.~349--364.
 
-\bibitem{Chan_89}
-{\sc Raymond~H. Chan}, {\em The spectrum of a family of circulant
-  preconditioned toeplitz systems}, SIAM Journal on Numerical Analysis, 26
-  (1989), pp.~503--506.
+\bibitem{precond_review}
+{\sc Raymond~H. Chan and Michael~K. Ng}, {\em Conjugate gradient methods for
+  toeplitz systems}, SIAM Review, 38 (1996), pp.~427--482.
 
 \bibitem{Chan_Strang}
 {\sc Raymond~H. Chan and Gilbert Strang}, {\em Toeplitz equations by conjugate
