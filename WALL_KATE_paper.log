@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  25 FEB 2026 21:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.17)  25 FEB 2026 22:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1024,12 +1024,11 @@ File: figures/AF.png Graphic file (type png)
 Package pdftex.def Info: figures/AF.png  used on input line 256.
 (pdftex.def)             Requested size: 344.48615pt x 376.28487pt.
  [4 <./figures/A.png (PNG copy)> <./figures/AD.png (PNG copy)> <./figures/AE.pn
-g (PNG copy)> <./figures/AF.png (PNG copy)>]
+g (PNG copy)> <./figures/AF.png (PNG copy)>] [5]
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 332.
- [5]
+line 331.
 Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 364.
+t line 363.
  [6] [7]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1037,7 +1036,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <figures/eig_comp.png, id=230, 1393.205pt x 618.31pt>
 File: figures/eig_comp.png Graphic file (type png)
 <use figures/eig_comp.png>
-Package pdftex.def Info: figures/eig_comp.png  used on input line 471.
+Package pdftex.def Info: figures/eig_comp.png  used on input line 470.
 (pdftex.def)             Requested size: 333.3431pt x 147.93513pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1046,32 +1045,28 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <figures/conv.png, id=241, 1447.4075pt x 333.245pt>
 File: figures/conv.png Graphic file (type png)
 <use figures/conv.png>
-Package pdftex.def Info: figures/conv.png  used on input line 483.
+Package pdftex.def Info: figures/conv.png  used on input line 482.
 (pdftex.def)             Requested size: 351.86342pt x 81.01266pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-Underfull \vbox (badness 7133) has occurred while \output is active []
-
- [9 <./figures/eig_comp.png (PNG copy)>] (./WALL_KATE_paper.bbl)
+[9 <./figures/eig_comp.png (PNG copy)>] (./WALL_KATE_paper.bbl)
 \tf@thm=\write5
 \openout5 = `WALL_KATE_paper.thm'.
 
- [10 <./figures/conv.png>]
-(./WALL_KATE_paper.aux)
+ [10 <./figures/conv.png>] (./WALL_KATE_paper.aux)
 Package rerunfilecheck Info: File `WALL_KATE_paper.out' has not changed.
 (rerunfilecheck)             Checksum: 2FAF5DE89D9303A04E07304837E8D028;2100.
  ) 
 Here is how much of TeX's memory you used:
  27137 strings out of 478994
  485661 string characters out of 5858183
- 772762 words of memory out of 5000000
+ 772662 words of memory out of 5000000
  42510 multiletter control sequences out of 15000+600000
  415337 words of font info for 71 fonts, out of 8000000 for 9000
  2715 hyphenation exceptions out of 8191
- 102i,29n,117p,1271b,543s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 102i,29n,117p,1264b,543s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><
@@ -1094,7 +1089,7 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/texm
 f-dist/fonts/type1/public/amsfonts/latxfont/line10.pfb></usr/local/texlive/2021
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/
 2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on WALL_KATE_paper.pdf (10 pages, 415588 bytes).
+Output written on WALL_KATE_paper.pdf (10 pages, 415574 bytes).
 PDF statistics:
  343 PDF objects out of 1000 (max. 8388607)
  284 compressed objects within 3 object streams
